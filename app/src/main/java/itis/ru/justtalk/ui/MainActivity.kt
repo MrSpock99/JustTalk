@@ -1,7 +1,9 @@
-package itis.ru.justtalk
+package itis.ru.justtalk.ui
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import itis.ru.justtalk.R
+import itis.ru.justtalk.ui.login.LoginFragment
 
 class MainActivity : AppCompatActivity() {
 
