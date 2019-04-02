@@ -1,55 +1,45 @@
 package itis.ru.justtalk.ui.login
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
-import android.widget.Toast
-import com.google.android.gms.auth.api.Auth
+import android.arch.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import itis.ru.justtalk.R
+import itis.ru.justtalk.interactor.login.LoginInteractor
+import itis.ru.justtalk.utils.LoginState
+import itis.ru.justtalk.utils.ScreenState
 
-class LoginViewModel : ViewModel(),
-        GoogleApiClient.OnConnectionFailedListener {
-    private lateinit var mView: LoginFragment
-    private var mGoogleApiClient: GoogleApiClient? = null
-    private lateinit var mFirebaseAuth: FirebaseAuth
+class LoginViewModel(private val loginInteractor: LoginInteractor) : ViewModel(),
+        GoogleApiClient.OnConnectionFailedListener, LoginInteractor.OnLoginFinishedListener {
 
-    override fun onConnectionFailed(p0: ConnectionResult) {}
+    private val mLoginState: MutableLiveData<ScreenState<LoginState>> = MutableLiveData()
+    val loginState: LiveData<ScreenState<LoginState>>
+        get() = mLoginState
 
-    fun firebaseGoogleAuth(account: GoogleSignInAccount) {
-        mFirebaseAuth = FirebaseAuth.getInstance()
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        mFirebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Toast.makeText(mView.activity, "Auth OK", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(mView.activity, "Auth Error ${task.exception}", Toast.LENGTH_SHORT).show()
-                Log.d("MYLOG", "Auth Error ${task.exception}")
-            }
-        }
+    fun onSignInClick(account: GoogleSignInAccount) {
+        mLoginState.value = ScreenState.Loading
+        loginInteractor.login(account, this)
     }
 
-    fun onSignInClick() {
-        mGoogleApiClient?.let { mView.openGoogleActivity(it) }
+    override fun onSuccess() {
+        mLoginState.value = ScreenState.Render(LoginState.Success)
     }
 
-    fun init(view: LoginFragment) {
-        mView = view
+    override fun onError() {
+        mLoginState.value = ScreenState.Render(LoginState.Error)
+    }
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(view.activity?.getString(R.string.google_api_token))
-                .requestEmail()
-                .build()
+    override fun onConnectionFailed(p0: ConnectionResult) {
+        mLoginState.value = ScreenState.Render(LoginState.Error)
+    }
+}
 
-        mGoogleApiClient = view.activity?.let {
-            GoogleApiClient.Builder(it)
-                    .enableAutoManage(it, this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build()
-        }
+class LoginViewModelFactory(private val loginInteractor: LoginInteractor) :
+        ViewModelProvider.NewInstanceFactory() {
+
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return LoginViewModel(loginInteractor) as T
     }
 }
