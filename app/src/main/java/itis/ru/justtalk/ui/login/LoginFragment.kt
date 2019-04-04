@@ -15,6 +15,7 @@ import itis.ru.justtalk.R
 import itis.ru.justtalk.interactor.login.LoginInteractor
 import itis.ru.justtalk.utils.LoginState
 import itis.ru.justtalk.utils.ScreenState
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 
 class LoginFragment : Fragment() {
@@ -67,16 +68,24 @@ class LoginFragment : Fragment() {
 
     private fun updateUI(screenState: ScreenState<LoginState>?) {
         when (screenState) {
-            ScreenState.Loading -> Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
+            ScreenState.Loading -> showLoading(true)
             is ScreenState.Render -> processLoginState(screenState.renderState)
         }
     }
 
     private fun processLoginState(renderState: LoginState) {
-        Toast.makeText(context, "Stop Loading", Toast.LENGTH_SHORT).show()
+        showLoading(false)
         when (renderState) {
             LoginState.Success -> Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
             LoginState.Error -> Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun showLoading(show: Boolean) {
+        if (show) {
+            activity?.pb_main?.visibility = View.VISIBLE
+        } else {
+            activity?.pb_main?.visibility = View.GONE
         }
     }
 

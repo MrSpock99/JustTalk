@@ -31,7 +31,7 @@ class LoginViewModel(private val loginInteractor: LoginInteractor) : ViewModel()
         mLoginState.value = ScreenState.Render(LoginState.Error)
     }
 
-    override fun onConnectionFailed(p0: ConnectionResult) {
+    override fun onConnectionFailed(result: ConnectionResult) {
         mLoginState.value = ScreenState.Render(LoginState.Error)
     }
 }
