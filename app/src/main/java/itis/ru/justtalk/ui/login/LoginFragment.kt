@@ -11,8 +11,13 @@ import android.widget.Toast
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import itis.ru.justtalk.R
 import itis.ru.justtalk.interactor.login.LoginInteractor
+import itis.ru.justtalk.repository.UserRepositoryImpl
+import itis.ru.justtalk.ui.MainActivity
+import itis.ru.justtalk.ui.people.PeopleFragment
 import itis.ru.justtalk.utils.LoginState
 import itis.ru.justtalk.utils.ScreenState
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,7 +50,8 @@ class LoginFragment : Fragment() {
     private fun init(view: View) {
         viewModel = ViewModelProviders.of(
                 this,
-                LoginViewModelFactory(LoginInteractor())
+                LoginViewModelFactory(LoginInteractor(UserRepositoryImpl(FirebaseAuth.getInstance(),
+                        FirebaseFirestore.getInstance())))
         )[LoginViewModel::class.java]
         viewModel.loginState.observe(::getLifecycle, ::updateUI)
 
@@ -76,7 +82,7 @@ class LoginFragment : Fragment() {
     private fun processLoginState(renderState: LoginState) {
         showLoading(false)
         when (renderState) {
-            LoginState.Success -> Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+            LoginState.Success -> (activity as MainActivity).navigateTo(PeopleFragment())
             LoginState.Error -> Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
         }
     }
