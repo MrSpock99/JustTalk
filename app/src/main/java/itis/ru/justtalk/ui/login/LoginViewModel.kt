@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import itis.ru.justtalk.interactor.login.LoginInteractor
@@ -18,9 +18,13 @@ class LoginViewModel(private val loginInteractor: LoginInteractor) : ViewModel()
     val loginState: LiveData<ScreenState<LoginState>>
         get() = mLoginState
 
-    fun onSignInClick(account: GoogleSignInAccount) {
-        mLoginState.value = ScreenState.Loading
-        loginInteractor.login(account, this)
+    fun onSignInClick(result: GoogleSignInResult) {
+        if (result.isSuccess) {
+            mLoginState.value = ScreenState.Loading
+            result.signInAccount?.let { loginInteractor.login(it, this) }
+        } else {
+            mLoginState.value = ScreenState.Render(LoginState.Error)
+        }
     }
 
     override fun onSuccess() {

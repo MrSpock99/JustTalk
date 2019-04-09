@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         navigateTo(LoginFragment())
     }
 
-    public fun navigateTo(fragment: Fragment) {
+    fun navigateTo(fragment: Fragment) {
         val transaction =
                 supportFragmentManager.beginTransaction()
         when (fragment) {

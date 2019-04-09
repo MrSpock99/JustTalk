@@ -41,9 +41,7 @@ class LoginFragment : Fragment() {
 
         if (requestCode == RC_SIGN_IN) {
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            if (result.isSuccess) {
-                result.signInAccount?.let { viewModel.onSignInClick(it) }
-            }
+            result?.let { viewModel.onSignInClick(it) }
         }
     }
 

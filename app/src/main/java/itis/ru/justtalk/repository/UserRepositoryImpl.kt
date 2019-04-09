@@ -51,9 +51,4 @@ class UserRepositoryImpl(private val mFirebaseAuth: FirebaseAuth, private val db
                     Log.d("MYLOG", it.message)
                 }
     }
-
-    private fun getUserAgeAndGender() {
-
-    }
-
 }
