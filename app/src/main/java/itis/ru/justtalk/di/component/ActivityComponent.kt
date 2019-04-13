@@ -1,7 +1,8 @@
-package itis.ru.jokesgenerator.di.component
+package itis.ru.justtalk.di.component
 
 import dagger.Component
 
 @Component
 interface ActivityComponent {
+
 }
