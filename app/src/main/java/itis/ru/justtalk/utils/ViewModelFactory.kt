@@ -1,4 +1,4 @@
-package itis.ru.jokesgenerator.viewmodel
+package itis.ru.justtalk.utils
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider

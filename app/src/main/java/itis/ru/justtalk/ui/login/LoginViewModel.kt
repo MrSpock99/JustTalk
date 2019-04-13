@@ -13,8 +13,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.login.LoginInteractor
 import itis.ru.justtalk.utils.LoginState
 import itis.ru.justtalk.utils.ScreenState
+import javax.inject.Inject
 
-class LoginViewModel(
+class LoginViewModel @Inject constructor(
     private val loginInteractor: LoginInteractor
 ) : ViewModel(), GoogleApiClient.OnConnectionFailedListener {
 
@@ -57,10 +58,14 @@ class LoginViewModel(
     }
 }
 
-class LoginViewModelFactory /*@Inject*/ constructor(private val loginInteractor: LoginInteractor) :
+/*
+class LoginViewModelFactory */
+/*@Inject*//*
+ constructor(private val loginInteractor: LoginInteractor) :
     ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return LoginViewModel(loginInteractor) as T
     }
 }
+*/

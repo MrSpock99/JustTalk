@@ -3,7 +3,7 @@ package itis.ru.justtalk.di.module
 import android.arch.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
-import itis.ru.jokesgenerator.viewmodel.ViewModelFactory
+import itis.ru.justtalk.utils.ViewModelFactory
 
 @Module
 abstract class ViewModelFactoryModule {
