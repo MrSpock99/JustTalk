@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'com.google.gms.google-services'
 
+apply plugin: 'kotlin-kapt'
+
 com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
 
 android {
@@ -52,4 +54,7 @@ dependencies {
     //ANKO
     implementation "org.jetbrains.anko:anko-commons:0.10.4"
 
+    //DI
+    implementation 'com.google.dagger:dagger:2.16'
+    kapt 'com.google.dagger:dagger-compiler:2.16'
 }
