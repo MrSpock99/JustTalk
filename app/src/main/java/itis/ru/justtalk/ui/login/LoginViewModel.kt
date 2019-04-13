@@ -4,44 +4,61 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Intent
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
+import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.login.LoginInteractor
 import itis.ru.justtalk.utils.LoginState
 import itis.ru.justtalk.utils.ScreenState
 
-class LoginViewModel(private val loginInteractor: LoginInteractor) : ViewModel(),
-        GoogleApiClient.OnConnectionFailedListener, LoginInteractor.OnLoginFinishedListener {
+class LoginViewModel(
+    private val loginInteractor: LoginInteractor
+) : ViewModel(), GoogleApiClient.OnConnectionFailedListener {
 
-    private val mLoginState: MutableLiveData<ScreenState<LoginState>> = MutableLiveData()
     val loginState: LiveData<ScreenState<LoginState>>
         get() = mLoginState
 
-    fun onSignInClick(result: GoogleSignInResult) {
+    private val mLoginState: MutableLiveData<ScreenState<LoginState>> = MutableLiveData()
+
+    fun onGoogleIntentResult(requestCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_AUTH) {
+            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+            result?.let { onSignInClick(it) }
+        }
+    }
+
+    private fun onSignInClick(result: GoogleSignInResult) {
         if (result.isSuccess) {
             mLoginState.value = ScreenState.Loading
-            result.signInAccount?.let { loginInteractor.login(it, this) }
+            result.signInAccount?.let { account ->
+                loginInteractor.login(account)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        mLoginState.value = ScreenState.Render(LoginState.Success)
+                    }, {
+                        mLoginState.value = ScreenState.Render(LoginState.Error)
+                        it.printStackTrace()
+                    })
+            }
         } else {
             mLoginState.value = ScreenState.Render(LoginState.Error)
         }
     }
 
-    override fun onSuccess() {
-        mLoginState.value = ScreenState.Render(LoginState.Success)
-    }
-
-    override fun onError() {
-        mLoginState.value = ScreenState.Render(LoginState.Error)
-    }
-
     override fun onConnectionFailed(result: ConnectionResult) {
         mLoginState.value = ScreenState.Render(LoginState.Error)
     }
+
+    companion object {
+        const val REQUEST_AUTH = 9001
+    }
 }
 
-class LoginViewModelFactory(private val loginInteractor: LoginInteractor) :
-        ViewModelProvider.NewInstanceFactory() {
+class LoginViewModelFactory /*@Inject*/ constructor(private val loginInteractor: LoginInteractor) :
+    ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return LoginViewModel(loginInteractor) as T

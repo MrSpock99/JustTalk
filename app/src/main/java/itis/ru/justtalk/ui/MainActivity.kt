@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     fun navigateTo(fragment: Fragment) {
         val transaction =
-                supportFragmentManager.beginTransaction()
+            supportFragmentManager.beginTransaction()
         when (fragment) {
             is LoginFragment -> transaction.replace(R.id.main_container, LoginFragment.newInstance())
             is PeopleFragment -> transaction.replace(R.id.main_container, PeopleFragment.newInstance())

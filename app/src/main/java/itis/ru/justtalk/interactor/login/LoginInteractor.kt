@@ -1,29 +1,17 @@
 package itis.ru.justtalk.interactor.login
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import itis.ru.justtalk.repository.UserRepository
 
-class LoginInteractor(private val mUserRepository: UserRepository) {
-    interface OnLoginFinishedListener {
-        fun onSuccess()
-        fun onError()
-    }
+class LoginInteractor /*@Inject*/ constructor(
+    private val mUserRepository: UserRepository
+) {
 
-    fun login(account: GoogleSignInAccount, listener: OnLoginFinishedListener) {
-        mUserRepository.login(account)
-                .subscribeBy(
-                        onSuccess = { listener.onSuccess() },
-                        onError = { listener.onError() })
-        /* mFirebaseAuth = FirebaseAuth.getInstance()
-         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-         mFirebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
-             if (task.isSuccessful) {
-                 listener.onSuccess()
-             } else {
-                 listener.onError()
-             }
-         }*/
+    fun login(account: GoogleSignInAccount): Completable {
+        return mUserRepository.login(account)
+            .subscribeOn(Schedulers.io())
     }
 
     fun addUserToDb(age: Int, gender: String, location: HashMap<String, Double>) {

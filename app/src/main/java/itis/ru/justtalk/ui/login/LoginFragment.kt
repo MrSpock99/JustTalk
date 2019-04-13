@@ -31,18 +31,14 @@ class LoginFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_login, container, false);
+        val rootView = inflater.inflate(R.layout.fragment_login, container, false)
         init(rootView)
         return rootView
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN) {
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            result?.let { viewModel.onSignInClick(it) }
-        }
+        viewModel.onGoogleIntentResult(requestCode, data)
     }
 
     private fun init(view: View) {
@@ -95,11 +91,10 @@ class LoginFragment : Fragment() {
 
     private fun openGoogleActivity(googleApiClient: GoogleApiClient) {
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        startActivityForResult(signInIntent, LoginViewModel.REQUEST_AUTH)
     }
 
     companion object {
-        private const val RC_SIGN_IN = 9001
         fun newInstance() = LoginFragment()
     }
 }
