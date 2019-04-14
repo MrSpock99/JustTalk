@@ -7,6 +7,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import io.reactivex.Completable
+import javax.inject.Inject
 
 private const val USER_NAME = "name"
 private const val USER_AGE = "age"
@@ -14,7 +15,7 @@ private const val USER_GENDER = "gender"
 private const val USER_LOCATION = "location"
 private const val USERS = "users"
 
-class UserRepositoryImpl(
+class UserRepositoryImpl @Inject constructor(
     private val mFirebaseAuth: FirebaseAuth,
     private val db: FirebaseFirestore
 ) : UserRepository {

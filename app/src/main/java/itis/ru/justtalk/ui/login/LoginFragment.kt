@@ -12,6 +12,9 @@ import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
 import itis.ru.justtalk.R
+import itis.ru.justtalk.di.component.DaggerFragmentComponent
+import itis.ru.justtalk.di.module.AppModule
+import itis.ru.justtalk.di.module.RepoModule
 import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.people.PeopleFragment
 import itis.ru.justtalk.utils.LoginState
@@ -22,16 +25,17 @@ import kotlinx.android.synthetic.main.fragment_login.view.*
 import javax.inject.Inject
 
 class LoginFragment : Fragment() {
-    private lateinit var viewModel: LoginViewModel
-    private var mGoogleApiClient: GoogleApiClient? = null
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
+    private lateinit var viewModel: LoginViewModel
+    private var mGoogleApiClient: GoogleApiClient? = null
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_login, container, false)
+        injectDependencies()
         init(rootView)
         return rootView
     }
@@ -41,12 +45,7 @@ class LoginFragment : Fragment() {
         viewModel.onGoogleIntentResult(requestCode, data)
     }
 
-    private fun init(view: View) {/*
-        viewModel = ViewModelProviders.of(
-                this,
-                LoginViewModelFactory(LoginInteractor(UserRepositoryImpl(FirebaseAuth.getInstance(),
-                        FirebaseFirestore.getInstance())))
-        )[LoginViewModel::class.java]*/
+    private fun init(view: View) {
         viewModel = ViewModelProviders.of(this, this.viewModeFactory).get(LoginViewModel::class.java)
         viewModel.loginState.observe(::getLifecycle, ::updateUI)
 
@@ -65,6 +64,13 @@ class LoginFragment : Fragment() {
         view.btn_login.setOnClickListener {
             mGoogleApiClient?.let { it1 -> openGoogleActivity(it1) }
         }
+    }
+
+    private fun injectDependencies(){
+        val fragmentComponent = DaggerFragmentComponent.builder()
+            .appModule(AppModule())
+            .build()
+        fragmentComponent.inject(this)
     }
 
     private fun updateUI(screenState: ScreenState<LoginState>?) {
