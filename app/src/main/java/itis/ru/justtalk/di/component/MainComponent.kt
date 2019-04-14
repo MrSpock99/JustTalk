@@ -5,9 +5,11 @@ import itis.ru.justtalk.di.module.AppModule
 import itis.ru.justtalk.di.module.RepoModule
 import itis.ru.justtalk.di.module.ViewModelFactoryModule
 import itis.ru.justtalk.di.module.ViewModelModule
+import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.login.LoginFragment
 
-@Component(modules = [ViewModelFactoryModule::class, ViewModelModule::class, RepoModule::class,AppModule::class])
-interface FragmentComponent {
+@Component(modules = [ViewModelFactoryModule::class, ViewModelModule::class, RepoModule::class, AppModule::class])
+interface MainComponent {
     fun inject(fragment: LoginFragment)
+    fun inject(activity: MainActivity)
 }

@@ -12,9 +12,8 @@ import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
 import itis.ru.justtalk.R
-import itis.ru.justtalk.di.component.DaggerFragmentComponent
+import itis.ru.justtalk.di.component.DaggerMainComponent
 import itis.ru.justtalk.di.module.AppModule
-import itis.ru.justtalk.di.module.RepoModule
 import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.people.PeopleFragment
 import itis.ru.justtalk.utils.LoginState
@@ -67,10 +66,10 @@ class LoginFragment : Fragment() {
     }
 
     private fun injectDependencies(){
-        val fragmentComponent = DaggerFragmentComponent.builder()
+        val component = DaggerMainComponent.builder()
             .appModule(AppModule())
             .build()
-        fragmentComponent.inject(this)
+        component.inject(this)
     }
 
     private fun updateUI(screenState: ScreenState<LoginState>?) {
