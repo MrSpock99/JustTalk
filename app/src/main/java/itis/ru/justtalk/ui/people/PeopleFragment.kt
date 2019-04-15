@@ -19,11 +19,10 @@ class PeopleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showAgeDialog()
     }
 
     private fun showAgeDialog() {
-        val dialogLayout = layoutInflater.inflate(R.layout.dialog_set_age, null)
+        /*val dialogLayout = layoutInflater.inflate(R.layout.dialog_set_age, null)
         val builder = context?.let {
             AlertDialog.Builder(it)
                     .setTitle("A little more information")
@@ -33,7 +32,7 @@ class PeopleFragment : Fragment() {
                                 .addUserToDb(dialogLayout.et_age.text.toString().toInt(), dialogLayout.spinner_gender.selectedItem.toString(), HashMap<String, Double>())
                     }
         }
-        builder?.show()
+        builder?.show()*/
     }
 
     companion object {

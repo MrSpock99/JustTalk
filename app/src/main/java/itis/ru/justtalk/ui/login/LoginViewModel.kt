@@ -57,15 +57,3 @@ class LoginViewModel @Inject constructor(
         const val REQUEST_AUTH = 9001
     }
 }
-
-/*
-class LoginViewModelFactory */
-/*@Inject*//*
- constructor(private val loginInteractor: LoginInteractor) :
-    ViewModelProvider.NewInstanceFactory() {
-
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return LoginViewModel(loginInteractor) as T
-    }
-}
-*/
