@@ -13,40 +13,33 @@
         android:layout_marginTop="92dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/btn_edit"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        style="@style/ButtonMyProfileStyle"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="32dp"
-        android:background="@drawable/button_round"
         android:src="@drawable/ic_edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_user_avatar" />
 
     <ImageButton
         android:id="@+id/btn_settings"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        style="@style/ButtonMyProfileStyle"
         android:layout_marginStart="32dp"
         android:layout_marginTop="80dp"
-        android:background="@drawable/button_round"
         android:src="@drawable/ic_settings"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_user_avatar" />
 
     <ImageButton
         android:id="@+id/btn_add_photo"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        style="@style/ButtonMyProfileStyle"
         android:layout_marginStart="8dp"
         android:layout_marginTop="176dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/button_round"
         android:src="@drawable/ic_add_a_photo"
         app:layout_constraintEnd_toStartOf="@+id/btn_edit"
         app:layout_constraintHorizontal_bias="0.496"
@@ -58,9 +51,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textSize="30sp"
-        android:textColor="#252020"
         android:text="Ayaz"
+        android:textColor="#252020"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="@+id/iv_user_avatar"
         app:layout_constraintStart_toStartOf="@+id/iv_user_avatar"
         app:layout_constraintTop_toBottomOf="@+id/iv_user_avatar" />
