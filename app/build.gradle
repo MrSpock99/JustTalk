@@ -46,6 +46,8 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.jpardogo.googleprogressbar:library:1.2.0'
     implementation 'com.android.support:design:28.0.0'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+
 
     //RX
     implementation 'io.reactivex.rxjava2:rxkotlin:2.0.0'
