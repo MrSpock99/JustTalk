@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">JustTalk</string>
+    <string name="google_api_token">499949272101-vmf6l1ib6td62v1g6s1qdpr1q9rqq5dl.apps.googleusercontent.com</string>
+    <string-array name="spinnder_gender_entities">
+        <item>M</item>
+        <item>W</item>
+    </string-array>
 </resources>
