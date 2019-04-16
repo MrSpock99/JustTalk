@@ -31,5 +31,4 @@ class MyProfileViewModel @Inject constructor(
     private fun onUserInfoLoaded(userName: String, userAvatar: URL) {
         myProfileState.value = ScreenState.Render(MyProfileState.ShowUserInfo(userName, userAvatar))
     }
-
 }
