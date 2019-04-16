@@ -3,6 +3,7 @@ package itis.ru.justtalk.repository
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
@@ -55,4 +56,9 @@ class UserRepositoryImpl @Inject constructor(
                 Log.d("MYLOG", it.message)
             }
     }
+
+    override fun getUserFromDb(firebaseUser: FirebaseUser) {
+
+    }
+
 }

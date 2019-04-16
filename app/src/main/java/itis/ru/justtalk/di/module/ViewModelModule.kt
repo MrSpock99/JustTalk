@@ -6,6 +6,7 @@ import dagger.MapKey
 import dagger.Module
 import dagger.multibindings.IntoMap
 import itis.ru.justtalk.ui.login.LoginViewModel
+import itis.ru.justtalk.ui.myprofile.MyProfileViewModel
 import kotlin.reflect.KClass
 
 @Module
@@ -13,7 +14,12 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(LoginViewModel::class)
-    abstract fun bindMyViewModel(myViewModel: LoginViewModel): ViewModel
+    abstract fun bindLoginViewModel(loginViewModel: LoginViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LoginViewModel::class)
+    abstract fun bindMyProfileViewModel(myProfileViewModel: MyProfileViewModel): ViewModel
 }
 
 @Target(
@@ -23,4 +29,3 @@ abstract class ViewModelModule {
 )
 @MapKey
 annotation class ViewModelKey(val value: KClass<out ViewModel>)
-
