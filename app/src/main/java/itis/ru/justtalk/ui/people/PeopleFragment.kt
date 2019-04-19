@@ -10,7 +10,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import itis.ru.justtalk.R
 import itis.ru.justtalk.repository.UserRepositoryImpl
+import itis.ru.justtalk.ui.MainActivity
+import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import kotlinx.android.synthetic.main.dialog_set_age.view.*
+import kotlinx.android.synthetic.main.fragment_people.*
 
 class PeopleFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -34,6 +37,10 @@ class PeopleFragment : Fragment() {
                     }
         }
         builder?.show()
+
+        btn_go.setOnClickListener {
+            (activity as MainActivity).navigateTo(MyProfileFragment())
+        }
     }
 
     companion object {

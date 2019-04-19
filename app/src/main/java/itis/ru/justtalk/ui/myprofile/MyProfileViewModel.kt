@@ -1,34 +1,33 @@
 package itis.ru.justtalk.ui.myprofile
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseAuth
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import itis.ru.justtalk.interactor.myprofile.MyProfileInteractor
-import itis.ru.justtalk.utils.MyProfileState
-import itis.ru.justtalk.utils.ScreenState
-import java.net.URL
+import itis.ru.justtalk.models.AppUser
 import javax.inject.Inject
 
 class MyProfileViewModel @Inject constructor(
-    private val mMyProfileInteractor: MyProfileInteractor,
-    private val mFirebaseAuth: FirebaseAuth
+        private val interactor: MyProfileInteractor
 ) : ViewModel() {
 
-    val mMyProfileState: LiveData<ScreenState<MyProfileState>>
-        get() {
-            if (!::myProfileState.isInitialized) {
-                myProfileState = MutableLiveData()
-                myProfileState.value = ScreenState.Loading
-                mFirebaseAuth.currentUser?.let { mMyProfileInteractor.getUserInfo(it) }
-            }
-            return myProfileState
-        }
+    val myProfileLiveData = MutableLiveData<AppUser>()
+    val showLoadingLiveData = MutableLiveData<Boolean>()
 
-    private lateinit var myProfileState: MutableLiveData<ScreenState<MyProfileState>>
+    private val disposables = CompositeDisposable()
 
-
-    private fun onUserInfoLoaded(userName: String, userAvatar: URL) {
-        myProfileState.value = ScreenState.Render(MyProfileState.ShowUserInfo(userName, userAvatar))
+    fun getMyProfile() {
+        showLoadingLiveData.value = true
+        disposables.add(
+                interactor.getMyProfile()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            myProfileLiveData.value = it
+                            showLoadingLiveData.value = false
+                        }, {
+                            it.printStackTrace()
+                        })
+        )
     }
 }
