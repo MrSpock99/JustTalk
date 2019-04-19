@@ -15,7 +15,6 @@ import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.editinfo.EditInfoFragment
 import itis.ru.justtalk.ui.settings.SettingsFragment
 import itis.ru.justtalk.utils.ViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_my_profile.*
 import javax.inject.Inject
 
@@ -23,8 +22,13 @@ class MyProfileFragment : Fragment() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: MyProfileViewModel
+    private lateinit var rootActivity: MainActivity
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         injectDependencies()
         return inflater.inflate(R.layout.fragment_my_profile, container, false)
     }
@@ -35,20 +39,23 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun init() {
-        viewModel = ViewModelProviders.of(this, this.viewModeFactory).get(MyProfileViewModel::class.java)
+        rootActivity = activity as MainActivity
+
+        viewModel =
+            ViewModelProviders.of(this, this.viewModeFactory).get(MyProfileViewModel::class.java)
 
         viewModel.getMyProfile()
         observeProfileLiveData()
         observeShowLoadingLiveData()
 
         btn_settings.setOnClickListener {
-            (activity as MainActivity).navigateTo(SettingsFragment())
+            rootActivity.navigateTo(SettingsFragment())
         }
         btn_add_photo.setOnClickListener {
             //(activity as MainActivity).navigateTo(SettingsFragment())
         }
         btn_edit.setOnClickListener {
-            (activity as MainActivity).navigateTo(EditInfoFragment())
+            rootActivity.navigateTo(EditInfoFragment())
         }
     }
 
@@ -63,7 +70,7 @@ class MyProfileFragment : Fragment() {
     private fun observeShowLoadingLiveData() {
         viewModel.showLoadingLiveData.observe(this, Observer {
             it?.let { show ->
-                showLoading(show)
+                rootActivity.showLoading(show)
             }
         })
     }
@@ -71,23 +78,15 @@ class MyProfileFragment : Fragment() {
     private fun setUserNameAndAvatar(userName: String, userAvatarUrl: String) {
         tv_user_name.text = userName
         Glide.with(this)
-                .load(userAvatarUrl)
-                .placeholder(R.drawable.ic_launcher_background)
-                .into(iv_user_avatar)
-    }
-
-    private fun showLoading(show: Boolean) {
-        if (show) {
-            activity?.pb_main?.visibility = View.VISIBLE
-        } else {
-            activity?.pb_main?.visibility = View.GONE
-        }
+            .load(userAvatarUrl)
+            .placeholder(R.drawable.ic_launcher_background)
+            .into(iv_user_avatar)
     }
 
     private fun injectDependencies() {
         val component = DaggerMainComponent.builder()
-                .appModule(AppModule())
-                .build()
+            .appModule(AppModule())
+            .build()
         component.inject(this)
     }
 
@@ -95,4 +94,3 @@ class MyProfileFragment : Fragment() {
         fun newInstance() = MyProfileFragment()
     }
 }
-

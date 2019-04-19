@@ -28,6 +28,7 @@ class LoginFragment : Fragment() {
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: LoginViewModel
     private var mGoogleApiClient: GoogleApiClient? = null
+    private lateinit var rootActivity: MainActivity
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +46,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun init(view: View) {
+        rootActivity = activity as MainActivity
+
         viewModel = ViewModelProviders.of(this, this.viewModeFactory).get(LoginViewModel::class.java)
         viewModel.loginState.observe(::getLifecycle, ::updateUI)
 
@@ -74,24 +77,16 @@ class LoginFragment : Fragment() {
 
     private fun updateUI(screenState: ScreenState<LoginState>?) {
         when (screenState) {
-            ScreenState.Loading -> showLoading(true)
+            ScreenState.Loading -> rootActivity.showLoading(true)
             is ScreenState.Render -> processLoginState(screenState.renderState)
         }
     }
 
     private fun processLoginState(renderState: LoginState) {
-        showLoading(false)
+        rootActivity.showLoading(false)
         when (renderState) {
             LoginState.Success -> (activity as MainActivity).navigateTo(PeopleFragment())
             LoginState.Error -> Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun showLoading(show: Boolean) {
-        if (show) {
-            activity?.pb_main?.visibility = View.VISIBLE
-        } else {
-            activity?.pb_main?.visibility = View.GONE
         }
     }
 
