@@ -12,7 +12,7 @@ import itis.ru.justtalk.R
 import itis.ru.justtalk.di.component.DaggerMainComponent
 import itis.ru.justtalk.di.module.AppModule
 import itis.ru.justtalk.ui.MainActivity
-import itis.ru.justtalk.ui.editinfo.EditInfoFragment
+import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.settings.SettingsFragment
 import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_my_profile.*
@@ -55,7 +55,7 @@ class MyProfileFragment : Fragment() {
             //(activity as MainActivity).navigateTo(SettingsFragment())
         }
         btn_edit.setOnClickListener {
-            rootActivity.navigateTo(EditInfoFragment())
+            rootActivity.navigateTo(EditProfileInfoFragment())
         }
     }
 

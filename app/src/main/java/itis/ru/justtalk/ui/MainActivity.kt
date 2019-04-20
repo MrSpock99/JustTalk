@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 import itis.ru.justtalk.R
 import itis.ru.justtalk.di.component.DaggerMainComponent
 import itis.ru.justtalk.di.module.AppModule
+import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.login.LoginFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.ui.people.PeopleFragment
@@ -53,6 +54,10 @@ class MainActivity : AppCompatActivity() {
             is MyProfileFragment -> transaction.replace(
                 R.id.main_container,
                 MyProfileFragment.newInstance()
+            )
+            is EditProfileInfoFragment -> transaction.replace(
+                R.id.main_container,
+                EditProfileInfoFragment.newInstance()
             )
         }
         transaction.commit()

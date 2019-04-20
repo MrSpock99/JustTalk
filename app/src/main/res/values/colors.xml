@@ -6,4 +6,6 @@
     <color name="coloPrimaryText">#FFFFFF</color>
     <color name="colorButtonMyProfileBackground">#D2CDCD</color>
     <color name="colorButtonMyProfileIcon">#989494</color>
+    <color name="colorLightGrey">#ffffff</color>
+    <color name="colorDarkGrey">#989494</color>
 </resources>
