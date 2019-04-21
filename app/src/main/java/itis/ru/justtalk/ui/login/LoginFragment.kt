@@ -19,6 +19,7 @@ import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.utils.LoginState
 import itis.ru.justtalk.utils.ScreenState
 import itis.ru.justtalk.utils.ViewModelFactory
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import javax.inject.Inject
 

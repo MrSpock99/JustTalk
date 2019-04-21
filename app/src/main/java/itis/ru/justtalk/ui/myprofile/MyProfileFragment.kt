@@ -58,7 +58,7 @@ class MyProfileFragment : Fragment() {
         }
         btn_edit.setOnClickListener {
             val profileBundle = Bundle()
-            profileBundle.putSerializable("user", user)
+            profileBundle.putSerializable(ARG_USER, user)
             rootActivity.navigateTo(EditProfileInfoFragment(), profileBundle)
         }
     }
@@ -97,5 +97,6 @@ class MyProfileFragment : Fragment() {
 
     companion object {
         fun newInstance() = MyProfileFragment()
+        const val ARG_USER = "user"
     }
 }
