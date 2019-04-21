@@ -19,7 +19,6 @@ import itis.ru.justtalk.ui.people.PeopleFragment
 import itis.ru.justtalk.utils.LoginState
 import itis.ru.justtalk.utils.ScreenState
 import itis.ru.justtalk.utils.ViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import javax.inject.Inject
 
@@ -31,8 +30,8 @@ class LoginFragment : Fragment() {
     private lateinit var rootActivity: MainActivity
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_login, container, false)
         injectDependencies()
@@ -48,19 +47,20 @@ class LoginFragment : Fragment() {
     private fun init(view: View) {
         rootActivity = activity as MainActivity
 
-        viewModel = ViewModelProviders.of(this, this.viewModeFactory).get(LoginViewModel::class.java)
+        viewModel =
+            ViewModelProviders.of(this, this.viewModeFactory).get(LoginViewModel::class.java)
         viewModel.loginState.observe(::getLifecycle, ::updateUI)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.google_api_token))
-                .requestEmail()
-                .build()
+            .requestIdToken(getString(R.string.google_api_token))
+            .requestEmail()
+            .build()
 
         mGoogleApiClient = activity?.let {
             GoogleApiClient.Builder(it)
-                    .enableAutoManage(it, viewModel)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build()
+                .enableAutoManage(it, viewModel)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build()
         }
 
         view.btn_login.setOnClickListener {
@@ -68,7 +68,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun injectDependencies(){
+    private fun injectDependencies() {
         val component = DaggerMainComponent.builder()
             .appModule(AppModule())
             .build()
@@ -85,7 +85,7 @@ class LoginFragment : Fragment() {
     private fun processLoginState(renderState: LoginState) {
         rootActivity.showLoading(false)
         when (renderState) {
-            LoginState.Success -> (activity as MainActivity).navigateTo(PeopleFragment())
+            LoginState.Success -> (activity as MainActivity).navigateTo(PeopleFragment(), null)
             LoginState.Error -> Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
         }
     }

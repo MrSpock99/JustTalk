@@ -24,9 +24,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         injectDependencies()
         if (isLoggedIn()) {
-            navigateTo(PeopleFragment())
+            navigateTo(PeopleFragment(), null)
         } else {
-            navigateTo(LoginFragment())
+            navigateTo(LoginFragment(), null)
         }
     }
 
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun isLoggedIn(): Boolean = firebaseAuth.currentUser != null
 
-    fun navigateTo(fragment: Fragment) {
+    fun navigateTo(fragment: Fragment, arguments: Bundle?) {
         val transaction =
             supportFragmentManager.beginTransaction()
         when (fragment) {
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             )
             is EditProfileInfoFragment -> transaction.replace(
                 R.id.main_container,
-                EditProfileInfoFragment.newInstance()
+                EditProfileInfoFragment.newInstance(arguments)
             )
         }
         transaction.commit()
@@ -70,5 +70,4 @@ class MainActivity : AppCompatActivity() {
             pb_main.visibility = View.GONE
         }
     }
-
 }

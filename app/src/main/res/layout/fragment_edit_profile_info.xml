@@ -57,7 +57,7 @@
             android:id="@+id/iv_user_photo_3"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="@+id/iv_user_photo_2"
             app:layout_constraintTop_toBottomOf="@+id/iv_user_photo_2"
             tools:srcCompat="@tools:sample/avatars" />

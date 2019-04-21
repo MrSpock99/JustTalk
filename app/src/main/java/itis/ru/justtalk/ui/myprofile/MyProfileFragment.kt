@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import itis.ru.justtalk.R
 import itis.ru.justtalk.di.component.DaggerMainComponent
 import itis.ru.justtalk.di.module.AppModule
+import itis.ru.justtalk.models.User
 import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.settings.SettingsFragment
@@ -23,6 +24,7 @@ class MyProfileFragment : Fragment() {
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: MyProfileViewModel
     private lateinit var rootActivity: MainActivity
+    private lateinit var user: User
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,20 +51,23 @@ class MyProfileFragment : Fragment() {
         observeShowLoadingLiveData()
 
         btn_settings.setOnClickListener {
-            rootActivity.navigateTo(SettingsFragment())
+            rootActivity.navigateTo(SettingsFragment(), null)
         }
         btn_add_photo.setOnClickListener {
             //(activity as MainActivity).navigateTo(SettingsFragment())
         }
         btn_edit.setOnClickListener {
-            rootActivity.navigateTo(EditProfileInfoFragment())
+            val profileBundle = Bundle()
+            profileBundle.putSerializable("user", user)
+            rootActivity.navigateTo(EditProfileInfoFragment(), profileBundle)
         }
     }
 
     private fun observeProfileLiveData() {
         viewModel.myProfileLiveData.observe(this, Observer {
             it?.let { user ->
-                setUserNameAndAvatar(user.name, user.avatar_url)
+                this.user = user
+                setUserNameAndAvatar(user.name, user.avatarUrl)
             }
         })
     }

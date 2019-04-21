@@ -5,14 +5,14 @@ import android.arch.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import itis.ru.justtalk.interactor.myprofile.MyProfileInteractor
-import itis.ru.justtalk.models.AppUser
+import itis.ru.justtalk.models.User
 import javax.inject.Inject
 
 class MyProfileViewModel @Inject constructor(
-        private val interactor: MyProfileInteractor
+    private val interactor: MyProfileInteractor
 ) : ViewModel() {
 
-    val myProfileLiveData = MutableLiveData<AppUser>()
+    val myProfileLiveData = MutableLiveData<User>()
     val showLoadingLiveData = MutableLiveData<Boolean>()
 
     private val disposables = CompositeDisposable()
@@ -20,14 +20,14 @@ class MyProfileViewModel @Inject constructor(
     fun getMyProfile() {
         showLoadingLiveData.value = true
         disposables.add(
-                interactor.getMyProfile()
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            myProfileLiveData.value = it
-                            showLoadingLiveData.value = false
-                        }, {
-                            it.printStackTrace()
-                        })
+            interactor.getMyProfile()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    myProfileLiveData.value = it
+                    showLoadingLiveData.value = false
+                }, {
+                    it.printStackTrace()
+                })
         )
     }
 }

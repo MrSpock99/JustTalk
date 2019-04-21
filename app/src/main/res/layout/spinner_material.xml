@@ -18,7 +18,7 @@
         tools:ignore="UselessParent">
 
         <Spinner
-            android:id="@+id/spnGift"
+            android:id="@+id/spinner_genders"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overlapAnchor="false"

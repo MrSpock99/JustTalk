@@ -39,7 +39,7 @@ class PeopleFragment : Fragment() {
         builder?.show()
 
         btn_go.setOnClickListener {
-            (activity as MainActivity).navigateTo(MyProfileFragment())
+            (activity as MainActivity).navigateTo(MyProfileFragment(), null)
         }
     }
 

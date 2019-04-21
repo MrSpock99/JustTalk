@@ -9,14 +9,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import io.reactivex.Completable
 import io.reactivex.Single
-import itis.ru.justtalk.models.AppUser
+import itis.ru.justtalk.models.User
 import javax.inject.Inject
 
 private const val USER_NAME = "name"
 private const val USER_AGE = "age"
 private const val USER_GENDER = "gender"
 private const val USER_LOCATION = "location"
-private const val USER_AVATAR_URL = "avatar_url"
+private const val USER_AVATAR_URL = "avatarUrl"
 private const val USERS = "users"
 
 class UserRepositoryImpl @Inject constructor(
@@ -62,13 +62,23 @@ class UserRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getUserFromDb(firebaseUser: FirebaseUser): Single<AppUser> {
+    override fun getUserFromDb(firebaseUser: FirebaseUser): Single<User> {
         return Single.create { emitter ->
             db.collection(USERS)
                 .document(firebaseUser.email ?: "")
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        emitter.onSuccess(task.result?.toObject(AppUser::class.java) ?: AppUser("",0,"",""))
+                        emitter.onSuccess(
+                            task.result?.toObject(User::class.java) ?: User(
+                                "",
+                                0,
+                                "",
+                                "",
+                                ArrayList(),
+                                ""
+
+                            )
+                        )
                         Log.d("MYLOG", task.result?.data.toString())
                     } else {
                         emitter.onError(task.exception ?: Exception(""))
@@ -77,9 +87,9 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMyProfile(): Single<AppUser> {
+    override fun getMyProfile(): Single<User> {
         return firebaseAuth.currentUser?.let {
             getUserFromDb(it)
-        }?: Single.error(Exception("user not exists"))
+        } ?: Single.error(Exception("user not exists"))
     }
 }

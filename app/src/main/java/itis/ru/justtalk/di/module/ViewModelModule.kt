@@ -5,6 +5,7 @@ import dagger.Binds
 import dagger.MapKey
 import dagger.Module
 import dagger.multibindings.IntoMap
+import itis.ru.justtalk.ui.editinfo.EditProfileInfoViewModel
 import itis.ru.justtalk.ui.login.LoginViewModel
 import itis.ru.justtalk.ui.myprofile.MyProfileViewModel
 import kotlin.reflect.KClass
@@ -20,6 +21,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MyProfileViewModel::class)
     abstract fun bindMyProfileViewModel(myProfileViewModel: MyProfileViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(EditProfileInfoViewModel::class)
+    abstract fun bindEditProfileViewModel(editProfileViewModel: EditProfileInfoViewModel): ViewModel
 }
 
 @Target(
