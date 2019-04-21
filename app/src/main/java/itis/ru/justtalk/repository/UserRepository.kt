@@ -8,7 +8,7 @@ import itis.ru.justtalk.models.User
 
 interface UserRepository {
     fun login(account: GoogleSignInAccount): Completable
-    fun addUserToDb(age: Int, gender: String, location: HashMap<String, Double>)
+    fun addUserToDb(user: User): Completable
     fun getUserFromDb(firebaseUser: FirebaseUser): Single<User>
     fun getMyProfile(): Single<User>
     fun getEmptyUser(): Single<User>

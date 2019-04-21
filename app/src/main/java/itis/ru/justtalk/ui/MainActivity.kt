@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
         injectDependencies()
         if (isLoggedIn()) {
             navigateTo(PeopleFragment(), null)

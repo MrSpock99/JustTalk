@@ -1,6 +1,7 @@
 package itis.ru.justtalk.interactor.myprofile
 
 import com.google.firebase.auth.FirebaseUser
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import itis.ru.justtalk.models.User
@@ -23,5 +24,9 @@ class MyProfileInteractor @Inject constructor(
     fun getEmptyUser(): Single<User> {
         return userRepository.getEmptyUser()
             .subscribeOn(Schedulers.io())
+    }
+
+    fun editUserInfo(user: User): Completable {
+        return userRepository.addUserToDb(user)
     }
 }

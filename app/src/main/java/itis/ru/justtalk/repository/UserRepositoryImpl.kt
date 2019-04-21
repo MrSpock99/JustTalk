@@ -15,8 +15,9 @@ import javax.inject.Inject
 private const val USER_NAME = "name"
 private const val USER_AGE = "age"
 private const val USER_GENDER = "gender"
+private const val USER_ABOUT_ME = "about_me"
 private const val USER_LOCATION = "location"
-private const val USER_AVATAR_URL = "avatarUrl"
+private const val USER_AVATAR_URL = "avatar_url"
 private const val USERS = "users"
 
 class UserRepositoryImpl @Inject constructor(
@@ -45,21 +46,26 @@ class UserRepositoryImpl @Inject constructor(
          )*/
     }
 
-    override fun addUserToDb(age: Int, gender: String, location: HashMap<String, Double>) {
-        val userMap = HashMap<String, Any>()
-        userMap[USER_NAME] = firebaseAuth.currentUser?.displayName.toString()
-        userMap[USER_AGE] = age
-        userMap[USER_AVATAR_URL] = firebaseAuth.currentUser?.photoUrl.toString()
-        userMap[USER_GENDER] = gender
-        userMap[USER_LOCATION] = GeoPoint(location["lat"] ?: 0.0, location["lon"] ?: 0.0)
-        db.collection(USERS)
-            .document(firebaseAuth.currentUser?.email ?: "")
-            .set(userMap)
-            .addOnSuccessListener {
-                Log.d("MYLOG", it.toString())
-            }.addOnFailureListener {
-                Log.d("MYLOG", it.message)
-            }
+    override fun addUserToDb(user: User): Completable {
+        return Completable.create {emitter ->
+            val userMap = HashMap<String, Any>()
+            userMap[USER_NAME] = user.name
+            userMap[USER_AGE] = user.age
+            userMap[USER_ABOUT_ME] = user.aboutMe
+            userMap[USER_AVATAR_URL] = user.avatarUrl
+            userMap[USER_GENDER] = user.gender
+            userMap[USER_LOCATION] = user.location
+            db.collection(USERS)
+                .document(firebaseAuth.currentUser?.email ?: "")
+                .set(userMap)
+                .addOnSuccessListener {
+                    emitter.onComplete()
+                    //Log.d("MYLOG", it.toString())
+                }.addOnFailureListener {
+                    emitter.onError(it)
+                    Log.d("MYLOG", it.message)
+                }
+        }
     }
 
     override fun getUserFromDb(firebaseUser: FirebaseUser): Single<User> {
@@ -75,7 +81,8 @@ class UserRepositoryImpl @Inject constructor(
                                 "",
                                 "",
                                 ArrayList(),
-                                ""
+                                "",
+                                GeoPoint(0.0, 0.0)
                             )
                         )
                         Log.d("MYLOG", task.result?.data.toString())
@@ -102,7 +109,8 @@ class UserRepositoryImpl @Inject constructor(
                         "",
                         it.photoUrl.toString(),
                         arrayListOf("", "", "", "", ""),
-                        ""
+                        "",
+                        GeoPoint(0.0, 0.0)
                     )
                 emitter.onSuccess(user)
             }

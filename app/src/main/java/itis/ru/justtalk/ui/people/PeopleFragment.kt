@@ -22,10 +22,13 @@ class PeopleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showAgeDialog()
+        //showAgeDialog()
+        btn_go.setOnClickListener {
+            (activity as MainActivity).navigateTo(MyProfileFragment(), null)
+        }
     }
 
-    private fun showAgeDialog() {
+   /* private fun showAgeDialog() {
         val dialogLayout = layoutInflater.inflate(R.layout.dialog_set_age, null)
         val builder = context?.let {
             AlertDialog.Builder(it)
@@ -41,7 +44,7 @@ class PeopleFragment : Fragment() {
         btn_go.setOnClickListener {
             (activity as MainActivity).navigateTo(MyProfileFragment(), null)
         }
-    }
+    }*/
 
     companion object {
         fun newInstance() = PeopleFragment()

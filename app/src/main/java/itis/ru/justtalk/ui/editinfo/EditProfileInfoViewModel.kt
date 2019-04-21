@@ -15,6 +15,7 @@ class EditProfileInfoViewModel @Inject constructor(
 ) : ViewModel() {
 
     val myProfileLiveData = MutableLiveData<User>()
+    val editProfileSuccessLiveData = MutableLiveData<Boolean>()
     val showLoadingLiveData = MutableLiveData<Boolean>()
 
     fun getMyProfile(bundleArgs: Bundle?) {
@@ -27,5 +28,17 @@ class EditProfileInfoViewModel @Inject constructor(
                     myProfileLiveData.value = it
                 }
         }
+    }
+
+    fun editProfileInfo(user: User) {
+        showLoadingLiveData.value = true
+        interactor.editUserInfo(user)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(onComplete = {
+                showLoadingLiveData.value = false
+                editProfileSuccessLiveData.value = true
+            }, onError = {
+                editProfileSuccessLiveData.value = false
+            })
     }
 }

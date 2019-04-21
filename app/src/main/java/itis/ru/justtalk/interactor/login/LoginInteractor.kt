@@ -16,6 +16,6 @@ class LoginInteractor @Inject constructor(
     }
 
     fun addUserToDb(age: Int, gender: String, location: HashMap<String, Double>) {
-        userRepository.addUserToDb(age, gender, location)
+        //userRepository.addUserToDb(age, gender, location)
     }
 }
