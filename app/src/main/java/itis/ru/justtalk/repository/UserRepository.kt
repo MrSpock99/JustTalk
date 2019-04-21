@@ -11,4 +11,5 @@ interface UserRepository {
     fun addUserToDb(age: Int, gender: String, location: HashMap<String, Double>)
     fun getUserFromDb(firebaseUser: FirebaseUser): Single<User>
     fun getMyProfile(): Single<User>
+    fun getEmptyUser(): Single<User>
 }

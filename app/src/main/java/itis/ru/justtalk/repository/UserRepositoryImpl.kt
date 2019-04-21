@@ -76,7 +76,6 @@ class UserRepositoryImpl @Inject constructor(
                                 "",
                                 ArrayList(),
                                 ""
-
                             )
                         )
                         Log.d("MYLOG", task.result?.data.toString())
@@ -91,5 +90,22 @@ class UserRepositoryImpl @Inject constructor(
         return firebaseAuth.currentUser?.let {
             getUserFromDb(it)
         } ?: Single.error(Exception("user not exists"))
+    }
+
+    override fun getEmptyUser(): Single<User> {
+        return Single.create { emitter ->
+            firebaseAuth.currentUser?.let {
+                val user =
+                    User(
+                        it.displayName ?: "",
+                        0,
+                        "",
+                        it.photoUrl.toString(),
+                        arrayListOf("", "", "", "", ""),
+                        ""
+                    )
+                emitter.onSuccess(user)
+            }
+        }
     }
 }

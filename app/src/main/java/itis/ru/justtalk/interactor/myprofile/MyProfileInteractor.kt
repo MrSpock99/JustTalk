@@ -8,15 +8,20 @@ import itis.ru.justtalk.repository.UserRepository
 import javax.inject.Inject
 
 class MyProfileInteractor @Inject constructor(
-    private val mUserRepository: UserRepository
+    private val userRepository: UserRepository
 ) {
     fun getUserInfo(firebaseUser: FirebaseUser): Single<User> {
-        return mUserRepository.getUserFromDb(firebaseUser)
+        return userRepository.getUserFromDb(firebaseUser)
             .subscribeOn(Schedulers.io())
     }
 
     fun getMyProfile(): Single<User> {
-        return mUserRepository.getMyProfile()
+        return userRepository.getMyProfile()
+            .subscribeOn(Schedulers.io())
+    }
+
+    fun getEmptyUser(): Single<User> {
+        return userRepository.getEmptyUser()
             .subscribeOn(Schedulers.io())
     }
 }

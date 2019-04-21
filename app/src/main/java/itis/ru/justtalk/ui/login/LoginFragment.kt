@@ -15,7 +15,7 @@ import itis.ru.justtalk.R
 import itis.ru.justtalk.di.component.DaggerMainComponent
 import itis.ru.justtalk.di.module.AppModule
 import itis.ru.justtalk.ui.MainActivity
-import itis.ru.justtalk.ui.people.PeopleFragment
+import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.utils.LoginState
 import itis.ru.justtalk.utils.ScreenState
 import itis.ru.justtalk.utils.ViewModelFactory
@@ -85,7 +85,10 @@ class LoginFragment : Fragment() {
     private fun processLoginState(renderState: LoginState) {
         rootActivity.showLoading(false)
         when (renderState) {
-            LoginState.Success -> (activity as MainActivity).navigateTo(PeopleFragment(), null)
+            LoginState.Success -> (activity as MainActivity).navigateTo(
+                EditProfileInfoFragment(),
+                null
+            )
             LoginState.Error -> Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
         }
     }
