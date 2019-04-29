@@ -12,32 +12,23 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_user_photo_4"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="@+id/iv_user_avatar"
-            app:layout_constraintTop_toBottomOf="@+id/iv_user_photo_2"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <ImageView
             android:id="@+id/iv_user_avatar"
-            android:layout_width="214dp"
+            android:layout_width="0dp"
             android:layout_height="214dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:adjustViewBounds="false"
-            android:cropToPadding="false"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:cropToPadding="true"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.6"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageView
             android:id="@+id/iv_user_photo_1"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            style="@style/UserPhotoVerticalStyle"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_user_avatar"
             app:layout_constraintTop_toTopOf="@+id/iv_user_avatar"
@@ -45,8 +36,7 @@
 
         <ImageView
             android:id="@+id/iv_user_photo_2"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/UserPhotoVerticalStyle"
             android:layout_marginTop="14dp"
             app:layout_constraintEnd_toEndOf="@+id/iv_user_photo_1"
             app:layout_constraintStart_toStartOf="@+id/iv_user_photo_1"
@@ -55,19 +45,27 @@
 
         <ImageView
             android:id="@+id/iv_user_photo_3"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/UserPhotoVerticalStyle"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="@+id/iv_user_photo_2"
+            app:layout_constraintStart_toStartOf="@+id/iv_user_photo_2"
+            app:layout_constraintTop_toBottomOf="@+id/iv_user_photo_2"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/iv_user_photo_4"
+            style="@style/UserPhotoHorizontalStyle"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/iv_user_avatar"
             app:layout_constraintTop_toBottomOf="@+id/iv_user_photo_2"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageView
             android:id="@+id/iv_user_photo_5"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginEnd="12dp"
+            style="@style/UserPhotoHorizontalStyle"
+            android:layout_marginEnd="4dp"
             app:layout_constraintEnd_toStartOf="@+id/iv_user_photo_4"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/iv_user_avatar"
             app:layout_constraintTop_toTopOf="@+id/iv_user_photo_4"
             tools:srcCompat="@tools:sample/avatars" />
@@ -95,7 +93,7 @@
             android:id="@+id/spinner_gender"
             layout="@layout/spinner_material"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
