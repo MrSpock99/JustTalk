@@ -74,8 +74,10 @@ class UserRepositoryImpl @Inject constructor(
                 .document(firebaseUser.email ?: "")
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        val result = task.result
+                        //val user = result?.toObject(User::class.java)
                         emitter.onSuccess(
-                            task.result?.toObject(User::class.java) ?: User(
+                            result?.toObject(User::class.java) ?: User(
                                 "",
                                 0,
                                 "",

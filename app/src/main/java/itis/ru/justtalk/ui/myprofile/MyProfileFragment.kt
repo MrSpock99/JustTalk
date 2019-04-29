@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import itis.ru.justtalk.R
 import itis.ru.justtalk.di.component.DaggerMainComponent
 import itis.ru.justtalk.di.module.AppModule
-import itis.ru.justtalk.models.User
 import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.settings.SettingsFragment
@@ -24,7 +23,6 @@ class MyProfileFragment : Fragment() {
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: MyProfileViewModel
     private lateinit var rootActivity: MainActivity
-    private lateinit var user: User
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,16 +55,13 @@ class MyProfileFragment : Fragment() {
             //(activity as MainActivity).navigateTo(SettingsFragment())
         }
         btn_edit.setOnClickListener {
-            val profileBundle = Bundle()
-            profileBundle.putSerializable(ARG_USER, user)
-            rootActivity.navigateTo(EditProfileInfoFragment(), profileBundle)
+            viewModel.editProfileClick()
         }
     }
 
     private fun observeProfileLiveData() {
         viewModel.myProfileLiveData.observe(this, Observer {
             it?.let { user ->
-                this.user = user
                 setUserNameAndAvatar(user.name, user.avatarUrl)
             }
         })
@@ -76,6 +71,14 @@ class MyProfileFragment : Fragment() {
         viewModel.showLoadingLiveData.observe(this, Observer {
             it?.let { show ->
                 rootActivity.showLoading(show)
+            }
+        })
+
+        viewModel.navigateToEdit.observe(this, Observer {
+            it?.let {
+                val profileBundle = Bundle()
+                profileBundle.putParcelable(ARG_USER, it)
+                rootActivity.navigateTo(EditProfileInfoFragment(), profileBundle)
             }
         })
     }

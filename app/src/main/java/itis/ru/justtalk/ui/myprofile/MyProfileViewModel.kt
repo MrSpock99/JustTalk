@@ -14,6 +14,7 @@ class MyProfileViewModel @Inject constructor(
 
     val myProfileLiveData = MutableLiveData<User>()
     val showLoadingLiveData = MutableLiveData<Boolean>()
+    val navigateToEdit = MutableLiveData<User>()
 
     private val disposables = CompositeDisposable()
 
@@ -29,5 +30,11 @@ class MyProfileViewModel @Inject constructor(
                     it.printStackTrace()
                 })
         )
+    }
+
+    fun editProfileClick() {
+        myProfileLiveData.value?.let {
+            navigateToEdit.value = it
+        }
     }
 }

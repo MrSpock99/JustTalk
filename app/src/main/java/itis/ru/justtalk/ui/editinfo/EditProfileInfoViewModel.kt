@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.os.Bundle
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import itis.ru.justtalk.interactor.myprofile.MyProfileInteractor
 import itis.ru.justtalk.models.User
@@ -18,9 +19,11 @@ class EditProfileInfoViewModel @Inject constructor(
     val editProfileSuccessLiveData = MutableLiveData<Boolean>()
     val showLoadingLiveData = MutableLiveData<Boolean>()
 
+    private val disposables = CompositeDisposable()
+
     fun getMyProfile(bundleArgs: Bundle?) {
-        if (bundleArgs?.getSerializable(MyProfileFragment.ARG_USER) != null) {
-            myProfileLiveData.value = bundleArgs.getSerializable(MyProfileFragment.ARG_USER) as User
+        if (bundleArgs?.getParcelable<User>(MyProfileFragment.ARG_USER) != null) {
+            myProfileLiveData.value = bundleArgs.getParcelable(MyProfileFragment.ARG_USER)
         } else {
             interactor.getEmptyUser()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -32,13 +35,20 @@ class EditProfileInfoViewModel @Inject constructor(
 
     fun editProfileInfo(user: User) {
         showLoadingLiveData.value = true
-        interactor.editUserInfo(user)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onComplete = {
-                showLoadingLiveData.value = false
-                editProfileSuccessLiveData.value = true
-            }, onError = {
-                editProfileSuccessLiveData.value = false
-            })
+        disposables.add(
+            interactor.editUserInfo(user)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    showLoadingLiveData.value = false
+                    editProfileSuccessLiveData.value = true
+                },{
+                    editProfileSuccessLiveData.value = false
+                })
+        )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        if (!disposables.isDisposed) disposables.dispose()
     }
 }
