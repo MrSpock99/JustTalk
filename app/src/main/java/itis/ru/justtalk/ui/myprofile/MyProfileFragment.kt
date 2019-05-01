@@ -14,6 +14,7 @@ import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.settings.SettingsFragment
 import itis.ru.justtalk.utils.ViewModelFactory
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_my_profile.*
 import javax.inject.Inject
 
@@ -39,6 +40,7 @@ class MyProfileFragment : Fragment() {
 
     private fun init() {
         rootActivity = activity as MainActivity
+        setToolbarAndBottomNavVisibility()
 
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(MyProfileViewModel::class.java)
@@ -58,6 +60,11 @@ class MyProfileFragment : Fragment() {
         }
     }
 
+    private fun setToolbarAndBottomNavVisibility(){
+        rootActivity.toolbar.visibility = View.VISIBLE
+        rootActivity.bottom_navigation.visibility = View.VISIBLE
+    }
+
     private fun observeProfileLiveData() {
         viewModel.myProfileLiveData.observe(this, Observer {
             it?.let { user ->
@@ -73,10 +80,10 @@ class MyProfileFragment : Fragment() {
             }
         })
 
-        viewModel.navigateToEdit.observe(this, Observer {
-            it?.let {
+        viewModel.navigateToEdit.observe(this, Observer {event ->
+            event?.getContentIfNotHandled()?.let { user ->
                 val profileBundle = Bundle()
-                profileBundle.putParcelable(ARG_USER, it)
+                profileBundle.putParcelable(ARG_USER, user)
                 rootActivity.navigateTo(EditProfileInfoFragment(), profileBundle)
             }
         })

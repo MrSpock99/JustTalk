@@ -12,6 +12,7 @@ import itis.ru.justtalk.R
 import itis.ru.justtalk.repository.UserRepositoryImpl
 import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_set_age.view.*
 import kotlinx.android.synthetic.main.fragment_people.*
 
@@ -26,6 +27,12 @@ class PeopleFragment : Fragment() {
         btn_go.setOnClickListener {
             (activity as MainActivity).navigateTo(MyProfileFragment(), null)
         }
+        setToolbarAndBottomNavVisibility()
+    }
+
+    private fun setToolbarAndBottomNavVisibility(){
+        (activity as MainActivity).toolbar.visibility = View.VISIBLE
+        (activity as MainActivity).bottom_navigation.visibility = View.VISIBLE
     }
 
    /* private fun showAgeDialog() {

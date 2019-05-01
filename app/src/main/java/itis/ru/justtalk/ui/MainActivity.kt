@@ -31,10 +31,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun injectDependencies() {
-       /* val component = DaggerAppComponent.builder()
-            .appModule(AppModule())
-            .build()
-        component.inject(this)*/
+        /* val component = DaggerAppComponent.builder()
+             .appModule(AppModule())
+             .build()
+         component.inject(this)*/
         (application as BaseApplication).appComponent.inject(this)
     }
 
@@ -49,34 +49,27 @@ class MainActivity : AppCompatActivity() {
                     R.id.main_container,
                     LoginFragment.newInstance()
                 )
-                toolbar.visibility = View.GONE
-                bottom_navigation.visibility = View.GONE
             }
             is PeopleFragment -> {
                 transaction.replace(
                     R.id.main_container,
                     PeopleFragment.newInstance()
                 )
-                toolbar.visibility = View.VISIBLE
-                bottom_navigation.visibility = View.VISIBLE
             }
             is MyProfileFragment -> {
                 transaction.replace(
                     R.id.main_container,
                     MyProfileFragment.newInstance()
                 )
-                toolbar.visibility = View.VISIBLE
-                bottom_navigation.visibility = View.VISIBLE
             }
             is EditProfileInfoFragment -> {
                 transaction.replace(
                     R.id.main_container,
                     EditProfileInfoFragment.newInstance(arguments)
                 )
-                toolbar.visibility = View.VISIBLE
-                bottom_navigation.visibility = View.GONE
             }
         }
+        transaction.addToBackStack(null)
         transaction.commit()
     }
 

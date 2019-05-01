@@ -18,6 +18,7 @@ import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.utils.LoginState
 import itis.ru.justtalk.utils.ScreenState
 import itis.ru.justtalk.utils.ViewModelFactory
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import javax.inject.Inject
 
@@ -45,6 +46,7 @@ class LoginFragment : Fragment() {
 
     private fun init(view: View) {
         rootActivity = activity as MainActivity
+        setToolbarAndBottomNavVisibility()
 
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(LoginViewModel::class.java)
@@ -65,6 +67,11 @@ class LoginFragment : Fragment() {
         view.btn_login.setOnClickListener {
             mGoogleApiClient?.let { it1 -> openGoogleActivity(it1) }
         }
+    }
+
+    private fun setToolbarAndBottomNavVisibility(){
+        rootActivity.toolbar.visibility = View.GONE
+        rootActivity.bottom_navigation.visibility = View.GONE
     }
 
     private fun injectDependencies() {

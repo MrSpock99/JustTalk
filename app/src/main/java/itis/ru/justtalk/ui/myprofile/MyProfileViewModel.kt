@@ -5,6 +5,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.interactor.myprofile.MyProfileInteractor
 import itis.ru.justtalk.models.User
+import itis.ru.justtalk.utils.ClickEvent
 import javax.inject.Inject
 
 class MyProfileViewModel @Inject constructor(
@@ -13,7 +14,7 @@ class MyProfileViewModel @Inject constructor(
 
     val myProfileLiveData = MutableLiveData<User>()
     val showLoadingLiveData = MutableLiveData<Boolean>()
-    val navigateToEdit = MutableLiveData<User>()
+    val navigateToEdit = MutableLiveData<ClickEvent<User>>()
 
     fun getMyProfile() {
         showLoadingLiveData.value = true
@@ -31,7 +32,7 @@ class MyProfileViewModel @Inject constructor(
 
     fun editProfileClick() {
         myProfileLiveData.value?.let {
-            navigateToEdit.value = it
+            navigateToEdit.value = ClickEvent(it)
         }
     }
 }

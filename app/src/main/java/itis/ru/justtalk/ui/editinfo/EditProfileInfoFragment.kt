@@ -14,6 +14,7 @@ import itis.ru.justtalk.models.User
 import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.utils.ViewModelFactory
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_edit_profile_info.*
 import kotlinx.android.synthetic.main.spinner_material.*
 import javax.inject.Inject
@@ -65,6 +66,8 @@ class EditProfileInfoFragment : Fragment() {
     }
 
     private fun init() {
+        setToolbarAndBottomNavVisibility()
+
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory)
                 .get(EditProfileInfoViewModel::class.java)
@@ -73,6 +76,11 @@ class EditProfileInfoFragment : Fragment() {
         observeProfileLiveData()
         observeEditProfileSuccessLiveData()
         observeShowLoadingLiveData()
+    }
+
+    private fun setToolbarAndBottomNavVisibility(){
+        rootActivity.toolbar.visibility = View.VISIBLE
+        rootActivity.bottom_navigation.visibility = View.GONE
     }
 
     private fun observeProfileLiveData() =
