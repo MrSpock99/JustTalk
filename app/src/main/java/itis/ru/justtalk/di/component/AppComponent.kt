@@ -18,5 +18,4 @@ interface AppComponent {
     fun inject(fragment: MyProfileFragment)
     fun inject(fragment: EditProfileInfoFragment)
     fun inject(activity: MainActivity)
-    fun inject(application: BaseApplication)
 }

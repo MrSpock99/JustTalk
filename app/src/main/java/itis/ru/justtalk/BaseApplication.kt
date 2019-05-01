@@ -11,11 +11,6 @@ class BaseApplication : Application() {
         appComponent = DaggerAppComponent.builder()
             .appModule(AppModule(this))
             .build()
-        //injectDependencies()
-    }
-
-    fun injectDependencies(){
-        appComponent.inject(this)
     }
 
     lateinit var appComponent: AppComponent
