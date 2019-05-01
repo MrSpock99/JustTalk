@@ -13,4 +13,8 @@
         <item>Advanced</item>
         <item>Native</item>
     </string-array>
+    <string-array name="et_language_entities">
+        <item>English</item>
+        <item>Russian</item>
+    </string-array>
 </resources>

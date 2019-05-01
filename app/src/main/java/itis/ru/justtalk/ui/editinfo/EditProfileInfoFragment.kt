@@ -59,16 +59,18 @@ class EditProfileInfoFragment : Fragment() {
     }
 
     private fun injectDependencies() {
-       /* val component = DaggerAppComponent.builder()
-            .appModule(AppModule())
-            .build()
-        component.inject(this)*/
+        /* val component = DaggerAppComponent.builder()
+             .appModule(AppModule())
+             .build()
+         component.inject(this)*/
         rootActivity = activity as MainActivity
         (rootActivity.application as BaseApplication).appComponent.inject(this)
     }
 
     private fun init() {
         setToolbarAndBottomNavVisibility()
+
+        setAutocompleteAdapters()
 
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory)
@@ -80,7 +82,24 @@ class EditProfileInfoFragment : Fragment() {
         observeShowLoadingLiveData()
     }
 
-    private fun setToolbarAndBottomNavVisibility(){
+    private fun setAutocompleteAdapters() {
+        et_speaking_language.setAdapter(
+            ArrayAdapter<String>(
+                rootActivity,
+                android.R.layout.simple_dropdown_item_1line,
+                rootActivity.resources.getStringArray(R.array.et_language_entities)
+            )
+        )
+        et_learning_language.setAdapter(
+            ArrayAdapter<String>(
+                rootActivity,
+                android.R.layout.simple_dropdown_item_1line,
+                rootActivity.resources.getStringArray(R.array.et_language_entities)
+            )
+        )
+    }
+
+    private fun setToolbarAndBottomNavVisibility() {
         rootActivity.toolbar.visibility = View.VISIBLE
         rootActivity.bottom_navigation.visibility = View.GONE
     }
@@ -130,6 +149,7 @@ class EditProfileInfoFragment : Fragment() {
         user.learningLanguageLevel = spinner_learning_level.selectedItem.toString()
 
         user.speakingLanguage = et_speaking_language.text.toString()
+
         user.speakingLanguageLevel = spinner_speaking_level.selectedItem.toString()
 
         viewModel.editProfileInfo(user)
@@ -182,7 +202,7 @@ class EditProfileInfoFragment : Fragment() {
         spinner_genders.setSelection(if (user.gender == User.GENDER_MAN) 0 else 1)
     }
 
-    private fun setLanguageLevelSpinners(){
+    private fun setLanguageLevelSpinners() {
         val levelsArr = activity?.resources?.getStringArray(R.array.spinner_level_entities)
         val aa =
             ArrayAdapter(
@@ -194,8 +214,10 @@ class EditProfileInfoFragment : Fragment() {
         spinner_learning_level.adapter = aa
         spinner_speaking_level.adapter = aa
 
-        levelsArr?.indexOf(user.learningLanguageLevel)?.let { spinner_learning_level.setSelection(it) }
-        levelsArr?.indexOf(user.speakingLanguageLevel)?.let { spinner_speaking_level.setSelection(it) }
+        levelsArr?.indexOf(user.learningLanguageLevel)
+            ?.let { spinner_learning_level.setSelection(it) }
+        levelsArr?.indexOf(user.speakingLanguageLevel)
+            ?.let { spinner_speaking_level.setSelection(it) }
     }
 
     companion object {
