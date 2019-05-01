@@ -11,15 +11,13 @@ import android.widget.Toast
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
+import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.di.component.DaggerMainComponent
-import itis.ru.justtalk.di.module.AppModule
 import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.utils.LoginState
 import itis.ru.justtalk.utils.ScreenState
 import itis.ru.justtalk.utils.ViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import javax.inject.Inject
 
@@ -70,10 +68,12 @@ class LoginFragment : Fragment() {
     }
 
     private fun injectDependencies() {
-        val component = DaggerMainComponent.builder()
+        /*val component = DaggerAppComponent.builder()
             .appModule(AppModule())
             .build()
-        component.inject(this)
+        component.inject(this)*/
+        (activity?.application as BaseApplication).appComponent.inject(this)
+
     }
 
     private fun updateUI(screenState: ScreenState<LoginState>?) {

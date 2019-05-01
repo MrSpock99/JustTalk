@@ -8,9 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.di.component.DaggerMainComponent
-import itis.ru.justtalk.di.module.AppModule
 import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.settings.SettingsFragment
@@ -92,10 +91,11 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun injectDependencies() {
-        val component = DaggerMainComponent.builder()
+        /*val component = DaggerAppComponent.builder()
             .appModule(AppModule())
             .build()
-        component.inject(this)
+        component.inject(this)*/
+        (activity?.application as BaseApplication).appComponent.inject(this)
     }
 
     companion object {

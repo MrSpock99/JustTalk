@@ -5,9 +5,8 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.google.firebase.auth.FirebaseAuth
+import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.di.component.DaggerMainComponent
-import itis.ru.justtalk.di.module.AppModule
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.login.LoginFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
@@ -32,10 +31,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun injectDependencies() {
-        val component = DaggerMainComponent.builder()
+       /* val component = DaggerAppComponent.builder()
             .appModule(AppModule())
             .build()
-        component.inject(this)
+        component.inject(this)*/
+        (application as BaseApplication).appComponent.inject(this)
     }
 
     private fun isLoggedIn(): Boolean = firebaseAuth.currentUser != null

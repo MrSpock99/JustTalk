@@ -8,9 +8,8 @@ import android.view.*
 import android.widget.ArrayAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.di.component.DaggerMainComponent
-import itis.ru.justtalk.di.module.AppModule
 import itis.ru.justtalk.models.User
 import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.utils.ViewModelFactory
@@ -57,15 +56,15 @@ class EditProfileInfoFragment : Fragment() {
     }
 
     private fun injectDependencies() {
-        val component = DaggerMainComponent.builder()
+       /* val component = DaggerAppComponent.builder()
             .appModule(AppModule())
             .build()
-        component.inject(this)
+        component.inject(this)*/
+        rootActivity = activity as MainActivity
+        (rootActivity.application as BaseApplication).appComponent.inject(this)
     }
 
     private fun init() {
-        rootActivity = activity as MainActivity
-
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory)
                 .get(EditProfileInfoViewModel::class.java)
