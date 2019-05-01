@@ -18,6 +18,10 @@ private const val USER_GENDER = "gender"
 private const val USER_ABOUT_ME = "about_me"
 private const val USER_LOCATION = "location"
 private const val USER_AVATAR_URL = "avatar_url"
+private const val USER_LEARNING_LANGUAGE = "learning_language"
+private const val USER_LEARNING_LANGUAGE_LEVEL = "learning_language_level"
+private const val USER_SPEAKING_LANGUAGE = "speaking_language"
+private const val USER_SPEAKING_LANGUAGE_LEVEL = "speaking_language_level"
 private const val USERS = "users"
 
 class UserRepositoryImpl @Inject constructor(
@@ -55,6 +59,10 @@ class UserRepositoryImpl @Inject constructor(
             userMap[USER_AVATAR_URL] = user.avatarUrl
             userMap[USER_GENDER] = user.gender
             userMap[USER_LOCATION] = user.location
+            userMap[USER_LEARNING_LANGUAGE] = user.learningLanguage
+            userMap[USER_LEARNING_LANGUAGE_LEVEL] = user.learningLanguageLevel
+            userMap[USER_SPEAKING_LANGUAGE] = user.speakingLanguage
+            userMap[USER_SPEAKING_LANGUAGE_LEVEL] = user.speakingLanguageLevel
             db.collection(USERS)
                 .document(firebaseAuth.currentUser?.email ?: "")
                 .set(userMap)
@@ -84,6 +92,10 @@ class UserRepositoryImpl @Inject constructor(
                                 "",
                                 ArrayList(),
                                 "",
+                                "",
+                                "",
+                                "",
+                                "",
                                 GeoPoint(0.0, 0.0)
                             )
                         )
@@ -111,6 +123,10 @@ class UserRepositoryImpl @Inject constructor(
                         "",
                         it.photoUrl.toString(),
                         arrayListOf("", "", "", "", ""),
+                        "",
+                        "",
+                        "",
+                        "",
                         "",
                         GeoPoint(0.0, 0.0)
                     )

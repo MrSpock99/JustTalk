@@ -5,4 +5,12 @@
         <item>Man</item>
         <item>Woman</item>
     </string-array>
+    <string-array name="spinner_level_entities">
+        <item>Beginner</item>
+        <item>Pre-Intermediate</item>
+        <item>Intermediate</item>
+        <item>Upper-Intermediate</item>
+        <item>Advanced</item>
+        <item>Native</item>
+    </string-array>
 </resources>

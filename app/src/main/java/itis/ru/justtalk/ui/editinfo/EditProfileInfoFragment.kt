@@ -16,7 +16,9 @@ import itis.ru.justtalk.utils.ViewModelFactory
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_edit_profile_info.*
+import kotlinx.android.synthetic.main.spinner_learning_level.*
 import kotlinx.android.synthetic.main.spinner_material.*
+import kotlinx.android.synthetic.main.spinner_speaking_level.*
 import javax.inject.Inject
 
 class EditProfileInfoFragment : Fragment() {
@@ -112,7 +114,10 @@ class EditProfileInfoFragment : Fragment() {
     private fun setUserInfo() {
         et_age.setText(user.age.toString())
         et_about_me.setText(user.aboutMe)
+        et_learning_language.setText(user.learningLanguage)
+        et_speaking_language.setText(user.speakingLanguage)
         setGenderSpinner()
+        setLanguageLevelSpinners()
         setUserPhotos()
     }
 
@@ -120,6 +125,12 @@ class EditProfileInfoFragment : Fragment() {
         user.age = et_age.text.toString().toInt()
         user.gender = spinner_genders.selectedItem.toString()
         user.aboutMe = et_about_me.text.toString()
+
+        user.learningLanguage = et_learning_language.text.toString()
+        user.learningLanguageLevel = spinner_learning_level.selectedItem.toString()
+
+        user.speakingLanguage = et_speaking_language.text.toString()
+        user.speakingLanguageLevel = spinner_speaking_level.selectedItem.toString()
 
         viewModel.editProfileInfo(user)
     }
@@ -169,6 +180,22 @@ class EditProfileInfoFragment : Fragment() {
         spinner_genders.adapter = aa
 
         spinner_genders.setSelection(if (user.gender == User.GENDER_MAN) 0 else 1)
+    }
+
+    private fun setLanguageLevelSpinners(){
+        val levelsArr = activity?.resources?.getStringArray(R.array.spinner_level_entities)
+        val aa =
+            ArrayAdapter(
+                context,
+                android.R.layout.simple_spinner_item,
+                levelsArr
+            )
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner_learning_level.adapter = aa
+        spinner_speaking_level.adapter = aa
+
+        levelsArr?.indexOf(user.learningLanguageLevel)?.let { spinner_learning_level.setSelection(it) }
+        levelsArr?.indexOf(user.speakingLanguageLevel)?.let { spinner_speaking_level.setSelection(it) }
     }
 
     companion object {
