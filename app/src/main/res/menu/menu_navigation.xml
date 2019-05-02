@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Profle"
+        android:icon="@drawable/ic_profile"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_people"
+        android:title="People"
+        android:icon="@drawable/ic_search"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_messages"
+        android:title="Messages"
+        android:icon="@drawable/ic_messages"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_words"
+        android:title="Words"
+        android:icon="@drawable/ic_words"
+        app:showAsAction="ifRoom" />
 </menu>
