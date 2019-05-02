@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/lyGiftList"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lyGiftList"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:layout_marginTop="5dp"
         android:layout_weight="8"
-        android:orientation="horizontal"
         android:background="@drawable/spinner_border"
+        android:orientation="horizontal"
         tools:ignore="UselessParent">
 
         <Spinner
@@ -26,8 +27,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="9dp"
-        android:layout_marginTop="-5dp"
-        android:background="@color/colorLightGrey"
+        android:layout_marginTop="-4dp"
+        android:background="@color/white"
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
         android:text="Gender"

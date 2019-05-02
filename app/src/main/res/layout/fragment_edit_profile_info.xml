@@ -9,6 +9,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -91,7 +92,7 @@
 
         <include
             android:id="@+id/spinner_gender"
-            layout="@layout/spinner_material"
+            layout="@layout/spinner_gender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

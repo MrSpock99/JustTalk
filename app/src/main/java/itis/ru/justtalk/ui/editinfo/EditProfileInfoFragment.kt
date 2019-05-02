@@ -17,7 +17,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_edit_profile_info.*
 import kotlinx.android.synthetic.main.spinner_learning_level.*
-import kotlinx.android.synthetic.main.spinner_material.*
+import kotlinx.android.synthetic.main.spinner_gender.*
 import kotlinx.android.synthetic.main.spinner_speaking_level.*
 import javax.inject.Inject
 
