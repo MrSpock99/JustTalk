@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
 import itis.ru.justtalk.BaseApplication
@@ -26,7 +28,8 @@ class LoginFragment : Fragment() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: LoginViewModel
-    private var mGoogleApiClient: GoogleApiClient? = null
+    @Inject
+    lateinit var mGoogleApiClient: GoogleSignInClient
     private lateinit var rootActivity: MainActivity
 
     override fun onCreateView(
@@ -52,17 +55,17 @@ class LoginFragment : Fragment() {
             ViewModelProviders.of(this, this.viewModeFactory).get(LoginViewModel::class.java)
         viewModel.loginState.observe(::getLifecycle, ::updateUI)
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+       /* val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.google_api_token))
             .requestEmail()
-            .build()
+            .build()*/
 
-        mGoogleApiClient = activity?.let {
+       /* mGoogleApiClient = activity?.let {
             GoogleApiClient.Builder(it)
                 .enableAutoManage(it, viewModel)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build()
-        }
+        }*/
 
         view.btn_login.setOnClickListener {
             mGoogleApiClient?.let { it1 -> openGoogleActivity(it1) }
@@ -101,8 +104,8 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun openGoogleActivity(googleApiClient: GoogleApiClient) {
-        val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
+    private fun openGoogleActivity(googleSignInClient: GoogleSignInClient) {
+        val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, LoginViewModel.REQUEST_AUTH)
     }
 

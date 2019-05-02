@@ -21,9 +21,9 @@ class AuthModule {
 
     @Provides
     fun provideGoogleSignInClient(
-        activity: AppCompatActivity,
+        context: Context,
         options: GoogleSignInOptions
     ): GoogleSignInClient {
-        return GoogleSignIn.getClient(activity, options)
+        return GoogleSignIn.getClient(context, options)
     }
 }
