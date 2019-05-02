@@ -10,7 +10,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import itis.ru.justtalk.R
 import itis.ru.justtalk.repository.UserRepositoryImpl
+import itis.ru.justtalk.ui.MainActivity
+import itis.ru.justtalk.ui.myprofile.MyProfileFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_set_age.view.*
+import kotlinx.android.synthetic.main.fragment_people.*
 
 class PeopleFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -19,10 +23,20 @@ class PeopleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //showAgeDialog()
+        btn_go.setOnClickListener {
+            (activity as MainActivity).navigateTo(MyProfileFragment(), null)
+        }
+        setToolbarAndBottomNavVisibility()
     }
 
-    private fun showAgeDialog() {
-        /*val dialogLayout = layoutInflater.inflate(R.layout.dialog_set_age, null)
+    private fun setToolbarAndBottomNavVisibility(){
+        (activity as MainActivity).toolbar.visibility = View.VISIBLE
+        (activity as MainActivity).bottom_navigation.visibility = View.VISIBLE
+    }
+
+   /* private fun showAgeDialog() {
+        val dialogLayout = layoutInflater.inflate(R.layout.dialog_set_age, null)
         val builder = context?.let {
             AlertDialog.Builder(it)
                     .setTitle("A little more information")
@@ -32,8 +46,12 @@ class PeopleFragment : Fragment() {
                                 .addUserToDb(dialogLayout.et_age.text.toString().toInt(), dialogLayout.spinner_gender.selectedItem.toString(), HashMap<String, Double>())
                     }
         }
-        builder?.show()*/
-    }
+        builder?.show()
+
+        btn_go.setOnClickListener {
+            (activity as MainActivity).navigateTo(MyProfileFragment(), null)
+        }
+    }*/
 
     companion object {
         fun newInstance() = PeopleFragment()

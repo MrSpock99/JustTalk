@@ -1,8 +1,20 @@
 <resources>
     <string name="app_name">JustTalk</string>
     <string name="google_api_token">499949272101-vmf6l1ib6td62v1g6s1qdpr1q9rqq5dl.apps.googleusercontent.com</string>
-    <string-array name="spinnder_gender_entities">
-        <item>M</item>
-        <item>W</item>
+    <string-array name="spinner_gender_entities">
+        <item>Man</item>
+        <item>Woman</item>
+    </string-array>
+    <string-array name="spinner_level_entities">
+        <item>Beginner</item>
+        <item>Pre-Intermediate</item>
+        <item>Intermediate</item>
+        <item>Upper-Intermediate</item>
+        <item>Advanced</item>
+        <item>Native</item>
+    </string-array>
+    <string-array name="et_language_entities">
+        <item>English</item>
+        <item>Russian</item>
     </string-array>
 </resources>

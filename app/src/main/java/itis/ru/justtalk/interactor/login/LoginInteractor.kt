@@ -7,15 +7,15 @@ import itis.ru.justtalk.repository.UserRepository
 import javax.inject.Inject
 
 class LoginInteractor @Inject constructor(
-    private val mUserRepository: UserRepository
+    private val userRepository: UserRepository
 ) {
 
     fun login(account: GoogleSignInAccount): Completable {
-        return mUserRepository.login(account)
+        return userRepository.login(account)
             .subscribeOn(Schedulers.io())
     }
 
     fun addUserToDb(age: Int, gender: String, location: HashMap<String, Double>) {
-        mUserRepository.addUserToDb(age, gender, location)
+        //userRepository.addUserToDb(age, gender, location)
     }
 }
