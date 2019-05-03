@@ -6,16 +6,18 @@ import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.login.LoginFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
+import itis.ru.justtalk.ui.people.PeopleFragment
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     modules = [AppModule::class, ViewModelFactoryModule::class, ViewModelModule::class,
-        RepoModule::class, AuthModule::class]
+        RepoModule::class, AuthModule::class, AdapterModule::class]
 )
 interface AppComponent {
     fun inject(fragment: LoginFragment)
     fun inject(fragment: MyProfileFragment)
     fun inject(fragment: EditProfileInfoFragment)
+    fun inject(fragment: PeopleFragment)
     fun inject(activity: MainActivity)
 }

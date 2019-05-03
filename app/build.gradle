@@ -64,6 +64,7 @@ dependencies {
     //DI
     implementation 'com.google.dagger:dagger:2.16'
     kapt 'com.google.dagger:dagger-compiler:2.16'
+    implementation 'android.arch.paging:runtime:1.0.1'
 }
 androidExtensions {
     experimental = true

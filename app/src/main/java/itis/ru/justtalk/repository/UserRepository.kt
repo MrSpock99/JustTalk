@@ -12,4 +12,5 @@ interface UserRepository {
     fun getUserFromDb(firebaseUser: FirebaseUser): Single<User>
     fun getMyProfile(): Single<User>
     fun getEmptyUser(): Single<User>
+    fun getUsers(limit: Long): Single<List<User>>
 }

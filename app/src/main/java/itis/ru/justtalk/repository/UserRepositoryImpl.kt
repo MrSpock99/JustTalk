@@ -28,7 +28,6 @@ class UserRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val db: FirebaseFirestore
 ) : UserRepository {
-
     override fun login(account: GoogleSignInAccount): Completable {
         return Completable.create { emitter ->
             firebaseAuth.signInWithCredential(
@@ -51,7 +50,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override fun addUserToDb(user: User): Completable {
-        return Completable.create {emitter ->
+        return Completable.create { emitter ->
             val userMap = HashMap<String, Any>()
             userMap[USER_NAME] = user.name
             userMap[USER_AGE] = user.age
@@ -134,4 +133,20 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override fun getUsers(limit: Long): Single<List<User>> {
+        return Single.create{emitter ->
+            db.collection(USERS)
+                .limit(limit)
+                .get()
+                .addOnCompleteListener {task ->
+                    if (task.isSuccessful){
+                        task.result?.toObjects(User::class.java)?.let { emitter.onSuccess(it) }
+                    }else{
+                        emitter.onError(task.exception ?: java.lang.Exception("error getting all users"))
+                    }
+                }
+        }
+    }
+
 }
