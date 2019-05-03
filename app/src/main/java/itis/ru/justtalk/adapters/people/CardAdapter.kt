@@ -12,6 +12,6 @@ interface CardAdapter {
 
     companion object {
 
-        val MAX_ELEVATION_FACTOR = 8
+        val MAX_ELEVATION_FACTOR = 1
     }
 }

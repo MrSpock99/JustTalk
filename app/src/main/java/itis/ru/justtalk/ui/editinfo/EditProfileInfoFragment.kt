@@ -163,7 +163,7 @@ class EditProfileInfoFragment : Fragment() {
             .transforms(transformation)
 
         val thumbnail = Glide.with(this)
-            .load(R.drawable.ic_launcher_background)
+            .load(R.drawable.image_placeholder)
             .apply(requestOptions)
 
         Glide.with(this)

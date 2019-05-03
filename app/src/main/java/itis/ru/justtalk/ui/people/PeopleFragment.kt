@@ -64,7 +64,7 @@ class PeopleFragment : Fragment() {
             val mCardShadowTransformer = ShadowTransformer(viewPager, mCardAdapter)
 
             viewPager.adapter = mCardAdapter
-            viewPager.setPageTransformer(false, mCardShadowTransformer)
+            //viewPager.setPageTransformer(false, mCardShadowTransformer)
             viewPager.offscreenPageLimit = 3
         }
     })

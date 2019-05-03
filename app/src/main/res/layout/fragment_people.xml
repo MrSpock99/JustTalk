@@ -17,8 +17,7 @@
         android:paddingLeft="60dp"
         android:paddingEnd="60dp"
         android:paddingRight="60dp"
-        android:paddingBottom="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/btn_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -26,15 +25,14 @@
     </android.support.v4.view.ViewPager>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_message"
         android:layout_width="190dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:background="@drawable/button_rounded"
-        android:text="Message"
+        android:text="@string/btn_message_title"
         android:textColor="@color/coloPrimaryText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 </android.support.constraint.ConstraintLayout>

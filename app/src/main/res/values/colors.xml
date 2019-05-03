@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#419FD9</color>
+    <color name="colorPrimaryDark">#035F97</color>
     <color name="colorAccent">#D81B60</color>
     <color name="coloPrimaryText">@color/white</color>
     <color name="colorButtonMyProfileBackground">#D2CDCD</color>

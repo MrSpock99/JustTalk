@@ -23,6 +23,7 @@ import java.util.List;
 
 import itis.ru.justtalk.R;
 import itis.ru.justtalk.models.User;
+import itis.ru.justtalk.utils.UtilsKt;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class CardPagerAdapterS extends PagerAdapter implements CardAdapter {
@@ -72,7 +73,7 @@ public class CardPagerAdapterS extends PagerAdapter implements CardAdapter {
             mBaseElevation = cardView.getCardElevation();
         }
 
-        cardView.setMaxCardElevation(mBaseElevation * Companion.getMAX_ELEVATION_FACTOR());
+        cardView.setMaxCardElevation(mBaseElevation);
         mViews.set(position, cardView);
         return view;
     }
@@ -89,7 +90,8 @@ public class CardPagerAdapterS extends PagerAdapter implements CardAdapter {
         ImageView ivAvatar = view.findViewById(R.id.iv_user_avatar);
 
         tvName.setText(user.getName());
-        tvDistance.setText(user.getLocation().toString());
+        tvDistance.setText(UtilsKt.getDistanceFromLocation(user.getLocation()));
+
         Transformation transformation = new RoundedCornersTransformation(20, 1);
 
         RequestOptions requestOptions = new RequestOptions()
@@ -97,7 +99,7 @@ public class CardPagerAdapterS extends PagerAdapter implements CardAdapter {
                 .transforms(transformation);
 
         RequestBuilder<Drawable> thumbnail = Glide.with(view)
-                .load(R.drawable.ic_launcher_background)
+                .load(R.drawable.image_placeholder)
                 .apply(requestOptions);
 
         Glide.with(view)
