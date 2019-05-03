@@ -18,7 +18,7 @@
         app:cardElevation="4dp">
 
         <ImageView
-            android:id="@+id/profileImageView"
+            android:id="@+id/iv_user_avatar"
             tools:srcCompat="@tools:sample/avatars"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -34,7 +34,7 @@
             android:paddingLeft="20dp">
 
             <TextView
-                android:id="@+id/nameAgeTxt"
+                android:id="@+id/tv_name_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimaryDark"
@@ -42,7 +42,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/locationNameTxt"
+                android:id="@+id/tv_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimaryDark"

@@ -40,6 +40,7 @@ class PeopleFragment : Fragment() {
     }
 
     private fun init(){
+        rootActivity = activity as MainActivity
         setToolbarAndBottomNavVisibility()
 
         viewModel =
