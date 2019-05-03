@@ -16,7 +16,6 @@ class EditProfileInfoViewModel @Inject constructor(
 
     val myProfileLiveData = MutableLiveData<User>()
     val editProfileSuccessLiveData = MutableLiveData<Boolean>()
-    val showLoadingLiveData = MutableLiveData<Boolean>()
 
     fun getMyProfile(bundleArgs: Bundle?) {
         if (bundleArgs?.getParcelable<User>(MyProfileFragment.ARG_USER) != null) {

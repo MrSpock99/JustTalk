@@ -13,7 +13,6 @@ class MyProfileViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val myProfileLiveData = MutableLiveData<User>()
-    val showLoadingLiveData = MutableLiveData<Boolean>()
     val navigateToEdit = MutableLiveData<ClickEvent<User>>()
 
     fun getMyProfile() {

@@ -13,7 +13,6 @@ class PeopleViewModel @Inject constructor(
     private val interactor: PeopleInteractor
 ) : BaseViewModel() {
     val usersLiveData = MutableLiveData<List<User>>()
-    val showLoadingLiveData = MutableLiveData<Boolean>()
     val navigateToMessages = MutableLiveData<ClickEvent<User>>()
 
     fun getUsers(limit: Long) {

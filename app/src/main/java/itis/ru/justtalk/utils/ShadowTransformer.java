@@ -81,7 +81,7 @@ public class ShadowTransformer implements ViewPager.OnPageChangeListener, ViewPa
                 currentCard.setScaleY((float) (1 + 0.1 * (1 - realOffset)));
             }
             currentCard.setCardElevation((baseElevation + baseElevation
-                    * (CardAdapter.MAX_ELEVATION_FACTOR - 1) * (1 - realOffset)));
+                    * (CardAdapter.Companion.getMAX_ELEVATION_FACTOR() - 1) * (1 - realOffset)));
         }
 
         CardView nextCard = mAdapter.getCardViewAt(nextPosition);
@@ -94,7 +94,7 @@ public class ShadowTransformer implements ViewPager.OnPageChangeListener, ViewPa
                 nextCard.setScaleY((float) (1 + 0.1 * (realOffset)));
             }
             nextCard.setCardElevation((baseElevation + baseElevation
-                    * (CardAdapter.MAX_ELEVATION_FACTOR - 1) * (realOffset)));
+                    * (CardAdapter.Companion.getMAX_ELEVATION_FACTOR() - 1) * (realOffset)));
         }
 
         mLastOffset = positionOffset;
