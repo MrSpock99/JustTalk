@@ -12,18 +12,20 @@ import javax.inject.Inject
 class PeopleViewModel @Inject constructor(
     private val interactor: PeopleInteractor
 ) : BaseViewModel() {
-    val usersLiveData = MutableLiveData<User>()
+    val usersLiveData = MutableLiveData<List<User>>()
     val showLoadingLiveData = MutableLiveData<Boolean>()
     val navigateToMessages = MutableLiveData<ClickEvent<User>>()
 
     fun getUsers(limit: Long) {
+        showLoadingLiveData.value = true
         disposables.add(
             interactor.getUsers(limit)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    Log.d("MYLOG", it.toString())
+                    showLoadingLiveData.value = false
+                    usersLiveData.value = it
                 }, {
-                    Log.d("MYLOG", it.toString())
+                    showLoadingLiveData.value = false
                 })
         )
     }

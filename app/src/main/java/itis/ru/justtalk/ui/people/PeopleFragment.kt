@@ -1,99 +1,80 @@
 package itis.ru.justtalk.ui.people
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.adapters.people.CardItemString
 import itis.ru.justtalk.adapters.people.CardPagerAdapterS
-import itis.ru.justtalk.repository.UserRepositoryImpl
 import itis.ru.justtalk.ui.MainActivity
-import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.utils.ShadowTransformer
+import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.dialog_set_age.view.*
 import kotlinx.android.synthetic.main.fragment_people.*
+import javax.inject.Inject
 
 class PeopleFragment : Fragment() {
-    private var mCardAdapter: CardPagerAdapterS? = null
-    private var mCardShadowTransformer: ShadowTransformer? = null
-
-    internal var titlesText = arrayOf(
-        " Time Table 0",
-        " Time Table 1",
-        " Time Table 2",
-        " Time Table 3",
-        " Time Table 4",
-        " Time Table 5",
-        " Time Table 6",
-        " Time Table 7",
-        " Time Table 8",
-        " Time Table 9"
-    )
-    internal var detailsArray = arrayOf(
-        "Time table details radom, Lorem ipsum characters ment for testing of programs and characters or displaying random informations",
-        "Time table details radom, Lorem ipsum characters ment for testing of programs and characters or displaying random informations",
-        "Time table details radom, Lorem ipsum characters ment for testing of programs and characters or displaying random informations",
-        "Time table details radom, Lorem ipsum characters ment for testing of programs and characters or displaying random informations",
-        "Time table details radom, Lorem ipsum characters ment for testing of programs and characters or displaying random informations",
-        "Time table details radom, Lorem ipsum characters ment for testing of programs and characters or displaying random informations",
-        "Time table details radom, Lorem ipsum characters ment for testing of programs and characters or displaying random informations",
-        "Time table details radom, Lorem ipsum characters ment for testing of programs and characters or displaying random informations",
-        "Time table details radom, Lorem ipsum characters ment for testing of programs and characters or displaying random informations",
-        "Time table details radom, Lorem ipsum characters ment for testing of programs and characters or displaying random informations"
-    )
+    @Inject
+    lateinit var mCardAdapter: CardPagerAdapterS
+    @Inject
+    lateinit var viewModeFactory: ViewModelFactory
+    private lateinit var viewModel: PeopleViewModel
+    private lateinit var rootActivity: MainActivity
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        injectDependencies()
         return inflater.inflate(R.layout.fragment_people, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //showAgeDialog()
         init()
-        setToolbarAndBottomNavVisibility()
+    }
+
+    private fun injectDependencies(){
+        (activity?.application as BaseApplication).appComponent.inject(this)
     }
 
     private fun init(){
-        mCardAdapter = CardPagerAdapterS()
-        for (i in titlesText.indices) {
-            mCardAdapter!!.addCardItemS(CardItemString(titlesText[i], detailsArray[i]))
-        }
-        mCardShadowTransformer = ShadowTransformer(viewPager, mCardAdapter)
+        rootActivity = activity as MainActivity
+        setToolbarAndBottomNavVisibility()
 
-        viewPager.setAdapter(mCardAdapter)
-        viewPager.setPageTransformer(false, mCardShadowTransformer)
-        viewPager.setOffscreenPageLimit(3)
+        viewModel =
+            ViewModelProviders.of(this, this.viewModeFactory).get(PeopleViewModel::class.java)
+
+        viewModel.getUsers(5)
+        observeUsersLiveData()
+        observeShowLoadingLiveData()
     }
 
     private fun setToolbarAndBottomNavVisibility(){
-        (activity as MainActivity).toolbar.visibility = View.VISIBLE
-        (activity as MainActivity).bottom_navigation.visibility = View.VISIBLE
+        rootActivity.toolbar.visibility = View.VISIBLE
+        rootActivity.bottom_navigation.visibility = View.VISIBLE
     }
 
-   /* private fun showAgeDialog() {
-        val dialogLayout = layoutInflater.inflate(R.layout.dialog_set_age, null)
-        val builder = context?.let {
-            AlertDialog.Builder(it)
-                    .setTitle("A little more information")
-                    .setView(dialogLayout)
-                    .setPositiveButton("OK") { _, i ->
-                        UserRepositoryImpl(FirebaseAuth.getInstance(), FirebaseFirestore.getInstance())
-                                .addUserToDb(dialogLayout.et_age.text.toString().toInt(), dialogLayout.spinner_gender.selectedItem.toString(), HashMap<String, Double>())
-                    }
-        }
-        builder?.show()
+    private fun observeUsersLiveData() = viewModel.usersLiveData.observe(this, Observer { list ->
+        list?.let {
+            for (i in list.indices) {
+                mCardAdapter.addCardItemS(list[i])
+            }
+            val mCardShadowTransformer = ShadowTransformer(viewPager, mCardAdapter)
 
-        btn_go.setOnClickListener {
-            (activity as MainActivity).navigateTo(MyProfileFragment(), null)
+            viewPager.adapter = mCardAdapter
+            viewPager.setPageTransformer(false, mCardShadowTransformer)
+            viewPager.offscreenPageLimit = 3
         }
-    }*/
+    })
+
+    private fun observeShowLoadingLiveData() =
+        viewModel.showLoadingLiveData.observe(this, Observer {
+            it?.let { show ->
+                rootActivity.showLoading(show)
+            }
+        })
 
     companion object {
         fun newInstance() = PeopleFragment()
