@@ -11,6 +11,9 @@ import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.people.CardPagerAdapterS
 import itis.ru.justtalk.ui.MainActivity
+import itis.ru.justtalk.ui.messages.ChatWithUserFragment
+import itis.ru.justtalk.ui.messages.MessagesFragment
+import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.utils.ShadowTransformer
 import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,7 +28,11 @@ class PeopleFragment : Fragment() {
     private lateinit var viewModel: PeopleViewModel
     private lateinit var rootActivity: MainActivity
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         injectDependencies()
         return inflater.inflate(R.layout.fragment_people, container, false)
     }
@@ -35,11 +42,11 @@ class PeopleFragment : Fragment() {
         init()
     }
 
-    private fun injectDependencies(){
+    private fun injectDependencies() {
         (activity?.application as BaseApplication).appComponent.inject(this)
     }
 
-    private fun init(){
+    private fun init() {
         rootActivity = activity as MainActivity
         setToolbarAndBottomNavVisibility()
 
@@ -49,9 +56,14 @@ class PeopleFragment : Fragment() {
         viewModel.getUsers(5)
         observeUsersLiveData()
         observeShowLoadingLiveData()
+        observeNavigateToChat()
+
+        btn_message.setOnClickListener {
+            viewModel.onMessageClick(viewPager.currentItem)
+        }
     }
 
-    private fun setToolbarAndBottomNavVisibility(){
+    private fun setToolbarAndBottomNavVisibility() {
         rootActivity.toolbar.visibility = View.VISIBLE
         rootActivity.bottom_navigation.visibility = View.VISIBLE
     }
@@ -73,6 +85,15 @@ class PeopleFragment : Fragment() {
         viewModel.showLoadingLiveData.observe(this, Observer {
             it?.let { show ->
                 rootActivity.showLoading(show)
+            }
+        })
+
+    private fun observeNavigateToChat() =
+        viewModel.navigateToChat.observe(this, Observer { event ->
+            event?.getContentIfNotHandled()?.let { user ->
+                val profileBundle = Bundle()
+                profileBundle.putParcelable(MyProfileFragment.ARG_USER, user)
+                rootActivity.navigateTo(ChatWithUserFragment(), profileBundle)
             }
         })
 

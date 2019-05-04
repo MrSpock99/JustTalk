@@ -1,7 +1,6 @@
 package itis.ru.justtalk.ui.people
 
 import android.arch.lifecycle.MutableLiveData
-import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.PeopleInteractor
 import itis.ru.justtalk.models.User
@@ -13,7 +12,7 @@ class PeopleViewModel @Inject constructor(
     private val interactor: PeopleInteractor
 ) : BaseViewModel() {
     val usersLiveData = MutableLiveData<List<User>>()
-    val navigateToMessages = MutableLiveData<ClickEvent<User>>()
+    val navigateToChat = MutableLiveData<ClickEvent<User?>>()
 
     fun getUsers(limit: Long) {
         showLoadingLiveData.value = true
@@ -27,5 +26,9 @@ class PeopleViewModel @Inject constructor(
                     showLoadingLiveData.value = false
                 })
         )
+    }
+
+    fun onMessageClick(index: Int){
+        navigateToChat.value = ClickEvent(usersLiveData.value?.get(index))
     }
 }

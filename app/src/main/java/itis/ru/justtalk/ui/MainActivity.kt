@@ -11,6 +11,8 @@ import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.login.LoginFragment
+import itis.ru.justtalk.ui.messages.ChatWithUserFragment
+import itis.ru.justtalk.ui.messages.MessagesFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.ui.people.PeopleFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,6 +30,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_people -> {
                     navigateTo(PeopleFragment(), null)
+                }
+                R.id.nav_messages -> {
+                    navigateTo(MessagesFragment(), null)
                 }
                 else -> {
                     return@OnNavigationItemSelectedListener false
@@ -88,6 +93,18 @@ class MainActivity : AppCompatActivity() {
                     EditProfileInfoFragment.newInstance(arguments)
                 )
             }
+            is MessagesFragment -> {
+                transaction.replace(
+                    R.id.main_container,
+                    MessagesFragment.newInstance()
+                )
+            }
+            is ChatWithUserFragment -> {
+                transaction.replace(
+                    R.id.main_container,
+                    ChatWithUserFragment.newInstance(arguments)
+                )
+            }
         }
         transaction.addToBackStack(null)
         transaction.commit()
@@ -102,7 +119,7 @@ class MainActivity : AppCompatActivity() {
             )
         } else {
             pb_main.visibility = View.GONE
-            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         }
     }
 }
