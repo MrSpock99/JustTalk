@@ -18,7 +18,6 @@ import itis.ru.justtalk.adapters.people.CardPagerAdapterS
 import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.messages.ChatWithUserFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
-import itis.ru.justtalk.utils.ShadowTransformer
 import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_people.*
@@ -111,10 +110,8 @@ class PeopleFragment : Fragment() {
             for (i in list.indices) {
                 mCardAdapter.addCardItemS(list[i])
             }
-            val mCardShadowTransformer = ShadowTransformer(viewPager, mCardAdapter)
 
             viewPager.adapter = mCardAdapter
-            //viewPager.setPageTransformer(false, mCardShadowTransformer)
             viewPager.offscreenPageLimit = 3
         }
     })
