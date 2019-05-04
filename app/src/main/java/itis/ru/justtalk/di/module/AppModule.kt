@@ -1,6 +1,7 @@
 package itis.ru.justtalk.di.module
 
 import android.content.Context
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -18,4 +19,8 @@ class AppModule(private val context: Context) {
 
     @Provides
     fun provideFirebaseAuth() = FirebaseAuth.getInstance()
+
+    @Provides
+    fun provideLocationClient(context: Context) =
+        LocationServices.getFusedLocationProviderClient(context)
 }

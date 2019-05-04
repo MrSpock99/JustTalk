@@ -2,6 +2,7 @@ package itis.ru.justtalk.repository
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.GeoPoint
 import io.reactivex.Completable
 import io.reactivex.Single
 import itis.ru.justtalk.models.User
@@ -12,5 +13,5 @@ interface UserRepository {
     fun getUserFromDb(firebaseUser: FirebaseUser): Single<User>
     fun getMyProfile(): Single<User>
     fun getEmptyUser(): Single<User>
-    fun getUsers(limit: Long): Single<List<User>>
+    fun getUsers(userLocation: GeoPoint, limit: Long): Single<List<User>>
 }
