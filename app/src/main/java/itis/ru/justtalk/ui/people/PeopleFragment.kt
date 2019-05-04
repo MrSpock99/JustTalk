@@ -80,9 +80,14 @@ class PeopleFragment : Fragment() {
         observeUsersLiveData()
         observeShowLoadingLiveData()
         observeNavigateToChat()
+        observeNavigateToUserDetails()
 
         btn_message.setOnClickListener {
             viewModel.onMessageClick(viewPager.currentItem)
+        }
+
+        mCardAdapter.setOnClickListener {
+            viewModel.onUserClicked(it)
         }
 
         ActivityCompat.requestPermissions(
@@ -129,6 +134,15 @@ class PeopleFragment : Fragment() {
                 val profileBundle = Bundle()
                 profileBundle.putParcelable(MyProfileFragment.ARG_USER, user)
                 rootActivity.navigateTo(ChatWithUserFragment(), profileBundle)
+            }
+        })
+
+    private fun observeNavigateToUserDetails() =
+        viewModel.navigateToUserDetails.observe(this, Observer { event ->
+            event?.getContentIfNotHandled()?.let { user ->
+                val profileBundle = Bundle()
+                profileBundle.putParcelable(MyProfileFragment.ARG_USER, user)
+                rootActivity.navigateTo(UserDetailsFragment(), profileBundle)
             }
         })
 

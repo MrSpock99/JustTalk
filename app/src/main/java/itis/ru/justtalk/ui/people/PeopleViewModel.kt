@@ -17,6 +17,7 @@ class PeopleViewModel @Inject constructor(
 ) : BaseViewModel() {
     val usersLiveData = MutableLiveData<List<User>>()
     val navigateToChat = MutableLiveData<ClickEvent<User?>>()
+    val navigateToUserDetails = MutableLiveData<ClickEvent<User?>>()
 
     fun getUsersNearby() {
         locationProviderClient.lastLocation.addOnCompleteListener {
@@ -41,5 +42,9 @@ class PeopleViewModel @Inject constructor(
 
     fun onMessageClick(index: Int) {
         navigateToChat.value = ClickEvent(usersLiveData.value?.get(index))
+    }
+
+    fun onUserClicked(user: User) {
+        navigateToUserDetails.value = ClickEvent(user)
     }
 }

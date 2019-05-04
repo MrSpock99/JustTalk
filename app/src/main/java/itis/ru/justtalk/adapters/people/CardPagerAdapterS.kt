@@ -15,16 +15,20 @@ import itis.ru.justtalk.utils.getDistanceFromLocation
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import java.util.*
 
-class CardPagerAdapterS : PagerAdapter() {
-
+class CardPagerAdapterS() : PagerAdapter() {
     private val mViews: MutableList<CardView?>
     private val mData: MutableList<User>
+    private lateinit var clickListener: (User) -> Unit
     var baseElevation: Float = 0.toFloat()
         private set
 
     init {
         mData = ArrayList()
         mViews = ArrayList()
+    }
+
+    fun setOnClickListener(clickListener: (User) -> Unit){
+        this.clickListener = clickListener
     }
 
     fun addCardItemS(user: User) {
@@ -47,6 +51,10 @@ class CardPagerAdapterS : PagerAdapter() {
         bind(mData[position], view)
         val cardView = view.findViewById<View>(R.id.cardview) as CardView
 
+        cardView.setOnClickListener {
+            clickListener(mData[position])
+        }
+
         if (baseElevation == 0f) {
             baseElevation = cardView.cardElevation
         }
@@ -58,7 +66,7 @@ class CardPagerAdapterS : PagerAdapter() {
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         container.removeView(`object` as View)
-        mViews.set(position, null)
+        mViews[position] = null
     }
 
     private fun bind(user: User, view: View) {

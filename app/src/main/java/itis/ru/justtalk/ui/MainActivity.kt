@@ -15,6 +15,7 @@ import itis.ru.justtalk.ui.messages.ChatWithUserFragment
 import itis.ru.justtalk.ui.messages.MessagesFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.ui.people.PeopleFragment
+import itis.ru.justtalk.ui.people.UserDetailsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -103,6 +104,12 @@ class MainActivity : AppCompatActivity() {
                 transaction.replace(
                     R.id.main_container,
                     ChatWithUserFragment.newInstance(arguments)
+                )
+            }
+            is UserDetailsFragment -> {
+                transaction.replace(
+                    R.id.main_container,
+                    UserDetailsFragment.newInstance(arguments)
                 )
             }
         }
