@@ -134,7 +134,9 @@ class UserRepositoryImpl @Inject constructor(
         updateUserLocationInDb(userLocation)
         return Single.create { emitter ->
             db.collection(USERS)
+/*
                 .whereLessThanOrEqualTo("location", userLocation)
+*/
                 .limit(limit)
                 .get()
                 .addOnCompleteListener { task ->

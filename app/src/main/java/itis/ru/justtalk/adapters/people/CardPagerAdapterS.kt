@@ -1,5 +1,6 @@
 package itis.ru.justtalk.adapters.people
 
+import android.annotation.SuppressLint
 import android.support.v4.view.PagerAdapter
 import android.support.v7.widget.CardView
 import android.view.LayoutInflater
@@ -9,13 +10,20 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import itis.ru.justtalk.R
+import itis.ru.justtalk.interactor.myprofile.MyProfileInteractor
 import itis.ru.justtalk.models.User
+import itis.ru.justtalk.repository.UserRepositoryImpl
 import itis.ru.justtalk.utils.getDistanceFromLocation
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import java.util.*
+import javax.inject.Inject
 
-class CardPagerAdapterS() : PagerAdapter() {
+class CardPagerAdapterS: PagerAdapter() {
+    var myProfileInteractor: MyProfileInteractor = MyProfileInteractor(UserRepositoryImpl(
+        FirebaseAuth.getInstance(), FirebaseFirestore.getInstance()))
     private val mViews: MutableList<CardView?>
     private val mData: MutableList<User>
     private lateinit var clickListener: (User) -> Unit
@@ -27,7 +35,7 @@ class CardPagerAdapterS() : PagerAdapter() {
         mViews = ArrayList()
     }
 
-    fun setOnClickListener(clickListener: (User) -> Unit){
+    fun setOnClickListener(clickListener: (User) -> Unit) {
         this.clickListener = clickListener
     }
 
@@ -69,13 +77,20 @@ class CardPagerAdapterS() : PagerAdapter() {
         mViews[position] = null
     }
 
+    @SuppressLint("CheckResult")
     private fun bind(user: User, view: View) {
         val tvName = view.findViewById<TextView>(R.id.tv_name_age)
         val tvDistance = view.findViewById<TextView>(R.id.tv_distance)
         val ivAvatar = view.findViewById<ImageView>(R.id.iv_user_avatar)
 
         tvName.text = user.name
-        tvDistance.text = getDistanceFromLocation(user.location)
+        myProfileInteractor
+            .getMyProfile()
+            .subscribe({
+                tvDistance.text = getDistanceFromLocation(user.location, it.location)
+            }, {
+                it.printStackTrace()
+            })
 
         val transformation = RoundedCornersTransformation(20, 1)
 

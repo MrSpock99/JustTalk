@@ -7,6 +7,7 @@ import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.login.LoginFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.ui.people.PeopleFragment
+import itis.ru.justtalk.ui.people.UserDetailsFragment
 import javax.inject.Singleton
 
 @Singleton
@@ -19,5 +20,6 @@ interface AppComponent {
     fun inject(fragment: MyProfileFragment)
     fun inject(fragment: EditProfileInfoFragment)
     fun inject(fragment: PeopleFragment)
+    fun inject(fragment: UserDetailsFragment)
     fun inject(activity: MainActivity)
 }

@@ -1,5 +1,6 @@
 package itis.ru.justtalk.ui.people
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.location.Location
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -19,6 +20,7 @@ class PeopleViewModel @Inject constructor(
     val navigateToChat = MutableLiveData<ClickEvent<User?>>()
     val navigateToUserDetails = MutableLiveData<ClickEvent<User?>>()
 
+    @SuppressLint("MissingPermission")
     fun getUsersNearby() {
         locationProviderClient.lastLocation.addOnCompleteListener {
             val currentLocation = it.result as Location

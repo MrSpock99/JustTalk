@@ -9,6 +9,7 @@ import itis.ru.justtalk.ui.editinfo.EditProfileInfoViewModel
 import itis.ru.justtalk.ui.login.LoginViewModel
 import itis.ru.justtalk.ui.myprofile.MyProfileViewModel
 import itis.ru.justtalk.ui.people.PeopleViewModel
+import itis.ru.justtalk.ui.people.UserDetailsViewModel
 import kotlin.reflect.KClass
 
 @Module
@@ -32,6 +33,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(PeopleViewModel::class)
     abstract fun bindPeopleViewModel(peopleViewModel: PeopleViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(UserDetailsViewModel::class)
+    abstract fun bindUserDetailsViewModel(userDetailsViewModel: UserDetailsViewModel): ViewModel
 }
 
 @Target(

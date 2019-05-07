@@ -19,6 +19,7 @@ import itis.ru.justtalk.ui.people.UserDetailsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
+
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
@@ -53,6 +54,14 @@ class MainActivity : AppCompatActivity() {
             bottom_navigation.selectedItemId = R.id.nav_people
         } else {
             navigateTo(LoginFragment(), null)
+        }
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
         }
     }
 
