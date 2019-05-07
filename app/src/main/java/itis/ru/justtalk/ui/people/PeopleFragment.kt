@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -16,22 +15,21 @@ import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.people.CardPagerAdapterS
 import itis.ru.justtalk.ui.MainActivity
+import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.messages.ChatWithUserFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.utils.ViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_people.*
 import javax.inject.Inject
 
 const val ACCESS_FINE_LOCATION_REQUEST_CODE: Int = 1001
 
-class PeopleFragment : Fragment() {
+class PeopleFragment : BaseFragment() {
     @Inject
     lateinit var mCardAdapter: CardPagerAdapterS
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: PeopleViewModel
-    private lateinit var rootActivity: MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,8 +69,12 @@ class PeopleFragment : Fragment() {
     }
 
     private fun init() {
-        rootActivity = activity as MainActivity
-        setToolbarAndBottomNavVisibility()
+        setToolbarAndBottomNavVisibility(
+            toolbarVisibility = View.VISIBLE,
+            bottomNavVisibility = View.VISIBLE
+        )
+        setArrowToolbarVisibility(false)
+        setToolbarTitle(getString(R.string.fragment_people_toolbar_title))
 
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(PeopleViewModel::class.java)
@@ -90,24 +92,19 @@ class PeopleFragment : Fragment() {
             viewModel.onUserClicked(it)
         }
 
-        ActivityCompat.requestPermissions(
-            rootActivity,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            ACCESS_FINE_LOCATION_REQUEST_CODE
-        )
-
         if (ContextCompat.checkSelfPermission(
                 rootActivity,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             viewModel.getUsersNearby()
+        } else {
+            ActivityCompat.requestPermissions(
+                rootActivity,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                ACCESS_FINE_LOCATION_REQUEST_CODE
+            )
         }
-    }
-
-    private fun setToolbarAndBottomNavVisibility() {
-        rootActivity.toolbar.visibility = View.VISIBLE
-        rootActivity.bottom_navigation.visibility = View.VISIBLE
     }
 
     private fun observeUsersLiveData() = viewModel.usersLiveData.observe(this, Observer { list ->

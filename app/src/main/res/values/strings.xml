@@ -8,6 +8,9 @@
     <string name="et_learning_language_hint">Learning language</string>
     <string name="spinner_gender_title">Gender</string>
     <string name="spinner_level_title">Level</string>
+    <string name="fragment_people_toolbar_title">People</string>
+    <string name="fragment_my_profile_toolbar_title">My profile</string>
+    <string name="fragment_edit_profile_toolbar_title">Edit profile</string>
     <string-array name="spinner_gender_entities">
         <item>Man</item>
         <item>Woman</item>

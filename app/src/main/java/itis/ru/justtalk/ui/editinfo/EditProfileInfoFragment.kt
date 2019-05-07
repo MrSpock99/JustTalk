@@ -3,7 +3,6 @@ package itis.ru.justtalk.ui.editinfo
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.*
 import android.widget.ArrayAdapter
 import com.bumptech.glide.Glide
@@ -12,21 +11,20 @@ import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.models.User
 import itis.ru.justtalk.ui.MainActivity
+import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.utils.ViewModelFactory
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_edit_profile_info.*
-import kotlinx.android.synthetic.main.spinner_learning_level.*
 import kotlinx.android.synthetic.main.spinner_gender.*
+import kotlinx.android.synthetic.main.spinner_learning_level.*
 import kotlinx.android.synthetic.main.spinner_speaking_level.*
 import javax.inject.Inject
 
-class EditProfileInfoFragment : Fragment() {
+class EditProfileInfoFragment : BaseFragment() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var user: User
     private lateinit var viewModel: EditProfileInfoViewModel
-    private lateinit var rootActivity: MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,12 +61,15 @@ class EditProfileInfoFragment : Fragment() {
              .appModule(AppModule())
              .build()
          component.inject(this)*/
-        rootActivity = activity as MainActivity
         (rootActivity.application as BaseApplication).appComponent.inject(this)
     }
 
     private fun init() {
-        setToolbarAndBottomNavVisibility()
+        setToolbarAndBottomNavVisibility(
+            toolbarVisibility = View.VISIBLE,
+            bottomNavVisibility = View.GONE
+        )
+        setToolbarTitle(getString(R.string.fragment_edit_profile_toolbar_title))
 
         setAutocompleteAdapters()
 
@@ -97,11 +98,6 @@ class EditProfileInfoFragment : Fragment() {
                 rootActivity.resources.getStringArray(R.array.et_language_entities)
             )
         )
-    }
-
-    private fun setToolbarAndBottomNavVisibility() {
-        rootActivity.toolbar.visibility = View.VISIBLE
-        rootActivity.bottom_navigation.visibility = View.GONE
     }
 
     private fun observeProfileLiveData() =

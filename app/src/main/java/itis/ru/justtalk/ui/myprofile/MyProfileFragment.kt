@@ -3,7 +3,6 @@ package itis.ru.justtalk.ui.myprofile
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,18 +10,17 @@ import com.bumptech.glide.Glide
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.ui.MainActivity
+import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.settings.SettingsFragment
 import itis.ru.justtalk.utils.ViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_my_profile.*
 import javax.inject.Inject
 
-class MyProfileFragment : Fragment() {
+class MyProfileFragment : BaseFragment() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: MyProfileViewModel
-    private lateinit var rootActivity: MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,8 +37,12 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun init() {
-        rootActivity = activity as MainActivity
-        setToolbarAndBottomNavVisibility()
+        setToolbarAndBottomNavVisibility(
+            toolbarVisibility = View.VISIBLE,
+            bottomNavVisibility = View.VISIBLE
+        )
+        setToolbarTitle(getString(R.string.fragment_my_profile_toolbar_title))
+        setArrowToolbarVisibility(false)
 
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(MyProfileViewModel::class.java)
@@ -60,11 +62,6 @@ class MyProfileFragment : Fragment() {
         }
     }
 
-    private fun setToolbarAndBottomNavVisibility(){
-        rootActivity.toolbar.visibility = View.VISIBLE
-        rootActivity.bottom_navigation.visibility = View.VISIBLE
-    }
-
     private fun observeProfileLiveData() {
         viewModel.myProfileLiveData.observe(this, Observer {
             it?.let { user ->
@@ -80,7 +77,7 @@ class MyProfileFragment : Fragment() {
             }
         })
 
-        viewModel.navigateToEdit.observe(this, Observer {event ->
+        viewModel.navigateToEdit.observe(this, Observer { event ->
             event?.getContentIfNotHandled()?.let { user ->
                 val profileBundle = Bundle()
                 profileBundle.putParcelable(ARG_USER, user)
