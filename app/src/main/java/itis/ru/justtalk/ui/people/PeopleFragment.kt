@@ -13,8 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.adapters.people.CardPagerAdapterS
-import itis.ru.justtalk.ui.MainActivity
+import itis.ru.justtalk.adapters.people.CardPagerAdapter
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.messages.ChatWithUserFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
@@ -26,7 +25,7 @@ const val ACCESS_FINE_LOCATION_REQUEST_CODE: Int = 1001
 
 class PeopleFragment : BaseFragment() {
     @Inject
-    lateinit var mCardAdapter: CardPagerAdapterS
+    lateinit var mCardAdapter: CardPagerAdapter
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: PeopleViewModel
@@ -109,7 +108,7 @@ class PeopleFragment : BaseFragment() {
 
     private fun observeUsersLiveData() = viewModel.usersLiveData.observe(this, Observer { list ->
         list?.let {
-            mCardAdapter.mData.clear()
+            mCardAdapter.data.clear()
             mCardAdapter.addCardItemS(it)
 
             viewPager.adapter = mCardAdapter

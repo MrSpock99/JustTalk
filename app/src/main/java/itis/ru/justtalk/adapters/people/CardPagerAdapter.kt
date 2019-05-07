@@ -6,8 +6,6 @@ import android.support.v7.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -18,49 +16,43 @@ import itis.ru.justtalk.models.User
 import itis.ru.justtalk.repository.UserRepositoryImpl
 import itis.ru.justtalk.utils.getDistanceFromLocation
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
+import kotlinx.android.synthetic.main.card_view_tinder_like.view.*
 import java.util.*
-import javax.inject.Inject
+import kotlin.collections.ArrayList
 
-class CardPagerAdapterS: PagerAdapter() {
+class CardPagerAdapter: PagerAdapter() {
     var myProfileInteractor: MyProfileInteractor = MyProfileInteractor(UserRepositoryImpl(
         FirebaseAuth.getInstance(), FirebaseFirestore.getInstance()))
-    private val mViews: MutableList<CardView?>
-    val mData: MutableList<User>
+    val data: MutableList<User> = ArrayList()
     private lateinit var clickListener: (User) -> Unit
-    var baseElevation: Float = 0.toFloat()
+    var baseElevation: Float = 0.0f
         private set
-
-    init {
-        mData = ArrayList()
-        mViews = ArrayList()
-    }
 
     fun setOnClickListener(clickListener: (User) -> Unit) {
         this.clickListener = clickListener
     }
 
     fun addCardItemS(userList: List<User>) {
-        //mViews.add(null)
-        mData.addAll(userList)
+        data.addAll(userList)
     }
 
     override fun getCount(): Int {
-        return mData.size
+        return data.size
     }
 
-    override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view === `object`
+    override fun isViewFromObject(view: View, obj: Any): Boolean {
+        return view === obj
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val view = LayoutInflater.from(container.context)
             .inflate(R.layout.card_view_tinder_like, container, false)
         container.addView(view)
-        bind(mData[position], view)
-        val cardView = view.findViewById<View>(R.id.cardview) as CardView
+        bind(data[position], view)
+        val cardView = view.cardview
 
         cardView.setOnClickListener {
-            clickListener(mData[position])
+            clickListener(data[position])
         }
 
         if (baseElevation == 0f) {
@@ -68,20 +60,18 @@ class CardPagerAdapterS: PagerAdapter() {
         }
 
         cardView.maxCardElevation = baseElevation
-        mViews.add(cardView)
         return view
     }
 
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        container.removeView(`object` as View)
-        mViews[position] = null
+    override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
+        container.removeView(obj as View)
     }
 
     @SuppressLint("CheckResult")
     private fun bind(user: User, view: View) {
-        val tvName = view.findViewById<TextView>(R.id.tv_name_age)
-        val tvDistance = view.findViewById<TextView>(R.id.tv_distance)
-        val ivAvatar = view.findViewById<ImageView>(R.id.iv_user_avatar)
+        val tvName = view.tv_name_age
+        val tvDistance = view.tv_distance
+        val ivAvatar = view.iv_user_avatar
 
         tvName.text = user.name
         myProfileInteractor
