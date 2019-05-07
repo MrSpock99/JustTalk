@@ -25,7 +25,7 @@ class CardPagerAdapterS: PagerAdapter() {
     var myProfileInteractor: MyProfileInteractor = MyProfileInteractor(UserRepositoryImpl(
         FirebaseAuth.getInstance(), FirebaseFirestore.getInstance()))
     private val mViews: MutableList<CardView?>
-    private val mData: MutableList<User>
+    val mData: MutableList<User>
     private lateinit var clickListener: (User) -> Unit
     var baseElevation: Float = 0.toFloat()
         private set
@@ -39,9 +39,9 @@ class CardPagerAdapterS: PagerAdapter() {
         this.clickListener = clickListener
     }
 
-    fun addCardItemS(user: User) {
-        mViews.add(null)
-        mData.add(user)
+    fun addCardItemS(userList: List<User>) {
+        //mViews.add(null)
+        mData.addAll(userList)
     }
 
     override fun getCount(): Int {
@@ -68,7 +68,7 @@ class CardPagerAdapterS: PagerAdapter() {
         }
 
         cardView.maxCardElevation = baseElevation
-        mViews[position] = cardView
+        mViews.add(cardView)
         return view
     }
 

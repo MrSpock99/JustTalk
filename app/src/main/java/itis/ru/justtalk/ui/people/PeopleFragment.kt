@@ -109,9 +109,8 @@ class PeopleFragment : BaseFragment() {
 
     private fun observeUsersLiveData() = viewModel.usersLiveData.observe(this, Observer { list ->
         list?.let {
-            for (i in list.indices) {
-                mCardAdapter.addCardItemS(list[i])
-            }
+            mCardAdapter.mData.clear()
+            mCardAdapter.addCardItemS(it)
 
             viewPager.adapter = mCardAdapter
             viewPager.offscreenPageLimit = 3
