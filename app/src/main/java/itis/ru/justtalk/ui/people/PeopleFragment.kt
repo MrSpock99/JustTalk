@@ -24,8 +24,7 @@ import javax.inject.Inject
 const val ACCESS_FINE_LOCATION_REQUEST_CODE: Int = 1001
 
 class PeopleFragment : BaseFragment() {
-    @Inject
-    lateinit var mCardAdapter: CardPagerAdapter
+    private var mCardAdapter: CardPagerAdapter = CardPagerAdapter()
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: PeopleViewModel
@@ -79,6 +78,7 @@ class PeopleFragment : BaseFragment() {
             ViewModelProviders.of(this, this.viewModeFactory).get(PeopleViewModel::class.java)
 
         observeUsersLiveData()
+        observeMyLocationLiveData()
         observeShowLoadingLiveData()
         observeNavigateToChat()
         observeNavigateToUserDetails()
@@ -105,6 +105,12 @@ class PeopleFragment : BaseFragment() {
             )
         }
     }
+
+    private fun observeMyLocationLiveData() =
+        viewModel.myLocationLiveData.observe(this, Observer {
+            if (it != null)
+                mCardAdapter.setMyLocation(it)
+        })
 
     private fun observeUsersLiveData() = viewModel.usersLiveData.observe(this, Observer { list ->
         list?.let {

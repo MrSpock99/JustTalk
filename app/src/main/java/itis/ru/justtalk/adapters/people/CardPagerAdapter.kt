@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import itis.ru.justtalk.R
 import itis.ru.justtalk.interactor.myprofile.MyProfileInteractor
 import itis.ru.justtalk.models.User
@@ -21,15 +22,17 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class CardPagerAdapter: PagerAdapter() {
-    var myProfileInteractor: MyProfileInteractor = MyProfileInteractor(UserRepositoryImpl(
-        FirebaseAuth.getInstance(), FirebaseFirestore.getInstance()))
     val data: MutableList<User> = ArrayList()
     private lateinit var clickListener: (User) -> Unit
-    var baseElevation: Float = 0.0f
-        private set
+    private lateinit var myLocation: GeoPoint
+    private var baseElevation: Float = 0.0f
 
     fun setOnClickListener(clickListener: (User) -> Unit) {
         this.clickListener = clickListener
+    }
+
+    fun setMyLocation(myLocation: GeoPoint){
+        this.myLocation = myLocation
     }
 
     fun addCardItemS(userList: List<User>) {
@@ -74,13 +77,7 @@ class CardPagerAdapter: PagerAdapter() {
         val ivAvatar = view.iv_user_avatar
 
         tvName.text = user.name
-        myProfileInteractor
-            .getMyProfile()
-            .subscribe({
-                tvDistance.text = getDistanceFromLocation(user.location, it.location)
-            }, {
-                it.printStackTrace()
-            })
+        tvDistance.text = myLocation?.let { getDistanceFromLocation(user.location, it) }
 
         val transformation = RoundedCornersTransformation(20, 1)
 

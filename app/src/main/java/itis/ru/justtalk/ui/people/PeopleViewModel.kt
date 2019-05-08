@@ -17,6 +17,7 @@ class PeopleViewModel @Inject constructor(
     private val locationProviderClient: FusedLocationProviderClient
 ) : BaseViewModel() {
     val usersLiveData = MutableLiveData<List<User>>()
+    val myLocationLiveData = MutableLiveData<GeoPoint>()
     val navigateToChat = MutableLiveData<ClickEvent<User?>>()
     val navigateToUserDetails = MutableLiveData<ClickEvent<User?>>()
 
@@ -24,7 +25,9 @@ class PeopleViewModel @Inject constructor(
     fun getUsersNearby() {
         locationProviderClient.lastLocation.addOnCompleteListener {
             val currentLocation = it.result as Location
-            getUsers(GeoPoint(currentLocation.latitude, currentLocation.longitude), 5)
+            val locationGeoPoint = GeoPoint(currentLocation.latitude, currentLocation.longitude)
+            myLocationLiveData.value = locationGeoPoint
+            getUsers(locationGeoPoint, 5)
         }
     }
 
