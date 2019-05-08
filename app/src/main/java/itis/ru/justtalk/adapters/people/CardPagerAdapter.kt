@@ -1,6 +1,5 @@
 package itis.ru.justtalk.adapters.people
 
-import android.annotation.SuppressLint
 import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
@@ -63,14 +62,13 @@ class CardPagerAdapter: PagerAdapter() {
         container.removeView(obj as View)
     }
 
-    @SuppressLint("CheckResult")
     private fun bind(user: User, view: View) {
         val tvName = view.tv_name_age
         val tvDistance = view.tv_distance
         val ivAvatar = view.iv_user_avatar
 
         tvName.text = user.name
-        tvDistance.text = myLocation?.let { getDistanceFromLocation(user.location, it) }
+        tvDistance.text = getDistanceFromLocation(user.location, myLocation)
 
         val transformation = RoundedCornersTransformation(20, 1)
 
