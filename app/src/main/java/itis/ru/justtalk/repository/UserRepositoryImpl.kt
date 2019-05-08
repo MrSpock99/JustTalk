@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import io.reactivex.Completable
 import io.reactivex.Single
+import itis.ru.justtalk.models.RemoteUser
 import itis.ru.justtalk.models.User
 import javax.inject.Inject
 
@@ -71,16 +72,16 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getUserFromDb(firebaseUser: FirebaseUser): Single<User> {
+    override fun getUserFromDb(firebaseUser: FirebaseUser): Single<RemoteUser> {
         return Single.create { emitter ->
             db.collection(USERS)
                 .document(firebaseUser.email ?: "")
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val result = task.result
-                        //val user = result?.toObject(User::class.java)
+                        //val user = result?.toObject(RemoteUser::class.java)
                         emitter.onSuccess(
-                            result?.toObject(User::class.java) ?: User(
+                            result?.toObject(RemoteUser::class.java) ?: RemoteUser(
                                 "",
                                 0,
                                 "",
@@ -102,17 +103,17 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMyProfile(): Single<User> {
+    override fun getMyProfile(): Single<RemoteUser> {
         return firebaseAuth.currentUser?.let {
             getUserFromDb(it)
         } ?: Single.error(Exception("user not exists"))
     }
 
-    override fun getEmptyUser(): Single<User> {
+    override fun getEmptyUser(): Single<RemoteUser> {
         return Single.create { emitter ->
             firebaseAuth.currentUser?.let {
                 val user =
-                    User(
+                    RemoteUser(
                         it.displayName ?: "",
                         0,
                         "",
@@ -130,7 +131,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getUsers(userLocation: GeoPoint, limit: Long): Single<List<User>> {
+    override fun getUsers(userLocation: GeoPoint, limit: Long): Single<List<RemoteUser>> {
         updateUserLocationInDb(userLocation)
         return Single.create { emitter ->
             db.collection(USERS)
@@ -141,7 +142,7 @@ class UserRepositoryImpl @Inject constructor(
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        task.result?.toObjects(User::class.java)?.let { emitter.onSuccess(it) }
+                        task.result?.toObjects(RemoteUser::class.java)?.let { emitter.onSuccess(it) }
                     } else {
                         emitter.onError(
                             task.exception ?: java.lang.Exception("error getting all users")

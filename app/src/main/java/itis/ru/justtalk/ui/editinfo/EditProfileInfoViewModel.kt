@@ -4,9 +4,9 @@ import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
-import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.interactor.myprofile.MyProfileInteractor
 import itis.ru.justtalk.models.User
+import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import javax.inject.Inject
 

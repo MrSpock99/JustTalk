@@ -10,8 +10,8 @@ import com.bumptech.glide.request.RequestOptions
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.models.User
-import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.base.BaseFragment
+import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.utils.ViewModelFactory
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.fragment_edit_profile_info.*
@@ -112,7 +112,7 @@ class EditProfileInfoFragment : BaseFragment() {
         viewModel.editProfileSuccessLiveData.observe(this, Observer {
             it?.let { success ->
                 if (success) {
-                    rootActivity.onBackPressed()
+                    rootActivity.navigateTo(MyProfileFragment(), null)
                 } else {
                     //show error
                 }
@@ -186,16 +186,17 @@ class EditProfileInfoFragment : BaseFragment() {
     }
 
     private fun setGenderSpinner() {
+        val gendersArr = activity?.resources?.getStringArray(R.array.spinner_gender_entities)
         val aa =
             ArrayAdapter(
                 context,
                 android.R.layout.simple_spinner_item,
-                activity?.resources?.getStringArray(R.array.spinner_gender_entities)
+                gendersArr
             )
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner_genders.adapter = aa
 
-        spinner_genders.setSelection(if (user.gender == User.GENDER_MAN) 0 else 1)
+        gendersArr?.indexOf(user.gender)?.let { spinner_genders.setSelection(it) }
     }
 
     private fun setLanguageLevelSpinners() {

@@ -2,24 +2,17 @@ package itis.ru.justtalk.adapters.people
 
 import android.annotation.SuppressLint
 import android.support.v4.view.PagerAdapter
-import android.support.v7.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import itis.ru.justtalk.R
-import itis.ru.justtalk.interactor.myprofile.MyProfileInteractor
 import itis.ru.justtalk.models.User
-import itis.ru.justtalk.repository.UserRepositoryImpl
 import itis.ru.justtalk.utils.getDistanceFromLocation
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.card_view_tinder_like.view.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 class CardPagerAdapter: PagerAdapter() {
     val data: MutableList<User> = ArrayList()

@@ -14,16 +14,61 @@ class MyProfileInteractor @Inject constructor(
     fun getUserInfo(firebaseUser: FirebaseUser): Single<User> {
         return userRepository.getUserFromDb(firebaseUser)
             .subscribeOn(Schedulers.io())
+            .map {
+                User(
+                    it.name,
+                    it.age,
+                    it.gender,
+                    it.avatarUrl,
+                    it.photosUrls,
+                    it.aboutMe,
+                    it.learningLanguage,
+                    it.learningLanguageLevel,
+                    it.speakingLanguage,
+                    it.speakingLanguageLevel,
+                    it.location
+                )
+            }
     }
 
     fun getMyProfile(): Single<User> {
         return userRepository.getMyProfile()
             .subscribeOn(Schedulers.io())
+            .map {
+                User(
+                    it.name,
+                    it.age,
+                    it.gender,
+                    it.avatarUrl,
+                    it.photosUrls,
+                    it.aboutMe,
+                    it.learningLanguage,
+                    it.learningLanguageLevel,
+                    it.speakingLanguage,
+                    it.speakingLanguageLevel,
+                    it.location
+                )
+            }
     }
 
     fun getEmptyUser(): Single<User> {
         return userRepository.getEmptyUser()
             .subscribeOn(Schedulers.io())
+            .map {
+                User(
+                    it.name,
+                    it.age,
+                    it.gender,
+                    it.avatarUrl,
+                    it.photosUrls,
+                    it.aboutMe,
+                    it.learningLanguage,
+                    it.learningLanguageLevel,
+                    it.speakingLanguage,
+                    it.speakingLanguageLevel,
+                    it.location
+                )
+            }
     }
 
     fun editUserInfo(user: User): Completable {
