@@ -17,7 +17,7 @@ fun getDistanceFromLocation(geoPoint: GeoPoint, myLocation: GeoPoint): String {
     val distanceInMeters = pointB.distanceTo(pointA)
 
     return if (distanceInMeters < 1000) {
-        "$distanceInMeters m"
+        "${distanceInMeters.roundToInt()} m"
     } else {
         "${(distanceInMeters / 1000).roundToInt()} km"
     }
