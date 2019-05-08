@@ -54,7 +54,6 @@ class UserDetailsFragment : BaseFragment() {
         observeUserLiveData()
     }
 
-
     private fun setUserInfo(user: User) {
         Glide.with(this)
             .load(user.avatarUrl)
@@ -74,8 +73,13 @@ class UserDetailsFragment : BaseFragment() {
         viewModel.userLiveData.observe(this, Observer {
             it?.let { user ->
                 setUserInfo(user)
-                viewModel.myProfileLiveData.observe(this, Observer { myProfile ->
-                    myProfile?.let { it1 -> setDistanceToUser(user, it1) }
+                viewModel.myProfileLiveData.observe(this, Observer { myProfileResponse ->
+                    if (myProfileResponse?.data != null) {
+                        setDistanceToUser(user, myProfileResponse.data)
+                    }
+                    if (myProfileResponse?.error != null) {
+                        showSnackbar(getString(R.string.snackbar_error_message))
+                    }
                 })
             }
         })

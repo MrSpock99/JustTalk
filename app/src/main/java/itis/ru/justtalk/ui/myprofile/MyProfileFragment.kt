@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.settings.SettingsFragment
@@ -64,8 +63,11 @@ class MyProfileFragment : BaseFragment() {
 
     private fun observeProfileLiveData() {
         viewModel.myProfileLiveData.observe(this, Observer {
-            it?.let { user ->
-                setUserNameAndAvatar(user.name, user.avatarUrl)
+            it?.let { userResponse ->
+                if (userResponse.data != null)
+                    setUserNameAndAvatar(userResponse.data.name, userResponse.data.avatarUrl)
+                if (userResponse.error != null)
+                    showSnackbar(getString(R.string.snackbar_error_message))
             }
         })
     }

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
@@ -91,7 +90,9 @@ class LoginFragment : BaseFragment() {
                 EditProfileInfoFragment(),
                 null
             )
-            LoginState.Error -> Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+            LoginState.Error -> view?.let {
+                showSnackbar(getString(R.string.snackbar_error_message))
+            }
         }
     }
 

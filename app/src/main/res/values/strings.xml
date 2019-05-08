@@ -11,6 +11,8 @@
     <string name="fragment_people_toolbar_title">People</string>
     <string name="fragment_my_profile_toolbar_title">My profile</string>
     <string name="fragment_edit_profile_toolbar_title">Edit profile</string>
+    <string name="snackbar_error_message">Error has occurred</string>
+    <string name="snackbar_permission_message">Permission is needed</string>
     <string-array name="spinner_gender_entities">
         <item>Man</item>
         <item>Woman</item>

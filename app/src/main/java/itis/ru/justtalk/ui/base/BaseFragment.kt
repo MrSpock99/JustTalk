@@ -1,6 +1,7 @@
 package itis.ru.justtalk.ui.base
 
 import android.content.Context
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.MenuItem
 import itis.ru.justtalk.ui.MainActivity
@@ -35,5 +36,15 @@ open class BaseFragment : Fragment() {
     fun setToolbarAndBottomNavVisibility(toolbarVisibility: Int, bottomNavVisibility: Int) {
         rootActivity.toolbar.visibility = toolbarVisibility
         rootActivity.bottom_navigation.visibility = bottomNavVisibility
+    }
+
+    fun showSnackbar(message: String){
+        view?.let { it1 ->
+            Snackbar.make(
+                it1,
+                message,
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
     }
 }

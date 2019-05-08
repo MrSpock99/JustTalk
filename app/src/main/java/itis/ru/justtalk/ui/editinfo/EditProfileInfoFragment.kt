@@ -102,9 +102,15 @@ class EditProfileInfoFragment : BaseFragment() {
 
     private fun observeProfileLiveData() =
         viewModel.myProfileLiveData.observe(this, Observer {
-            it?.let { user ->
-                this.user = user
-                setUserInfo()
+            it?.let { userResponse ->
+                if (userResponse.data != null) {
+                    this.user = userResponse.data
+                    setUserInfo()
+                }
+                if (userResponse.error != null) {
+                    showSnackbar(getString(R.string.snackbar_error_message))
+                }
+
             }
         })
 
@@ -114,7 +120,7 @@ class EditProfileInfoFragment : BaseFragment() {
                 if (success) {
                     rootActivity.navigateTo(MyProfileFragment(), null)
                 } else {
-                    //show error
+                    showSnackbar(getString(R.string.snackbar_error_message))
                 }
             }
         })

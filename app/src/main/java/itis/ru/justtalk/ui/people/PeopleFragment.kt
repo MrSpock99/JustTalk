@@ -10,7 +10,6 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.people.CardPagerAdapter
@@ -52,11 +51,7 @@ class PeopleFragment : BaseFragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     viewModel.getUsersNearby()
                 } else {
-                    Toast.makeText(
-                        rootActivity,
-                        "Screw you",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showSnackbar(getString(R.string.snackbar_permission_message))
                 }
             }
         }
@@ -114,11 +109,18 @@ class PeopleFragment : BaseFragment() {
 
     private fun observeUsersLiveData() = viewModel.usersLiveData.observe(this, Observer { list ->
         list?.let {
-            mCardAdapter.data.clear()
-            mCardAdapter.addCardItemS(it)
+            if (it.data != null) {
+                mCardAdapter.data.clear()
+                mCardAdapter.addCardItemS(it.data)
+                viewPager.adapter = mCardAdapter
+                viewPager.offscreenPageLimit = 3
+            }
+            if (it.error != null) {
+                view?.let {
+                    showSnackbar(getString(R.string.snackbar_error_message))
+                }
+            }
 
-            viewPager.adapter = mCardAdapter
-            viewPager.offscreenPageLimit = 3
         }
     })
 

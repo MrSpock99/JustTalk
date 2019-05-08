@@ -10,13 +10,14 @@ import itis.ru.justtalk.interactor.PeopleInteractor
 import itis.ru.justtalk.models.User
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.utils.ClickEvent
+import itis.ru.justtalk.utils.Response
 import javax.inject.Inject
 
 class PeopleViewModel @Inject constructor(
     private val interactor: PeopleInteractor,
     private val locationProviderClient: FusedLocationProviderClient
 ) : BaseViewModel() {
-    val usersLiveData = MutableLiveData<List<User>>()
+    val usersLiveData = MutableLiveData<Response<List<User>>>()
     val myLocationLiveData = MutableLiveData<GeoPoint>()
     val navigateToChat = MutableLiveData<ClickEvent<User?>>()
     val navigateToUserDetails = MutableLiveData<ClickEvent<User?>>()
@@ -36,17 +37,20 @@ class PeopleViewModel @Inject constructor(
         disposables.add(
             interactor.getUsers(userLocation, limit)
                 .observeOn(AndroidSchedulers.mainThread())
+                .doFinally {
+                    showLoadingLiveData.value = false
+                }
                 .subscribe({
-                    showLoadingLiveData.value = false
-                    usersLiveData.value = it
+                    usersLiveData.value = Response.success(it)
                 }, {
-                    showLoadingLiveData.value = false
+                    usersLiveData.value = Response.error(it)
+                    it.printStackTrace()
                 })
         )
     }
 
     fun onMessageClick(index: Int) {
-        navigateToChat.value = ClickEvent(usersLiveData.value?.get(index))
+        navigateToChat.value = ClickEvent(usersLiveData.value?.data?.get(index))
     }
 
     fun onUserClicked(user: User) {

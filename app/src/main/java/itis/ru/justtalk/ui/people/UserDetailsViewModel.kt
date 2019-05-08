@@ -6,13 +6,14 @@ import itis.ru.justtalk.interactor.myprofile.MyProfileInteractor
 import itis.ru.justtalk.models.User
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
+import itis.ru.justtalk.utils.Response
 import javax.inject.Inject
 
 class UserDetailsViewModel @Inject constructor(
     private val myProfileInteractor: MyProfileInteractor
 ) : BaseViewModel() {
     val userLiveData = MutableLiveData<User>()
-    val myProfileLiveData = MutableLiveData<User>()
+    val myProfileLiveData = MutableLiveData<Response<User>>()
 
     fun getUserInfo(bundle: Bundle?) {
         val user = (bundle?.getParcelable(MyProfileFragment.ARG_USER) as User)
@@ -24,8 +25,11 @@ class UserDetailsViewModel @Inject constructor(
         disposables.add(
             myProfileInteractor.getMyProfile()
                 .subscribe({
-                    myProfileLiveData.value = it
-                }, {})
+                    myProfileLiveData.value = Response.success(it)
+                }, {
+                    myProfileLiveData.value = Response.error(it)
+                    it.printStackTrace()
+                })
         )
     }
 }

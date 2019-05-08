@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#419FD9</color>
     <color name="colorPrimaryDark">#035F97</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#8C9EFF</color>
     <color name="coloPrimaryText">@color/white</color>
     <color name="colorButtonMyProfileBackground">#D2CDCD</color>
     <color name="colorButtonMyProfileIcon">#989494</color>

@@ -6,13 +6,14 @@ import itis.ru.justtalk.interactor.myprofile.MyProfileInteractor
 import itis.ru.justtalk.models.User
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.utils.ClickEvent
+import itis.ru.justtalk.utils.Response
 import javax.inject.Inject
 
 class MyProfileViewModel @Inject constructor(
     private val interactor: MyProfileInteractor
 ) : BaseViewModel() {
 
-    val myProfileLiveData = MutableLiveData<User>()
+    val myProfileLiveData = MutableLiveData<Response<User>>()
     val navigateToEdit = MutableLiveData<ClickEvent<User>>()
 
     fun getMyProfile() {
@@ -20,10 +21,13 @@ class MyProfileViewModel @Inject constructor(
         disposables.add(
             interactor.getMyProfile()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    myProfileLiveData.value = it
+                .doFinally {
                     showLoadingLiveData.value = false
+                }
+                .subscribe({
+                    myProfileLiveData.value = Response.success(it)
                 }, {
+                    myProfileLiveData.value = Response.error(it)
                     it.printStackTrace()
                 })
         )
@@ -31,7 +35,8 @@ class MyProfileViewModel @Inject constructor(
 
     fun editProfileClick() {
         myProfileLiveData.value?.let {
-            navigateToEdit.value = ClickEvent(it)
+            if (it.data != null)
+                navigateToEdit.value = ClickEvent(it.data)
         }
     }
 }
