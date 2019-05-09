@@ -26,7 +26,7 @@ class PeopleFragment : BaseFragment() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: PeopleViewModel
-    private var mCardAdapter: CardPagerAdapter = CardPagerAdapter()
+    private var cardAdapter: CardPagerAdapter = CardPagerAdapter()
     private var viewPagerPosition: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,41 +106,18 @@ class PeopleFragment : BaseFragment() {
         setArrowToolbarVisibility(false)
         setToolbarTitle(getString(R.string.fragment_people_toolbar_title))
 
-        /*viewModel =
-            ViewModelProviders.of(this, this.viewModeFactory).get(PeopleViewModel::class.java)
-
-        observeUsersLiveData()
-        observeMyLocationLiveData()
-        observeShowLoadingLiveData()
-        observeNavigateToChat()
-        observeNavigateToUserDetails()
-*/
         btn_message.setOnClickListener {
             viewModel.onMessageClick(viewPager.currentItem)
         }
 
-        mCardAdapter.setOnClickListener {
+        cardAdapter.setOnClickListener {
             viewModel.onUserClicked(it)
         }
-
-        /*if (ContextCompat.checkSelfPermission(
-                rootActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            viewModel.getUsersNearby()
-        } else {
-            ActivityCompat.requestPermissions(
-                rootActivity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                ACCESS_FINE_LOCATION_REQUEST_CODE
-            )
-        }*/
     }
 
     private fun restoreState() {
         if (viewPagerPosition != -1){
-            viewPager.adapter = mCardAdapter
+            viewPager.adapter = cardAdapter
             viewPager.currentItem = viewPagerPosition
         }
     }
@@ -148,14 +125,14 @@ class PeopleFragment : BaseFragment() {
     private fun observeMyLocationLiveData() =
         viewModel.myLocationLiveData.observe(this, Observer {
             if (it != null)
-                mCardAdapter.setMyLocation(it)
+                cardAdapter.setMyLocation(it)
         })
 
     private fun observeUsersLiveData() = viewModel.usersLiveData.observe(this, Observer { list ->
         list?.let {
             if (it.data != null) {
-                mCardAdapter.addCardItemS(it.data)
-                viewPager.adapter = mCardAdapter
+                cardAdapter.addCardItemS(it.data)
+                viewPager.adapter = cardAdapter
                 viewPager.offscreenPageLimit = 3
             }
             if (it.error != null) {
