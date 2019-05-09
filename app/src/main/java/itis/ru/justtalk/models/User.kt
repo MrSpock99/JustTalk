@@ -9,6 +9,7 @@ import kotlinx.android.parcel.RawValue
 
 @Parcelize
 data class User(
+    val uid: String,
     val name: String,
     var age: Int,
     var gender: String, var avatarUrl: String,
@@ -21,7 +22,8 @@ data class User(
     var location: @RawValue GeoPoint
 ) : Parcelable {
 
-    constructor(parcel: Parcel): this("", 0, "", "", arrayListOf("", "", "", "", ""),
+
+    constructor(parcel: Parcel): this("","", 0, "", "", arrayListOf("", "", "", "", ""),
         "","","","","",
         GeoPoint(parcel.readDouble(), parcel.readDouble()))
 

@@ -2,7 +2,7 @@ package itis.ru.justtalk.ui.myprofile
 
 import android.arch.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
-import itis.ru.justtalk.interactor.myprofile.MyProfileInteractor
+import itis.ru.justtalk.interactor.MyProfileInteractor
 import itis.ru.justtalk.models.User
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.utils.ClickEvent

@@ -8,8 +8,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
+import itis.ru.justtalk.interactor.LoginInteractor
 import itis.ru.justtalk.ui.base.BaseViewModel
-import itis.ru.justtalk.interactor.login.LoginInteractor
 import itis.ru.justtalk.utils.LoginState
 import itis.ru.justtalk.utils.ScreenState
 import javax.inject.Inject

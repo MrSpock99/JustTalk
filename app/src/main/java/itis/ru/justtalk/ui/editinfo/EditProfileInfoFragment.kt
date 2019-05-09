@@ -57,10 +57,6 @@ class EditProfileInfoFragment : BaseFragment() {
     }
 
     private fun injectDependencies() {
-        /* val component = DaggerAppComponent.builder()
-             .appModule(AppModule())
-             .build()
-         component.inject(this)*/
         (rootActivity.application as BaseApplication).appComponent.inject(this)
     }
 

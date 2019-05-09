@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoViewModel
 import itis.ru.justtalk.ui.login.LoginViewModel
+import itis.ru.justtalk.ui.messages.ChatWithUserViewModel
 import itis.ru.justtalk.ui.myprofile.MyProfileViewModel
 import itis.ru.justtalk.ui.people.PeopleViewModel
 import itis.ru.justtalk.ui.people.UserDetailsViewModel
@@ -38,6 +39,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(UserDetailsViewModel::class)
     abstract fun bindUserDetailsViewModel(userDetailsViewModel: UserDetailsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ChatWithUserViewModel::class)
+    abstract fun bindChatWithUserViewModel(chatWithUserViewModel: ChatWithUserViewModel): ViewModel
 }
 
 @Target(

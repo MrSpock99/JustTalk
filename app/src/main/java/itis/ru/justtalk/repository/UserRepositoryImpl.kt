@@ -13,17 +13,18 @@ import itis.ru.justtalk.models.RemoteUser
 import itis.ru.justtalk.models.User
 import javax.inject.Inject
 
-private const val USER_NAME = "name"
-private const val USER_AGE = "age"
-private const val USER_GENDER = "gender"
-private const val USER_ABOUT_ME = "about_me"
-private const val USER_LOCATION = "location"
-private const val USER_AVATAR_URL = "avatar_url"
-private const val USER_LEARNING_LANGUAGE = "learning_language"
-private const val USER_LEARNING_LANGUAGE_LEVEL = "learning_language_level"
-private const val USER_SPEAKING_LANGUAGE = "speaking_language"
-private const val USER_SPEAKING_LANGUAGE_LEVEL = "speaking_language_level"
-private const val USERS = "users"
+const val UID = "name"
+const val USER_NAME = "name"
+const val USER_AGE = "age"
+const val USER_GENDER = "gender"
+const val USER_ABOUT_ME = "about_me"
+const val USER_LOCATION = "location"
+const val USER_AVATAR_URL = "avatar_url"
+const val USER_LEARNING_LANGUAGE = "learning_language"
+const val USER_LEARNING_LANGUAGE_LEVEL = "learning_language_level"
+const val USER_SPEAKING_LANGUAGE = "speaking_language"
+const val USER_SPEAKING_LANGUAGE_LEVEL = "speaking_language_level"
+const val USERS = "users"
 
 class UserRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
@@ -49,6 +50,7 @@ class UserRepositoryImpl @Inject constructor(
     override fun addUserToDb(user: User): Completable {
         return Completable.create { emitter ->
             val userMap = HashMap<String, Any>()
+            userMap[UID] = firebaseAuth.currentUser?.email as String
             userMap[USER_NAME] = user.name
             userMap[USER_AGE] = user.age
             userMap[USER_ABOUT_ME] = user.aboutMe
@@ -83,6 +85,7 @@ class UserRepositoryImpl @Inject constructor(
                         emitter.onSuccess(
                             result?.toObject(RemoteUser::class.java) ?: RemoteUser(
                                 "",
+                                "",
                                 0,
                                 "",
                                 "",
@@ -114,6 +117,7 @@ class UserRepositoryImpl @Inject constructor(
             firebaseAuth.currentUser?.let {
                 val user =
                     RemoteUser(
+                        "",
                         it.displayName ?: "",
                         0,
                         "",
@@ -142,7 +146,8 @@ class UserRepositoryImpl @Inject constructor(
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        task.result?.toObjects(RemoteUser::class.java)?.let { emitter.onSuccess(it) }
+                        task.result?.toObjects(RemoteUser::class.java)
+                            ?.let { emitter.onSuccess(it) }
                     } else {
                         emitter.onError(
                             task.exception ?: java.lang.Exception("error getting all users")

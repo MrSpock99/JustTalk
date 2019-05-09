@@ -18,6 +18,7 @@ class PeopleInteractor @Inject constructor(
                 remoteUserList.forEach {
                     list.add(
                         User(
+                            it.uid,
                             it.name,
                             it.age,
                             it.gender,

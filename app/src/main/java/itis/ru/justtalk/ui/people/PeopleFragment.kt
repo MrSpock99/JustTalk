@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_people.*
 import javax.inject.Inject
 
 const val ACCESS_FINE_LOCATION_REQUEST_CODE: Int = 1001
+const val ARG_USER_UID: String = "ARG_USER_UID"
 
 class PeopleFragment : BaseFragment() {
     @Inject
@@ -151,9 +152,9 @@ class PeopleFragment : BaseFragment() {
     private fun observeNavigateToChat() =
         viewModel.navigateToChat.observe(this, Observer { event ->
             event?.getContentIfNotHandled()?.let { user ->
-                val profileBundle = Bundle()
-                profileBundle.putParcelable(MyProfileFragment.ARG_USER, user)
-                rootActivity.navigateTo(ChatWithUserFragment(), profileBundle)
+                val uidBundle = Bundle()
+                uidBundle.putString(ARG_USER_UID, user.uid)
+                rootActivity.navigateTo(ChatWithUserFragment(), uidBundle)
             }
         })
 

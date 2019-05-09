@@ -5,6 +5,7 @@ import itis.ru.justtalk.di.module.*
 import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.login.LoginFragment
+import itis.ru.justtalk.ui.messages.ChatWithUserFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.ui.people.PeopleFragment
 import itis.ru.justtalk.ui.people.UserDetailsFragment
@@ -21,5 +22,6 @@ interface AppComponent {
     fun inject(fragment: EditProfileInfoFragment)
     fun inject(fragment: PeopleFragment)
     fun inject(fragment: UserDetailsFragment)
+    fun inject(fragment: ChatWithUserFragment)
     fun inject(activity: MainActivity)
 }

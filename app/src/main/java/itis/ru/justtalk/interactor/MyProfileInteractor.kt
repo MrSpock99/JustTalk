@@ -1,4 +1,4 @@
-package itis.ru.justtalk.interactor.myprofile
+package itis.ru.justtalk.interactor
 
 import com.google.firebase.auth.FirebaseUser
 import io.reactivex.Completable
@@ -16,6 +16,7 @@ class MyProfileInteractor @Inject constructor(
             .subscribeOn(Schedulers.io())
             .map {
                 User(
+                    it.uid,
                     it.name,
                     it.age,
                     it.gender,
@@ -36,6 +37,7 @@ class MyProfileInteractor @Inject constructor(
             .subscribeOn(Schedulers.io())
             .map {
                 User(
+                    it.uid,
                     it.name,
                     it.age,
                     it.gender,
@@ -51,11 +53,20 @@ class MyProfileInteractor @Inject constructor(
             }
     }
 
+    fun getMyUid(): Single<String> {
+        return userRepository.getMyProfile()
+            .subscribeOn(Schedulers.io())
+            .map {
+                it.uid
+            }
+    }
+
     fun getEmptyUser(): Single<User> {
         return userRepository.getEmptyUser()
             .subscribeOn(Schedulers.io())
             .map {
                 User(
+                    it.uid,
                     it.name,
                     it.age,
                     it.gender,

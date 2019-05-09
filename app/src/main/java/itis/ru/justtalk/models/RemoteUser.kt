@@ -5,6 +5,7 @@ import com.google.firebase.firestore.PropertyName
 import kotlinx.android.parcel.RawValue
 
 data class RemoteUser(
+    val uid: String,
     val name: String,
     var age: Int,
     var gender: String,
@@ -40,6 +41,7 @@ data class RemoteUser(
     var location: @RawValue GeoPoint
 ) {
     constructor() : this(
+        "",
         "", 0, "", "", arrayListOf("", "", "", "", ""),
         "", "", "", "", "",
         GeoPoint(0.0, 0.0)
