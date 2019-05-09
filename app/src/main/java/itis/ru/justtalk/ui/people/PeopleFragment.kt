@@ -23,23 +23,60 @@ import javax.inject.Inject
 const val ACCESS_FINE_LOCATION_REQUEST_CODE: Int = 1001
 
 class PeopleFragment : BaseFragment() {
-    private var mCardAdapter: CardPagerAdapter = CardPagerAdapter()
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: PeopleViewModel
+    private var mCardAdapter: CardPagerAdapter = CardPagerAdapter()
+    private var viewPagerPosition: Int = -1
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injectDependencies()
+        viewModel =
+            ViewModelProviders.of(this, this.viewModeFactory).get(PeopleViewModel::class.java)
+
+        observeUsersLiveData()
+        observeMyLocationLiveData()
+        observeShowLoadingLiveData()
+        observeNavigateToChat()
+        observeNavigateToUserDetails()
+
+        if (ContextCompat.checkSelfPermission(
+                rootActivity,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            viewModel.getUsersNearby()
+        } else {
+            ActivityCompat.requestPermissions(
+                rootActivity,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                ACCESS_FINE_LOCATION_REQUEST_CODE
+            )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        injectDependencies()
         return inflater.inflate(R.layout.fragment_people, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        restoreState()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewPagerPosition = viewPager.currentItem
     }
 
     override fun onRequestPermissionsResult(
@@ -69,7 +106,7 @@ class PeopleFragment : BaseFragment() {
         setArrowToolbarVisibility(false)
         setToolbarTitle(getString(R.string.fragment_people_toolbar_title))
 
-        viewModel =
+        /*viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(PeopleViewModel::class.java)
 
         observeUsersLiveData()
@@ -77,7 +114,7 @@ class PeopleFragment : BaseFragment() {
         observeShowLoadingLiveData()
         observeNavigateToChat()
         observeNavigateToUserDetails()
-
+*/
         btn_message.setOnClickListener {
             viewModel.onMessageClick(viewPager.currentItem)
         }
@@ -86,7 +123,7 @@ class PeopleFragment : BaseFragment() {
             viewModel.onUserClicked(it)
         }
 
-        if (ContextCompat.checkSelfPermission(
+        /*if (ContextCompat.checkSelfPermission(
                 rootActivity,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
@@ -98,6 +135,13 @@ class PeopleFragment : BaseFragment() {
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 ACCESS_FINE_LOCATION_REQUEST_CODE
             )
+        }*/
+    }
+
+    private fun restoreState() {
+        if (viewPagerPosition != -1){
+            viewPager.adapter = mCardAdapter
+            viewPager.currentItem = viewPagerPosition
         }
     }
 
@@ -110,17 +154,13 @@ class PeopleFragment : BaseFragment() {
     private fun observeUsersLiveData() = viewModel.usersLiveData.observe(this, Observer { list ->
         list?.let {
             if (it.data != null) {
-                mCardAdapter.data.clear()
                 mCardAdapter.addCardItemS(it.data)
                 viewPager.adapter = mCardAdapter
                 viewPager.offscreenPageLimit = 3
             }
             if (it.error != null) {
-                view?.let {
-                    showSnackbar(getString(R.string.snackbar_error_message))
-                }
+                showSnackbar(getString(R.string.snackbar_error_message))
             }
-
         }
     })
 
