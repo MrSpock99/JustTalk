@@ -7,16 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import itis.ru.justtalk.R
 
-class MessagesFragment : Fragment() {
+class ContactsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_messages, container, false)
+        return inflater.inflate(R.layout.fragment_contacts, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
     companion object {
-        fun newInstance() = MessagesFragment()
+        fun newInstance() = ContactsFragment()
     }
 }

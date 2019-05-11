@@ -1,4 +1,4 @@
-package itis.ru.justtalk.adapters.people
+package itis.ru.justtalk.adapters
 
 import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater

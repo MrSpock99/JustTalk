@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.adapters.people.CardPagerAdapter
+import itis.ru.justtalk.adapters.CardPagerAdapter
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.messages.ChatWithUserFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
@@ -22,12 +22,15 @@ import javax.inject.Inject
 
 const val ACCESS_FINE_LOCATION_REQUEST_CODE: Int = 1001
 const val ARG_USER_UID: String = "ARG_USER_UID"
+const val ARG_CHAT_ID: String = "ARG_CHAT_ID"
+const val NO_CHAT_ID: String = "no_chat_id"
 
 class PeopleFragment : BaseFragment() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: PeopleViewModel
-    private var cardAdapter: CardPagerAdapter = CardPagerAdapter()
+    private var cardAdapter: CardPagerAdapter =
+        CardPagerAdapter()
     private var viewPagerPosition: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,7 +120,7 @@ class PeopleFragment : BaseFragment() {
     }
 
     private fun restoreState() {
-        if (viewPagerPosition != -1){
+        if (viewPagerPosition != -1) {
             viewPager.adapter = cardAdapter
             viewPager.currentItem = viewPagerPosition
         }
@@ -129,18 +132,19 @@ class PeopleFragment : BaseFragment() {
                 cardAdapter.setMyLocation(it)
         })
 
-    private fun observeUsersLiveData() = viewModel.usersLiveData.observe(this, Observer { list ->
-        list?.let {
-            if (it.data != null) {
-                cardAdapter.addCardItemS(it.data)
-                viewPager.adapter = cardAdapter
-                viewPager.offscreenPageLimit = 3
+    private fun observeUsersLiveData() =
+        viewModel.usersLiveData.observe(this, Observer { list ->
+            list?.let {
+                if (it.data != null) {
+                    cardAdapter.addCardItemS(it.data)
+                    viewPager.adapter = cardAdapter
+                    viewPager.offscreenPageLimit = 3
+                }
+                if (it.error != null) {
+                    showSnackbar(getString(R.string.snackbar_error_message))
+                }
             }
-            if (it.error != null) {
-                showSnackbar(getString(R.string.snackbar_error_message))
-            }
-        }
-    })
+        })
 
     private fun observeShowLoadingLiveData() =
         viewModel.showLoadingLiveData.observe(this, Observer {
@@ -152,9 +156,10 @@ class PeopleFragment : BaseFragment() {
     private fun observeNavigateToChat() =
         viewModel.navigateToChat.observe(this, Observer { event ->
             event?.getContentIfNotHandled()?.let { user ->
-                val uidBundle = Bundle()
-                uidBundle.putString(ARG_USER_UID, user.uid)
-                rootActivity.navigateTo(ChatWithUserFragment(), uidBundle)
+                val chatBundle = Bundle()
+                chatBundle.putString(ARG_USER_UID, user.uid)
+                chatBundle.putString(ARG_CHAT_ID, NO_CHAT_ID)
+                rootActivity.navigateTo(ChatWithUserFragment(), chatBundle)
             }
         })
 

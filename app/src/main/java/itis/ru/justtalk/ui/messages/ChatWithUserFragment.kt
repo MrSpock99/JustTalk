@@ -21,11 +21,14 @@ class ChatWithUserFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
+
         viewModel = ViewModelProviders.of(this, this.viewModeFactory)
             .get(ChatWithUserViewModel::class.java)
+
         viewModel.startChat(arguments)
+        viewModel.getMessages(arguments)
         observeStartChatSuccessLiveData()
-        observeMessages()
+        observeSendMessagesLiveData()
     }
 
     override fun onCreateView(
@@ -46,8 +49,8 @@ class ChatWithUserFragment : BaseFragment() {
     }
 
     private fun init() {
-        button.setOnClickListener {
-            viewModel.sendMessage("no_room_id", edit_text.text.toString())
+        btn_send_message.setOnClickListener {
+            viewModel.sendMessage(et_message.text.toString())
         }
     }
 
@@ -61,7 +64,7 @@ class ChatWithUserFragment : BaseFragment() {
             }
         })
 
-    private fun observeMessages() =
+    private fun observeSendMessagesLiveData() =
         viewModel.sendMessageSuccessLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
                 showSnackbar("Success")

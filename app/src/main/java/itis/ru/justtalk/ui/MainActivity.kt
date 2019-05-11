@@ -12,7 +12,7 @@ import itis.ru.justtalk.R
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.login.LoginFragment
 import itis.ru.justtalk.ui.messages.ChatWithUserFragment
-import itis.ru.justtalk.ui.messages.MessagesFragment
+import itis.ru.justtalk.ui.messages.ContactsFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.ui.people.PeopleFragment
 import itis.ru.justtalk.ui.people.UserDetailsFragment
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
                     navigateTo(PeopleFragment(), null)
                 }
                 R.id.nav_messages -> {
-                    navigateTo(MessagesFragment(), null)
+                    navigateTo(ContactsFragment(), null)
                 }
                 else -> {
                     return@OnNavigationItemSelectedListener false
@@ -103,10 +103,10 @@ class MainActivity : AppCompatActivity() {
                     EditProfileInfoFragment.newInstance(arguments)
                 )
             }
-            is MessagesFragment -> {
+            is ContactsFragment -> {
                 transaction.replace(
                     R.id.main_container,
-                    MessagesFragment.newInstance()
+                    ContactsFragment.newInstance()
                 )
             }
             is ChatWithUserFragment -> {

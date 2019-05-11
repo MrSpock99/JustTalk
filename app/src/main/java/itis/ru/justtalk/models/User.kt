@@ -22,14 +22,11 @@ data class User(
     var location: @RawValue GeoPoint
 ) : Parcelable {
 
-
     constructor(parcel: Parcel): this("","", 0, "", "", arrayListOf("", "", "", "", ""),
         "","","","","",
         GeoPoint(parcel.readDouble(), parcel.readDouble()))
 
     companion object : Parceler<User> {
-        const val GENDER_MAN = "man"
-        const val GENDER_WOMAN = "woman"
         override fun User.write(parcel: Parcel, flags: Int) {
             parcel.writeDouble(location.latitude)
             parcel.writeDouble(location.longitude)

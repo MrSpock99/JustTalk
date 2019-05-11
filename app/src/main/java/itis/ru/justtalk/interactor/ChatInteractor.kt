@@ -1,5 +1,6 @@
 package itis.ru.justtalk.interactor
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -25,6 +26,11 @@ class ChatInteractor @Inject constructor(private val chatRepository: ChatReposit
         message: Message
     ): Completable {
         return chatRepository.sendMessage(userFrom, userTo, chatId, message)
+            .subscribeOn(Schedulers.io())
+    }
+
+    fun getMessages(chatId: String): Single<FirestoreRecyclerOptions<Message>> {
+        return chatRepository.getMessages(chatId)
             .subscribeOn(Schedulers.io())
     }
 }
