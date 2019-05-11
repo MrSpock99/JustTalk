@@ -10,6 +10,7 @@ import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.utils.ViewModelFactory
+import kotlinx.android.synthetic.main.fragment_chat_with_user.*
 import javax.inject.Inject
 
 class ChatWithUserFragment : BaseFragment() {
@@ -24,6 +25,7 @@ class ChatWithUserFragment : BaseFragment() {
             .get(ChatWithUserViewModel::class.java)
         viewModel.startChat(arguments)
         observeStartChatSuccessLiveData()
+        observeMessages()
     }
 
     override fun onCreateView(
@@ -44,11 +46,23 @@ class ChatWithUserFragment : BaseFragment() {
     }
 
     private fun init() {
-
+        button.setOnClickListener {
+            viewModel.sendMessage("no_room_id", edit_text.text.toString())
+        }
     }
 
     private fun observeStartChatSuccessLiveData() =
         viewModel.startChatSuccessLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
+                showSnackbar("Success")
+            }
+            if (response?.error != null) {
+                showSnackbar(getString(R.string.snackbar_error_message))
+            }
+        })
+
+    private fun observeMessages() =
+        viewModel.sendMessageSuccessLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
                 showSnackbar("Success")
             }

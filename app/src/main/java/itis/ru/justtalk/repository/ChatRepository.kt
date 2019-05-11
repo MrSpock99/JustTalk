@@ -3,8 +3,15 @@ package itis.ru.justtalk.repository
 import io.reactivex.Completable
 import io.reactivex.Single
 import itis.ru.justtalk.models.ChatUser
+import itis.ru.justtalk.models.Message
 
 interface ChatRepository {
     fun getUser(uid: String): Single<ChatUser>
     fun addToContacts(userFromUid: String, userTo: ChatUser): Completable
+    fun sendMessage(
+        userFrom: ChatUser,
+        userTo: ChatUser,
+        immutableChatId: String,
+        message: Message
+    ): Completable
 }
