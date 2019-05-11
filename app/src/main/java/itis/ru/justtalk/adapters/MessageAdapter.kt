@@ -16,7 +16,7 @@ class MessageAdapter internal constructor(
     options: FirestoreRecyclerOptions<Message>
 ) :
     FirestoreRecyclerAdapter<Message, MessageAdapter.MessageViewHolder>(options) {
-    private lateinit var view: View
+    private var view: View? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return if (viewType == R.layout.item_message_to) {
@@ -43,13 +43,15 @@ class MessageAdapter internal constructor(
     }
 
     override fun onDataChanged() {
-        view.rv_messages.layoutManager?.scrollToPosition(itemCount - 1)
+        if (view != null){
+            view?.rv_messages?.layoutManager?.scrollToPosition(itemCount - 1)
+        }
     }
 
-    inner class MessageViewHolder : RecyclerView.ViewHolder(view) {
+    inner class MessageViewHolder : RecyclerView.ViewHolder(view!!) {
         internal fun setMessage(message: Message) {
-            val textView = view.findViewById<TextView>(R.id.text_view)
-            textView.text = message.messageText
+            val textView = view?.findViewById<TextView>(R.id.text_view)
+            textView?.text = message.messageText
         }
     }
 }

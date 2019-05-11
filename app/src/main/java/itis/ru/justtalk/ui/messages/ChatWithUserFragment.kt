@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
+import itis.ru.justtalk.adapters.MessageAdapter
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_chat_with_user.*
@@ -17,6 +18,7 @@ class ChatWithUserFragment : BaseFragment() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: ChatWithUserViewModel
+    private var adapter: MessageAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,9 +28,14 @@ class ChatWithUserFragment : BaseFragment() {
             .get(ChatWithUserViewModel::class.java)
 
         viewModel.startChat(arguments)
-        viewModel.getMessages(arguments)
         observeStartChatSuccessLiveData()
         observeSendMessagesLiveData()
+        observeGetMessagesLiveData()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        adapter?.startListening()
     }
 
     override fun onCreateView(
@@ -68,6 +75,18 @@ class ChatWithUserFragment : BaseFragment() {
         viewModel.sendMessageSuccessLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
                 showSnackbar("Success")
+            }
+            if (response?.error != null) {
+                showSnackbar(getString(R.string.snackbar_error_message))
+            }
+        })
+
+    private fun observeGetMessagesLiveData() =
+        viewModel.getMessagesLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
+                adapter = MessageAdapter(response.data.uid, response.data.options)
+                rv_messages.adapter = adapter
+                adapter?.startListening()
             }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))

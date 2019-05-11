@@ -5,6 +5,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import itis.ru.justtalk.models.ChatUser
+import itis.ru.justtalk.models.ContactsAndChats
 import itis.ru.justtalk.models.Message
 import itis.ru.justtalk.repository.ChatRepository
 import javax.inject.Inject
@@ -34,7 +35,7 @@ class ChatInteractor @Inject constructor(private val chatRepository: ChatReposit
             .subscribeOn(Schedulers.io())
     }
 
-    fun getContacts(userFromUid: String): Single<List<ChatUser>> {
+    fun getContacts(userFromUid: String): Single<ContactsAndChats> {
         return chatRepository.getContacts(userFromUid)
             .subscribeOn(Schedulers.io())
     }

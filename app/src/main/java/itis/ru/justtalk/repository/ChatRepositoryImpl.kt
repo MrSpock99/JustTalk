@@ -7,6 +7,7 @@ import com.google.firebase.firestore.SetOptions
 import io.reactivex.Completable
 import io.reactivex.Single
 import itis.ru.justtalk.models.ChatUser
+import itis.ru.justtalk.models.ContactsAndChats
 import itis.ru.justtalk.models.Message
 import itis.ru.justtalk.ui.people.NO_CHAT_ID
 import javax.inject.Inject
@@ -62,7 +63,7 @@ class ChatRepositoryImpl @Inject constructor(
         message: Message
     ): Completable {
         return Completable.create { emitter ->
-            var chatId = ""
+            var chatId: String
             if (immutableChatId == NO_CHAT_ID) {
                 chatId = db.collection(MESSAGES).document().id
                 for ((key, _) in userFrom.chats) {
@@ -70,27 +71,46 @@ class ChatRepositoryImpl @Inject constructor(
                         chatId = key
                     }
                 }
+            } else {
+                chatId = immutableChatId
             }
 
             userFrom.chats[chatId] = true
-            db.collection(USERS).document(userFrom.uid).set(userFrom, SetOptions.merge())
-            db.collection(CONTACTS).document(userTo.uid)
-                .collection(USER_CONTACTS).document(userFrom.uid)
+            db.collection(USERS)
+                .document(userFrom.uid)
                 .set(userFrom, SetOptions.merge())
-            db.collection(CHATS).document(userTo.uid)
+
+            db.collection(CONTACTS)
+                .document(userTo.uid)
+                .collection(USER_CONTACTS)
+                .document(userFrom.uid)
+                .set(userFrom, SetOptions.merge())
+
+            db.collection(CHATS)
+                .document(userTo.uid)
                 .collection(USER_CHATS)
-                .document(chatId).set(userFrom, SetOptions.merge())
+                .document(chatId)
+                .set(userFrom, SetOptions.merge())
 
             userTo.chats[chatId] = true
-            db.collection(USERS).document(userTo.uid).set(userTo, SetOptions.merge())
-            db.collection(CONTACTS).document(userFrom.uid)
-                .collection(USER_CONTACTS).document(userTo.uid)
+            db.collection(USERS)
+                .document(userTo.uid)
                 .set(userTo, SetOptions.merge())
-            db.collection(CHATS).document(userFrom.uid)
-                .collection(USER_CHATS)
-                .document(chatId).set(userTo, SetOptions.merge())
 
-            db.collection(MESSAGES).document(chatId)
+            db.collection(CONTACTS)
+                .document(userFrom.uid)
+                .collection(USER_CONTACTS)
+                .document(userTo.uid)
+                .set(userTo, SetOptions.merge())
+
+            db.collection(CHATS)
+                .document(userFrom.uid)
+                .collection(USER_CHATS)
+                .document(chatId)
+                .set(userTo, SetOptions.merge())
+
+            db.collection(MESSAGES)
+                .document(chatId)
                 .collection(CHAT_MESSAGES)
                 .add(message)
                 .addOnCompleteListener { task ->
@@ -110,32 +130,42 @@ class ChatRepositoryImpl @Inject constructor(
             val options =
                 FirestoreRecyclerOptions.Builder<Message>().setQuery(query, Message::class.java)
                     .build()
-            query.addSnapshotListener { _, e ->
+            /*query.get().addOnCompleteListener {task ->
+                if (task.isSuccessful){
+                }else{
+                    emitter.onError(task.exception!!)
+                }
+
+            }*/
+            query.addSnapshotListener { snp, e ->
                 if (e != null) {
                     emitter.onError(e)
+                }else{
+                    emitter.onSuccess(options)
                 }
-                emitter.onSuccess(options)
+
             }
         }
     }
 
-    override fun getContacts(userFromUid: String): Single<List<ChatUser>> {
+    override fun getContacts(userFromUid: String): Single<ContactsAndChats> {
         return Single.create { emitter ->
             db.collection(CHATS).document(userFromUid).collection(USER_CHATS)
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val contactsList = mutableListOf<ChatUser>()
+                        val chatList = mutableListOf<String>()
                         task.result?.forEach {
                             contactsList.add(it.toObject(ChatUser::class.java))
+                            chatList.add(it.id)
                         }
-                        emitter.onSuccess(contactsList)
+                        emitter.onSuccess(ContactsAndChats(contactsList, chatList))
                     } else {
                         emitter.onError(
                             task.exception ?: Exception("error getting contacts")
                         )
                     }
                 }
-
         }
     }
 }

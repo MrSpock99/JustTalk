@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.ui.base.BaseFragment
+import itis.ru.justtalk.ui.people.ARG_CHAT_ID
+import itis.ru.justtalk.ui.people.ARG_USER_UID
 import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import javax.inject.Inject
@@ -49,8 +52,12 @@ class ContactsFragment : BaseFragment() {
         viewModel.contactsListLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
                 val listOfToUserNames = mutableListOf<String>()
-                response.data.forEach {
+                val listOfToUserChats = mutableListOf<String>()
+                response.data.contactsList.forEach {
                     listOfToUserNames.add(it.name)
+                }
+                response.data.chatsList.forEach {
+                    listOfToUserChats.add(it)
                 }
                 val arrayAdapter =
                     ArrayAdapter(
@@ -59,6 +66,13 @@ class ContactsFragment : BaseFragment() {
                         listOfToUserNames
                     )
                 rv_contacts.adapter = arrayAdapter
+                rv_contacts.onItemClickListener =
+                    AdapterView.OnItemClickListener { _, _, position, _ ->
+                        val chatBundle = Bundle()
+                        chatBundle.putString(ARG_USER_UID, response.data.contactsList[position].uid)
+                        chatBundle.putString(ARG_CHAT_ID, listOfToUserChats[position])
+                        rootActivity.navigateTo(ChatWithUserFragment(), chatBundle)
+                    }
             }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))

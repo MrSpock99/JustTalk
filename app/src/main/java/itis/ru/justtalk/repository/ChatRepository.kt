@@ -4,6 +4,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import io.reactivex.Completable
 import io.reactivex.Single
 import itis.ru.justtalk.models.ChatUser
+import itis.ru.justtalk.models.ContactsAndChats
 import itis.ru.justtalk.models.Message
 
 interface ChatRepository {
@@ -20,5 +21,5 @@ interface ChatRepository {
 
     fun getMessages(chatId: String): Single<FirestoreRecyclerOptions<Message>>
 
-    fun getContacts(userFromUid: String): Single<List<ChatUser>>
+    fun getContacts(userFromUid: String): Single<ContactsAndChats>
 }

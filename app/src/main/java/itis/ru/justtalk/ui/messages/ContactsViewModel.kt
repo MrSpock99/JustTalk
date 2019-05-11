@@ -4,7 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.ChatInteractor
 import itis.ru.justtalk.interactor.MyProfileInteractor
-import itis.ru.justtalk.models.ChatUser
+import itis.ru.justtalk.models.ContactsAndChats
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.utils.Response
 import javax.inject.Inject
@@ -14,7 +14,7 @@ class ContactsViewModel @Inject constructor(
     private val myProfileInteractor: MyProfileInteractor
 ) : BaseViewModel() {
 
-    val contactsListLiveData = MutableLiveData<Response<List<ChatUser>>>()
+    val contactsListLiveData = MutableLiveData<Response<ContactsAndChats>>()
 
     fun getContacts() {
         showLoadingLiveData.value = true
@@ -27,8 +27,8 @@ class ContactsViewModel @Inject constructor(
                         .doFinally {
                             showLoadingLiveData.value = false
                         }
-                        .subscribe({ contactsList ->
-                            contactsListLiveData.value = Response.success(contactsList)
+                        .subscribe({ contactsChats ->
+                            contactsListLiveData.value = Response.success(contactsChats)
                         }, { error ->
                             contactsListLiveData.value = Response.error(error)
                             error.printStackTrace()

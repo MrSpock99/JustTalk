@@ -2,12 +2,12 @@ package itis.ru.justtalk.ui.messages
 
 import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.ChatInteractor
 import itis.ru.justtalk.interactor.MyProfileInteractor
 import itis.ru.justtalk.models.ChatUser
 import itis.ru.justtalk.models.Message
+import itis.ru.justtalk.models.UidAndRecyclerOptions
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.ui.people.ARG_CHAT_ID
 import itis.ru.justtalk.ui.people.ARG_USER_UID
@@ -21,7 +21,7 @@ class ChatWithUserViewModel @Inject constructor(
 
     val startChatSuccessLiveData = MutableLiveData<Response<Boolean>>()
     val sendMessageSuccessLiveData = MutableLiveData<Response<Boolean>>()
-    val getMessagesLiveData = MutableLiveData<Response<FirestoreRecyclerOptions<Message>>>()
+    val getMessagesLiveData = MutableLiveData<Response<UidAndRecyclerOptions>>()
 
     private lateinit var userTo: ChatUser
     private lateinit var myUid: String
@@ -36,6 +36,7 @@ class ChatWithUserViewModel @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ myUid ->
                     this.myUid = myUid
+                    getMessages(arguments)
                     chatInteractor
                         .getUser(userToUid)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -92,7 +93,7 @@ class ChatWithUserViewModel @Inject constructor(
         )
     }
 
-    fun getMessages(arguments: Bundle?) {
+    private fun getMessages(arguments: Bundle?) {
         showLoadingLiveData.value = true
         chatId = arguments?.getString(ARG_CHAT_ID).toString()
         disposables.add(
@@ -102,7 +103,7 @@ class ChatWithUserViewModel @Inject constructor(
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    getMessagesLiveData.value = Response.success(it)
+                    getMessagesLiveData.value = Response.success(UidAndRecyclerOptions(myUid, it))
                 }, { error ->
                     sendMessageSuccessLiveData.value = Response.error(error)
                     error.printStackTrace()
