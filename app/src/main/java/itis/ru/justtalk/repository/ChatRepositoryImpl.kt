@@ -118,4 +118,24 @@ class ChatRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override fun getContacts(userFromUid: String): Single<List<ChatUser>> {
+        return Single.create { emitter ->
+            db.collection(CHATS).document(userFromUid).collection(USER_CHATS)
+                .get().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val contactsList = mutableListOf<ChatUser>()
+                        task.result?.forEach {
+                            contactsList.add(it.toObject(ChatUser::class.java))
+                        }
+                        emitter.onSuccess(contactsList)
+                    } else {
+                        emitter.onError(
+                            task.exception ?: Exception("error getting contacts")
+                        )
+                    }
+                }
+
+        }
+    }
 }

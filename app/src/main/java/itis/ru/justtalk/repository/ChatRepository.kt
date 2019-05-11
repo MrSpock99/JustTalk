@@ -19,4 +19,6 @@ interface ChatRepository {
     ): Completable
 
     fun getMessages(chatId: String): Single<FirestoreRecyclerOptions<Message>>
+
+    fun getContacts(userFromUid: String): Single<List<ChatUser>>
 }

@@ -33,4 +33,9 @@ class ChatInteractor @Inject constructor(private val chatRepository: ChatReposit
         return chatRepository.getMessages(chatId)
             .subscribeOn(Schedulers.io())
     }
+
+    fun getContacts(userFromUid: String): Single<List<ChatUser>> {
+        return chatRepository.getContacts(userFromUid)
+            .subscribeOn(Schedulers.io())
+    }
 }
