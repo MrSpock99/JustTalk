@@ -30,6 +30,7 @@ class ContactsFragment : BaseFragment() {
             .get(ContactsViewModel::class.java)
         viewModel.getContacts()
         observeContactsListLiveData()
+        observeShowLoadingLiveData()
     }
 
     override fun onCreateView(
@@ -78,6 +79,12 @@ class ContactsFragment : BaseFragment() {
                 showSnackbar(getString(R.string.snackbar_error_message))
             }
         })
+
+    private fun observeShowLoadingLiveData() =
+        viewModel.showLoadingLiveData.observe(this, Observer {
+            it?.let { it1 -> rootActivity.showLoading(it1) }
+        })
+
 
     companion object {
         fun newInstance() = ContactsFragment()

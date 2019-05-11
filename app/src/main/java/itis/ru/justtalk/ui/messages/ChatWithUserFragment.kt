@@ -31,6 +31,7 @@ class ChatWithUserFragment : BaseFragment() {
         observeStartChatSuccessLiveData()
         observeSendMessagesLiveData()
         observeGetMessagesLiveData()
+        observeShowLoadingLiveData()
     }
 
     override fun onStart() {
@@ -91,6 +92,11 @@ class ChatWithUserFragment : BaseFragment() {
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
             }
+        })
+
+    private fun observeShowLoadingLiveData() =
+        viewModel.showLoadingLiveData.observe(this, Observer {
+            it?.let { it1 -> rootActivity.showLoading(it1) }
         })
 
     companion object {
