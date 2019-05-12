@@ -12,7 +12,7 @@ data class WordGroup(
 /*
     val list: List<Word>,
 */
-    val progress: Int,
+    val progress: Int = 0,
     @ColumnInfo(name = "image_url")
     val imageUrl: String
 ) {

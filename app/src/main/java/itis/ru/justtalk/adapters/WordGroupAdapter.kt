@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import itis.ru.justtalk.R
 import itis.ru.justtalk.models.db.WordGroup
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.item_words_group.view.*
 
 class WordGroupAdapter(private val clickListener: (WordGroup) -> Unit) :
@@ -32,9 +34,23 @@ class WordGroupAdapter(private val clickListener: (WordGroup) -> Unit) :
         fun bind(item: WordGroup, clickListener: (WordGroup) -> Unit) {
             itemView.tv_word_group_name.text = item.name
             itemView.tv_word_group_count.text = "0"
+
+            val transformation = RoundedCornersTransformation(20, 1)
+
+            val requestOptions = RequestOptions()
+                .centerCrop()
+                .transforms(transformation)
+
+            val thumbnail = Glide.with(itemView)
+                .load(R.drawable.image_placeholder)
+                .apply(requestOptions)
+
             Glide.with(itemView)
                 .load(item.imageUrl)
+                .apply(requestOptions)
+                .thumbnail(thumbnail)
                 .into(itemView.iv_word_group)
+
             itemView.setOnClickListener {
                 clickListener(item)
             }

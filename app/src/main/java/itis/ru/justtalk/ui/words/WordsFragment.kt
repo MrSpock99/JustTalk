@@ -1,7 +1,9 @@
 package itis.ru.justtalk.ui.words
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import itis.ru.justtalk.BaseApplication
@@ -12,6 +14,10 @@ import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_words.*
 import javax.inject.Inject
+
+const val REQ_CODE_CREATE_GROUP = 1001
+const val ARG_GROUP_NAME = "GROUP_NAME"
+const val ARG_IMAGE_URL = "IMAGE_URL"
 
 class WordsFragment : BaseFragment() {
     @Inject
@@ -50,16 +56,31 @@ class WordsFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_add -> {
-                viewModel.addGroup(WordGroup(name = "Test1", progress = 0, imageUrl = ""))
+                startActivityForResult(
+                    Intent(rootActivity, ActivityCreateGroup::class.java),
+                    REQ_CODE_CREATE_GROUP
+                )
                 return true
             }
         }
         return false
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQ_CODE_CREATE_GROUP) {
+            viewModel.addGroup(
+                WordGroup(
+                    name = data?.getStringExtra(ARG_GROUP_NAME).toString(),
+                    imageUrl = data?.getStringExtra(ARG_IMAGE_URL).toString()
+                )
+            )
+        }
+    }
+
     private fun injectDependencies() {
         (activity?.application as BaseApplication).appComponent.inject(this)
-    }//////
+    }
 
     private fun observeAddGroupSuccessLiveData() =
         viewModel.addGroupSuccessLiveData.observe(this, Observer { response ->
