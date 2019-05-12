@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.firestore.GeoPoint
 import itis.ru.justtalk.R
-import itis.ru.justtalk.models.User
+import itis.ru.justtalk.models.user.User
 import itis.ru.justtalk.utils.getDistanceFromLocation
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.card_view_tinder_like.view.*

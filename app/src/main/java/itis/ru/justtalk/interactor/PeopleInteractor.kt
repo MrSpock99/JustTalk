@@ -3,8 +3,8 @@ package itis.ru.justtalk.interactor
 import com.google.firebase.firestore.GeoPoint
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import itis.ru.justtalk.models.RemoteUser
-import itis.ru.justtalk.models.User
+import itis.ru.justtalk.models.user.RemoteUser
+import itis.ru.justtalk.models.user.User
 import itis.ru.justtalk.repository.UserRepository
 import javax.inject.Inject
 

@@ -9,8 +9,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import io.reactivex.Completable
 import io.reactivex.Single
-import itis.ru.justtalk.models.RemoteUser
-import itis.ru.justtalk.models.User
+import itis.ru.justtalk.models.user.RemoteUser
+import itis.ru.justtalk.models.user.User
 import javax.inject.Inject
 
 const val UID = "name"

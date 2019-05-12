@@ -7,9 +7,9 @@ import com.google.firebase.firestore.SetOptions
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import itis.ru.justtalk.models.ChatUser
-import itis.ru.justtalk.models.ContactsAndChats
 import itis.ru.justtalk.models.Message
+import itis.ru.justtalk.models.user.ChatUser
+import itis.ru.justtalk.models.utils.ContactsAndChats
 import itis.ru.justtalk.ui.people.NO_CHAT_ID
 import javax.inject.Inject
 
@@ -168,7 +168,12 @@ class ChatRepositoryImpl @Inject constructor(
                                     contactsList.add(user)
                                     chatList.add(it.id)
                                     if (contactsList.size == task.result?.size()) {
-                                        emitter.onSuccess(ContactsAndChats(contactsList, chatList))
+                                        emitter.onSuccess(
+                                            ContactsAndChats(
+                                                contactsList,
+                                                chatList
+                                            )
+                                        )
                                     }
                                 }, { error ->
                                     emitter.onError(

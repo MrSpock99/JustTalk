@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [AppModule::class, ViewModelFactoryModule::class, ViewModelModule::class,
-        RepoModule::class, AuthModule::class]
+        RepoModule::class, AuthModule::class, DatabaseModule::class]
 )
 interface AppComponent {
     fun inject(fragment: LoginFragment)

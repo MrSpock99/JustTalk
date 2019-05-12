@@ -8,7 +8,7 @@ import com.google.firebase.firestore.GeoPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.MyProfileInteractor
 import itis.ru.justtalk.interactor.PeopleInteractor
-import itis.ru.justtalk.models.User
+import itis.ru.justtalk.models.user.User
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.utils.ClickEvent
 import itis.ru.justtalk.utils.Response

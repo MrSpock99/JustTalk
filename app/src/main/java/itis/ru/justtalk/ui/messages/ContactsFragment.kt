@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.ContactsAdapter
-import itis.ru.justtalk.models.ChatUser
+import itis.ru.justtalk.models.user.ChatUser
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.people.ARG_CHAT_ID
 import itis.ru.justtalk.ui.people.ARG_USER_UID

@@ -1,4 +1,4 @@
-package itis.ru.justtalk.models
+package itis.ru.justtalk.models.user
 
 import com.google.firebase.firestore.PropertyName
 
