@@ -13,6 +13,10 @@
     <string name="fragment_edit_profile_toolbar_title">Edit profile</string>
     <string name="snackbar_error_message">Error has occurred</string>
     <string name="snackbar_permission_message">Permission is needed</string>
+    <string name="nav_contacts_title">Messages</string>
+    <string name="nav_people_title">People</string>
+    <string name="nav_profile_title">Profle</string>
+    <string name="nav_words_title">Words</string>
     <string-array name="spinner_gender_entities">
         <item>Man</item>
         <item>Woman</item>

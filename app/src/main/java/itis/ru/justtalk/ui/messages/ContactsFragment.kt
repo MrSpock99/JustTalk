@@ -28,7 +28,6 @@ class ContactsFragment : BaseFragment() {
 
         viewModel = ViewModelProviders.of(this, this.viewModeFactory)
             .get(ContactsViewModel::class.java)
-        viewModel.getContacts()
         observeContactsListLiveData()
         observeShowLoadingLiveData()
     }
@@ -43,6 +42,17 @@ class ContactsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        init()
+    }
+
+    private fun init() {
+        setToolbarTitle(getString(R.string.nav_contacts_title))
+        setArrowToolbarVisibility(false)
+        setToolbarAndBottomNavVisibility(
+            toolbarVisibility = View.VISIBLE,
+            bottomNavVisibility = View.VISIBLE
+        )
+        viewModel.getContacts()
     }
 
     private fun injectDependencies() {
@@ -81,7 +91,6 @@ class ContactsFragment : BaseFragment() {
         viewModel.showLoadingLiveData.observe(this, Observer {
             it?.let { it1 -> rootActivity.showLoading(it1) }
         })
-
 
     companion object {
         fun newInstance() = ContactsFragment()

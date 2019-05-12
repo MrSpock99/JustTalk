@@ -23,6 +23,7 @@ class ChatWithUserFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
+        setHasOptionsMenu(true)
 
         viewModel = ViewModelProviders.of(this, this.viewModeFactory)
             .get(ChatWithUserViewModel::class.java)
@@ -62,6 +63,11 @@ class ChatWithUserFragment : BaseFragment() {
     }
 
     private fun init() {
+        setArrowToolbarVisibility(true)
+        setToolbarAndBottomNavVisibility(
+            toolbarVisibility = View.VISIBLE,
+            bottomNavVisibility = View.GONE
+        )
         btn_send_message.setOnClickListener {
             if (et_message.text.toString() != "") {
                 viewModel.sendMessage(et_message.text.toString())
@@ -72,6 +78,9 @@ class ChatWithUserFragment : BaseFragment() {
 
     private fun observeStartChatSuccessLiveData() =
         viewModel.startChatSuccessLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
+                setToolbarTitle(response.data)
+            }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
             }

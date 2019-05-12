@@ -19,7 +19,7 @@ class ChatWithUserViewModel @Inject constructor(
     private val myProfileInteractor: MyProfileInteractor
 ) : BaseViewModel() {
 
-    val startChatSuccessLiveData = MutableLiveData<Response<Boolean>>()
+    val startChatSuccessLiveData = MutableLiveData<Response<String>>()
     val sendMessageSuccessLiveData = MutableLiveData<Response<Boolean>>()
     val getMessagesLiveData = MutableLiveData<Response<UidAndRecyclerOptions>>()
 
@@ -48,7 +48,7 @@ class ChatWithUserViewModel @Inject constructor(
                                 }
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe({
-                                    startChatSuccessLiveData.value = Response.success(true)
+                                    startChatSuccessLiveData.value = Response.success(userTo.name)
                                 }, { error ->
                                     startChatSuccessLiveData.value = Response.error(error)
                                     error.printStackTrace()
