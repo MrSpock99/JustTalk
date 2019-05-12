@@ -10,6 +10,7 @@ import itis.ru.justtalk.ui.messages.ContactsFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.ui.people.PeopleFragment
 import itis.ru.justtalk.ui.people.UserDetailsFragment
+import itis.ru.justtalk.ui.words.WordsFragment
 import javax.inject.Singleton
 
 @Singleton
@@ -25,5 +26,6 @@ interface AppComponent {
     fun inject(fragment: UserDetailsFragment)
     fun inject(fragment: ChatWithUserFragment)
     fun inject(fragment: ContactsFragment)
+    fun inject(fragment: WordsFragment)
     fun inject(activity: MainActivity)
 }

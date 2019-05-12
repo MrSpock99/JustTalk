@@ -10,10 +10,10 @@ import itis.ru.justtalk.db.WordGroupsDao
 import javax.inject.Singleton
 
 @Module
-class DatabaseModule(private val context: Context) {
+class DatabaseModule {
     @Provides
     @Singleton
-    fun provideDb(): AppDatabase = Room.databaseBuilder(
+    fun provideDb(context: Context): AppDatabase = Room.databaseBuilder(
         context, AppDatabase::class.java, DB_NAME
     )
         .fallbackToDestructiveMigration()
