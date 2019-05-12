@@ -52,21 +52,26 @@ class ChatWithUserFragment : BaseFragment() {
         init()
     }
 
+    override fun onStop() {
+        super.onStop()
+        adapter?.stopListening()
+    }
+
     private fun injectDependencies() {
         (rootActivity.application as BaseApplication).appComponent.inject(this)
     }
 
     private fun init() {
         btn_send_message.setOnClickListener {
-            viewModel.sendMessage(et_message.text.toString())
+            if (et_message.text.toString() != "") {
+                viewModel.sendMessage(et_message.text.toString())
+            }
+            et_message.setText("")
         }
     }
 
     private fun observeStartChatSuccessLiveData() =
         viewModel.startChatSuccessLiveData.observe(this, Observer { response ->
-            if (response?.data != null) {
-                showSnackbar("Success")
-            }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
             }
@@ -74,9 +79,6 @@ class ChatWithUserFragment : BaseFragment() {
 
     private fun observeSendMessagesLiveData() =
         viewModel.sendMessageSuccessLiveData.observe(this, Observer { response ->
-            if (response?.data != null) {
-                showSnackbar("Success")
-            }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
             }

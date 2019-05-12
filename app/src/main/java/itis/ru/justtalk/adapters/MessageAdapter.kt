@@ -1,6 +1,7 @@
 package itis.ru.justtalk.adapters
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import itis.ru.justtalk.R
 import itis.ru.justtalk.models.Message
 import kotlinx.android.synthetic.main.fragment_chat_with_user.view.*
+
+
 
 class MessageAdapter internal constructor(
     private  val uidFrom: String,
@@ -42,6 +45,10 @@ class MessageAdapter internal constructor(
         }
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     override fun onDataChanged() {
         if (view != null){
             view?.rv_messages?.layoutManager?.scrollToPosition(itemCount - 1)
@@ -51,6 +58,7 @@ class MessageAdapter internal constructor(
     inner class MessageViewHolder : RecyclerView.ViewHolder(view!!) {
         internal fun setMessage(message: Message) {
             val textView = view?.findViewById<TextView>(R.id.text_view)
+            Log.d("MYLOPG", message.messageText)
             textView?.text = message.messageText
         }
     }

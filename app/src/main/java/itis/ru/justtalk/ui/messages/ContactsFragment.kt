@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
+import itis.ru.justtalk.adapters.ContactsAdapter
+import itis.ru.justtalk.models.ChatUser
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.people.ARG_CHAT_ID
 import itis.ru.justtalk.ui.people.ARG_USER_UID
@@ -52,28 +52,25 @@ class ContactsFragment : BaseFragment() {
     private fun observeContactsListLiveData() =
         viewModel.contactsListLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
-                val listOfToUserNames = mutableListOf<String>()
                 val listOfToUserChats = mutableListOf<String>()
+                val listOfContacts = mutableListOf<ChatUser>()
+
                 response.data.contactsList.forEach {
-                    listOfToUserNames.add(it.name)
+                    listOfContacts.add(it)
                 }
                 response.data.chatsList.forEach {
                     listOfToUserChats.add(it)
                 }
-                val arrayAdapter =
-                    ArrayAdapter(
-                        rootActivity,
-                        android.R.layout.simple_list_item_1,
-                        listOfToUserNames
-                    )
-                rv_contacts.adapter = arrayAdapter
-                rv_contacts.onItemClickListener =
-                    AdapterView.OnItemClickListener { _, _, position, _ ->
-                        val chatBundle = Bundle()
-                        chatBundle.putString(ARG_USER_UID, response.data.contactsList[position].uid)
-                        chatBundle.putString(ARG_CHAT_ID, listOfToUserChats[position])
-                        rootActivity.navigateTo(ChatWithUserFragment(), chatBundle)
-                    }
+
+                val contactsAdapter = ContactsAdapter { pos ->
+                    val chatBundle = Bundle()
+                    chatBundle.putString(ARG_USER_UID, listOfContacts[pos].uid)
+                    chatBundle.putString(ARG_CHAT_ID, listOfToUserChats[pos])
+                    rootActivity.navigateTo(ChatWithUserFragment(), chatBundle)
+                }
+                contactsAdapter.submitList(listOfContacts)
+                rv_contacts.adapter = contactsAdapter
+
             }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))

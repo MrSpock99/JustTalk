@@ -6,6 +6,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import itis.ru.justtalk.models.ChatUser
 import itis.ru.justtalk.models.ContactsAndChats
 import itis.ru.justtalk.models.Message
@@ -19,6 +20,7 @@ const val CHATS: String = "chats"
 const val USER_CHATS: String = "user_chats"
 const val CHAT_MESSAGES: String = "chat_messages"
 const val SENT_AT = "sentAt"
+const val MESSAGE_TEXT = "messageText"
 
 class ChatRepositoryImpl @Inject constructor(
     private val db: FirebaseFirestore
@@ -140,7 +142,7 @@ class ChatRepositoryImpl @Inject constructor(
             query.addSnapshotListener { snp, e ->
                 if (e != null) {
                     emitter.onError(e)
-                }else{
+                } else {
                     emitter.onSuccess(options)
                 }
 
@@ -155,15 +157,42 @@ class ChatRepositoryImpl @Inject constructor(
                     if (task.isSuccessful) {
                         val contactsList = mutableListOf<ChatUser>()
                         val chatList = mutableListOf<String>()
-                        task.result?.forEach {
-                            contactsList.add(it.toObject(ChatUser::class.java))
-                            chatList.add(it.id)
+
+                        task.result?.forEach { it ->
+                            getLastMessageInChat(it.id)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(Schedulers.io())
+                                .subscribe({ message ->
+                                    val user = it.toObject(ChatUser::class.java)
+                                    user.lastMessage = message
+                                    contactsList.add(user)
+                                    chatList.add(it.id)
+                                    if (contactsList.size == task.result?.size()) {
+                                        emitter.onSuccess(ContactsAndChats(contactsList, chatList))
+                                    }
+                                }, { error ->
+                                    emitter.onError(
+                                        error ?: Exception("error getting last message")
+                                    )
+                                })
                         }
-                        emitter.onSuccess(ContactsAndChats(contactsList, chatList))
                     } else {
                         emitter.onError(
                             task.exception ?: Exception("error getting contacts")
                         )
+                    }
+                }
+        }
+    }
+
+    private fun getLastMessageInChat(chatId: String): Single<String> {
+        return Single.create { emitter ->
+            val query = db.collection(MESSAGES).document(chatId).collection(CHAT_MESSAGES)
+                .orderBy(SENT_AT, Query.Direction.DESCENDING)
+            query.get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        emitter.onSuccess(it.result?.documents?.get(0)?.data?.get(MESSAGE_TEXT).toString())
                     }
                 }
         }
