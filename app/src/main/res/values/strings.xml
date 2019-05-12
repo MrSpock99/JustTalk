@@ -1,6 +1,22 @@
 <resources>
     <string name="app_name">JustTalk</string>
     <string name="google_api_token">499949272101-vmf6l1ib6td62v1g6s1qdpr1q9rqq5dl.apps.googleusercontent.com</string>
+    <string name="btn_message_title">Message</string>
+    <string name="et_age_hint">My age</string>
+    <string name="et_about_me_hint">About me</string>
+    <string name="et_speaking_language_hint">Speaking language</string>
+    <string name="et_learning_language_hint">Learning language</string>
+    <string name="spinner_gender_title">Gender</string>
+    <string name="spinner_level_title">Level</string>
+    <string name="fragment_people_toolbar_title">People</string>
+    <string name="fragment_my_profile_toolbar_title">My profile</string>
+    <string name="fragment_edit_profile_toolbar_title">Edit profile</string>
+    <string name="snackbar_error_message">Error has occurred</string>
+    <string name="snackbar_permission_message">Permission is needed</string>
+    <string name="nav_contacts_title">Messages</string>
+    <string name="nav_people_title">People</string>
+    <string name="nav_profile_title">Profle</string>
+    <string name="nav_words_title">Words</string>
     <string-array name="spinner_gender_entities">
         <item>Man</item>
         <item>Woman</item>

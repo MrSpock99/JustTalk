@@ -30,6 +30,6 @@
         android:background="@color/white"
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
-        android:text="Level"
+        android:text="@string/spinner_level_title"
         android:textColor="@color/colorDarkGrey" />
 </RelativeLayout>

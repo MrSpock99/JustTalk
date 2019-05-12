@@ -31,6 +31,6 @@
         android:background="@color/white"
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
-        android:text="Gender"
+        android:text="@string/spinner_gender_title"
         android:textColor="@color/colorDarkGrey" />
 </RelativeLayout>

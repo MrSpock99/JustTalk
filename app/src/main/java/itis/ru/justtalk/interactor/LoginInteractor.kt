@@ -1,4 +1,4 @@
-package itis.ru.justtalk.interactor.login
+package itis.ru.justtalk.interactor
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import io.reactivex.Completable

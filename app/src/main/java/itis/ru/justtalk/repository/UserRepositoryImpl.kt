@@ -9,26 +9,27 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import io.reactivex.Completable
 import io.reactivex.Single
+import itis.ru.justtalk.models.RemoteUser
 import itis.ru.justtalk.models.User
 import javax.inject.Inject
 
-private const val USER_NAME = "name"
-private const val USER_AGE = "age"
-private const val USER_GENDER = "gender"
-private const val USER_ABOUT_ME = "about_me"
-private const val USER_LOCATION = "location"
-private const val USER_AVATAR_URL = "avatar_url"
-private const val USER_LEARNING_LANGUAGE = "learning_language"
-private const val USER_LEARNING_LANGUAGE_LEVEL = "learning_language_level"
-private const val USER_SPEAKING_LANGUAGE = "speaking_language"
-private const val USER_SPEAKING_LANGUAGE_LEVEL = "speaking_language_level"
-private const val USERS = "users"
+const val UID = "name"
+const val USER_NAME = "name"
+const val USER_AGE = "age"
+const val USER_GENDER = "gender"
+const val USER_ABOUT_ME = "about_me"
+const val USER_LOCATION = "location"
+const val USER_AVATAR_URL = "avatar_url"
+const val USER_LEARNING_LANGUAGE = "learning_language"
+const val USER_LEARNING_LANGUAGE_LEVEL = "learning_language_level"
+const val USER_SPEAKING_LANGUAGE = "speaking_language"
+const val USER_SPEAKING_LANGUAGE_LEVEL = "speaking_language_level"
+const val USERS = "users"
 
 class UserRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val db: FirebaseFirestore
 ) : UserRepository {
-
     override fun login(account: GoogleSignInAccount): Completable {
         return Completable.create { emitter ->
             firebaseAuth.signInWithCredential(
@@ -44,15 +45,12 @@ class UserRepositoryImpl @Inject constructor(
                 }
             }
         }
-        /* return RxFirebaseAuth.signInWithCredential(
-                 mFirebaseAuth,
-                 GoogleAuthProvider.getCredential(account.idToken, null)
-         )*/
     }
 
     override fun addUserToDb(user: User): Completable {
-        return Completable.create {emitter ->
+        return Completable.create { emitter ->
             val userMap = HashMap<String, Any>()
+            userMap[UID] = firebaseAuth.currentUser?.email as String
             userMap[USER_NAME] = user.name
             userMap[USER_AGE] = user.age
             userMap[USER_ABOUT_ME] = user.aboutMe
@@ -76,16 +74,17 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getUserFromDb(firebaseUser: FirebaseUser): Single<User> {
+    override fun getUserFromDb(firebaseUser: FirebaseUser): Single<RemoteUser> {
         return Single.create { emitter ->
             db.collection(USERS)
                 .document(firebaseUser.email ?: "")
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val result = task.result
-                        //val user = result?.toObject(User::class.java)
+                        //val user = result?.toObject(RemoteUser::class.java)
                         emitter.onSuccess(
-                            result?.toObject(User::class.java) ?: User(
+                            result?.toObject(RemoteUser::class.java) ?: RemoteUser(
+                                "",
                                 "",
                                 0,
                                 "",
@@ -96,7 +95,8 @@ class UserRepositoryImpl @Inject constructor(
                                 "",
                                 "",
                                 "",
-                                GeoPoint(0.0, 0.0)
+                                GeoPoint(0.0, 0.0),
+                                mutableMapOf()
                             )
                         )
                         Log.d("MYLOG", task.result?.data.toString())
@@ -107,17 +107,18 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMyProfile(): Single<User> {
+    override fun getMyProfile(): Single<RemoteUser> {
         return firebaseAuth.currentUser?.let {
             getUserFromDb(it)
         } ?: Single.error(Exception("user not exists"))
     }
 
-    override fun getEmptyUser(): Single<User> {
+    override fun getEmptyUser(): Single<RemoteUser> {
         return Single.create { emitter ->
             firebaseAuth.currentUser?.let {
                 val user =
-                    User(
+                    RemoteUser(
+                        "",
                         it.displayName ?: "",
                         0,
                         "",
@@ -128,10 +129,42 @@ class UserRepositoryImpl @Inject constructor(
                         "",
                         "",
                         "",
-                        GeoPoint(0.0, 0.0)
+                        GeoPoint(0.0, 0.0),
+                        mutableMapOf()
                     )
                 emitter.onSuccess(user)
             }
         }
     }
+
+    override fun getUsers(userLocation: GeoPoint, limit: Long): Single<List<RemoteUser>> {
+        updateUserLocationInDb(userLocation)
+        return Single.create { emitter ->
+            db.collection(USERS)
+/*
+                .whereLessThanOrEqualTo("location", userLocation)
+*/
+                .limit(limit)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        task.result?.toObjects(RemoteUser::class.java)
+                            ?.let { emitter.onSuccess(it) }
+                    } else {
+                        emitter.onError(
+                            task.exception ?: java.lang.Exception("error getting all users")
+                        )
+                    }
+                }
+        }
+    }
+
+    private fun updateUserLocationInDb(userLocation: GeoPoint) {
+        val userMap = HashMap<String, Any>()
+        userMap[USER_LOCATION] = userLocation
+        db.collection(USERS)
+            .document(firebaseAuth.currentUser?.email ?: "")
+            .update(userMap)
+    }
+
 }
