@@ -38,12 +38,13 @@ data class RemoteUser(
     @set:PropertyName("speaking_language_level")
     var speakingLanguageLevel: String,
 
-    var location: @RawValue GeoPoint
+    var location: @RawValue GeoPoint,
+    val chats: Map<String, Boolean>
 ) {
     constructor() : this(
         "",
         "", 0, "", "", arrayListOf("", "", "", "", ""),
         "", "", "", "", "",
-        GeoPoint(0.0, 0.0)
+        GeoPoint(0.0, 0.0), mutableMapOf<String,Boolean>()
     )
 }

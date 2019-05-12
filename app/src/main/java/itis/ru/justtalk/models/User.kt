@@ -19,12 +19,13 @@ data class User(
     var learningLanguageLevel: String,
     var speakingLanguage: String,
     var speakingLanguageLevel: String,
-    var location: @RawValue GeoPoint
+    var location: @RawValue GeoPoint,
+    var chats: Map<String, Boolean>
 ) : Parcelable {
 
     constructor(parcel: Parcel): this("","", 0, "", "", arrayListOf("", "", "", "", ""),
         "","","","","",
-        GeoPoint(parcel.readDouble(), parcel.readDouble()))
+        GeoPoint(parcel.readDouble(), parcel.readDouble()), mutableMapOf<String,Boolean>())
 
     companion object : Parceler<User> {
         override fun User.write(parcel: Parcel, flags: Int) {

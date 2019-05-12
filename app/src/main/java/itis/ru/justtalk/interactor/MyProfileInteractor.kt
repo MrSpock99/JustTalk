@@ -27,7 +27,8 @@ class MyProfileInteractor @Inject constructor(
                     it.learningLanguageLevel,
                     it.speakingLanguage,
                     it.speakingLanguageLevel,
-                    it.location
+                    it.location,
+                    it.chats
                 )
             }
     }
@@ -48,7 +49,8 @@ class MyProfileInteractor @Inject constructor(
                     it.learningLanguageLevel,
                     it.speakingLanguage,
                     it.speakingLanguageLevel,
-                    it.location
+                    it.location,
+                    it.chats
                 )
             }
     }
@@ -77,7 +79,8 @@ class MyProfileInteractor @Inject constructor(
                     it.learningLanguageLevel,
                     it.speakingLanguage,
                     it.speakingLanguageLevel,
-                    it.location
+                    it.location,
+                    it.chats
                 )
             }
     }

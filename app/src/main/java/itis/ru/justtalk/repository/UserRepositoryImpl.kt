@@ -95,7 +95,8 @@ class UserRepositoryImpl @Inject constructor(
                                 "",
                                 "",
                                 "",
-                                GeoPoint(0.0, 0.0)
+                                GeoPoint(0.0, 0.0),
+                                mutableMapOf()
                             )
                         )
                         Log.d("MYLOG", task.result?.data.toString())
@@ -128,7 +129,8 @@ class UserRepositoryImpl @Inject constructor(
                         "",
                         "",
                         "",
-                        GeoPoint(0.0, 0.0)
+                        GeoPoint(0.0, 0.0),
+                        mutableMapOf()
                     )
                 emitter.onSuccess(user)
             }
