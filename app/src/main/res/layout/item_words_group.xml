@@ -5,12 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     cv_item:cardCornerRadius="10dp"
+    cv_item:cardBackgroundColor="@color/white"
+    cv_item:cardUseCompatPadding="true"
     cv_item:cardElevation="5dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:background="?android:attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/iv_word_group"
