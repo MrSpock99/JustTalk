@@ -32,6 +32,7 @@ class WordsFragment : BaseFragment() {
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(WordsViewModel::class.java)
         observeAddGroupSuccessLiveData()
+        observeGetAllGroupsLiveData()
     }
 
     override fun onCreateView(
@@ -42,10 +43,9 @@ class WordsFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_words, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onStart() {
+        super.onStart()
         viewModel.getGroups()
-        observeGetAllGroupsLiveData()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

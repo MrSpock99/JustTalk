@@ -12,6 +12,7 @@ import itis.ru.justtalk.ui.messages.ContactsViewModel
 import itis.ru.justtalk.ui.myprofile.MyProfileViewModel
 import itis.ru.justtalk.ui.people.PeopleViewModel
 import itis.ru.justtalk.ui.people.UserDetailsViewModel
+import itis.ru.justtalk.ui.words.CreateGroupViewModel
 import itis.ru.justtalk.ui.words.WordsViewModel
 import kotlin.reflect.KClass
 
@@ -57,6 +58,10 @@ abstract class ViewModelModule {
     @ViewModelKey(WordsViewModel::class)
     abstract fun bindWordsViewModel(wordsViewModel: WordsViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(CreateGroupViewModel::class)
+    abstract fun bindCreateGroupViewModel(createGroupViewModel: CreateGroupViewModel): ViewModel
 }
 
 @Target(

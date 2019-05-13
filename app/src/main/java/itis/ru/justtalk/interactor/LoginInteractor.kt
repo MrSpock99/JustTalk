@@ -14,8 +14,4 @@ class LoginInteractor @Inject constructor(
         return userRepository.login(account)
             .subscribeOn(Schedulers.io())
     }
-
-    fun addUserToDb(age: Int, gender: String, location: HashMap<String, Double>) {
-        //userRepository.addUserToDb(age, gender, location)
-    }
 }
