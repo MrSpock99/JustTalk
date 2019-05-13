@@ -14,6 +14,7 @@ import itis.ru.justtalk.ui.people.PeopleViewModel
 import itis.ru.justtalk.ui.people.UserDetailsViewModel
 import itis.ru.justtalk.ui.words.groups.CreateGroupViewModel
 import itis.ru.justtalk.ui.words.groups.GroupsViewModel
+import itis.ru.justtalk.ui.words.words.AddWordViewModel
 import itis.ru.justtalk.ui.words.words.WordsViewModel
 import kotlin.reflect.KClass
 
@@ -68,6 +69,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(WordsViewModel::class)
     abstract fun bindWordsDetailsViewModel(wordsViewModel: WordsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AddWordViewModel::class)
+    abstract fun bindAddWordViewModel(addWordViewModel: AddWordViewModel): ViewModel
 }
 
 @Target(

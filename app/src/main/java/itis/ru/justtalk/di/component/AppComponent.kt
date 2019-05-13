@@ -12,6 +12,7 @@ import itis.ru.justtalk.ui.people.PeopleFragment
 import itis.ru.justtalk.ui.people.UserDetailsFragment
 import itis.ru.justtalk.ui.words.groups.CreateGroupActivity
 import itis.ru.justtalk.ui.words.groups.GroupsFragment
+import itis.ru.justtalk.ui.words.words.AddWordActivity
 import itis.ru.justtalk.ui.words.words.WordsFragment
 import javax.inject.Singleton
 
@@ -32,4 +33,5 @@ interface AppComponent {
     fun inject(fragment: WordsFragment)
     fun inject(activity: MainActivity)
     fun inject(activity: CreateGroupActivity)
+    fun inject(activity: AddWordActivity)
 }
