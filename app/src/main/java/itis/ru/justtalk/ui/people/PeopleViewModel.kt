@@ -28,10 +28,16 @@ class PeopleViewModel @Inject constructor(
     @SuppressLint("MissingPermission")
     fun getUsersNearby() {
         locationProviderClient.lastLocation.addOnCompleteListener {
-            val currentLocation = it.result as Location
-            val locationGeoPoint = GeoPoint(currentLocation.latitude, currentLocation.longitude)
-            myLocationLiveData.value = locationGeoPoint
-            getMyChats(locationGeoPoint)
+            if (it.result != null) {
+                val currentLocation = it.result as Location
+                val locationGeoPoint = GeoPoint(currentLocation.latitude, currentLocation.longitude)
+                myLocationLiveData.value = locationGeoPoint
+                getMyChats(locationGeoPoint)
+            } else {
+                val locationGeoPoint = GeoPoint(0.0, 0.0)
+                myLocationLiveData.value = locationGeoPoint
+                getMyChats(locationGeoPoint)
+            }
         }
     }
 
