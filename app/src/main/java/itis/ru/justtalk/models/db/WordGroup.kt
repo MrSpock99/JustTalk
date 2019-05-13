@@ -7,13 +7,13 @@ import android.arch.persistence.room.PrimaryKey
 @Entity(tableName = "word_group")
 data class WordGroup(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-    val name: String,
+    var id: Long = 0,
+    var name: String = "",
 /*
     val list: List<Word>,
 */
-    val progress: Int = 0,
+    var progress: Int = 0,
     @ColumnInfo(name = "image_url")
-    val imageUrl: String
-) {
-}
+    var imageUrl: String = ""
+)
+

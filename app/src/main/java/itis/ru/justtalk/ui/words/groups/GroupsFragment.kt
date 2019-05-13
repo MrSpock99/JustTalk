@@ -98,7 +98,7 @@ class GroupsFragment : BaseFragment() {
                 val adapter = WordGroupAdapter { item ->
                     val bundle = Bundle()
                     bundle.putLong(ARG_GROUP_ID, item.id)
-                    rootActivity.navigateTo(WordsFragment(),bundle)
+                    rootActivity.navigateTo(WordsFragment(), bundle)
                 }
                 adapter.submitList(response.data)
                 rv_word_groups.adapter = adapter

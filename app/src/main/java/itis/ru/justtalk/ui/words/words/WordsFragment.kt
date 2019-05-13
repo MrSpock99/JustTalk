@@ -1,6 +1,7 @@
 package itis.ru.justtalk.ui.words.words
 
 import android.app.Activity
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
+import itis.ru.justtalk.models.db.Word
+import itis.ru.justtalk.models.db.WordGroup
 import itis.ru.justtalk.ui.base.BaseFragment
+import itis.ru.justtalk.ui.words.groups.ARG_GROUP_ID
 import itis.ru.justtalk.ui.words.groups.ARG_IMAGE_URL
 import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_words.*
@@ -30,6 +34,7 @@ class WordsFragment : BaseFragment() {
 
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(WordsViewModel::class.java)
+        observeAddWordLiveData()
     }
 
     override fun onCreateView(
@@ -48,8 +53,13 @@ class WordsFragment : BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQ_CODE_ADD_WORD) {
-            showSnackbar(data?.getStringExtra(ARG_WORD).toString() + data?.getStringExtra(
-                ARG_TRANSLATION).toString() + data?.getStringExtra(ARG_IMAGE_URL).toString())
+            val word = Word(
+                word = data?.getStringExtra(ARG_WORD).toString(),
+                translation = data?.getStringExtra(ARG_TRANSLATION).toString(),
+                imageUrl = data?.getStringExtra(ARG_IMAGE_URL).toString()
+            )
+            val wordGroup = WordGroup(id = arguments?.get(ARG_GROUP_ID) as Long)
+            viewModel.addWord(word, wordGroup)
             /*viewModel.add(
                 WordGroup(
                     name = data?.getStringExtra(ARG_GROUP_NAME).toString(),
@@ -72,7 +82,21 @@ class WordsFragment : BaseFragment() {
         }
     }
 
+    private fun observeAddWordLiveData() =
+        viewModel.addWordSuccessLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
+
+            }
+            if (response?.error != null) {
+                showSnackbar(getString(R.string.snackbar_error_message))
+            }
+        })
+
     companion object {
-        fun newInstance() = WordsFragment()
+        fun newInstance(bundle: Bundle?): WordsFragment {
+            val fragment = WordsFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 }

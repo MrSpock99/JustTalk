@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
             is WordsFragment -> {
                 transaction.replace(
                     R.id.main_container,
-                    WordsFragment.newInstance()
+                    WordsFragment.newInstance(arguments)
                 )
             }
         }
