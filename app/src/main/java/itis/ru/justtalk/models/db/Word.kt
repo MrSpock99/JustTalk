@@ -4,13 +4,6 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
-/*@Entity(
-    tableName = "word", foreignKeys = [ForeignKey(
-        entity = WordGroup::class, parentColumns = ["id"],
-        childColumns = ["word_id"],
-        onDelete = ForeignKey.CASCADE
-    )]
-)*/
 @Entity(tableName = "word")
 data class Word(
     @PrimaryKey(autoGenerate = true)

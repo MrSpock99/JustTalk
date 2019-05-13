@@ -9,7 +9,6 @@ import android.view.*
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.WordGroupAdapter
-import itis.ru.justtalk.models.db.WordGroup
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.words.words.WordsFragment
 import itis.ru.justtalk.utils.ViewModelFactory
@@ -71,12 +70,7 @@ class GroupsFragment : BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQ_CODE_CREATE_GROUP) {
-            viewModel.addGroup(
-                WordGroup(
-                    name = data?.getStringExtra(ARG_GROUP_NAME).toString(),
-                    imageUrl = data?.getStringExtra(ARG_IMAGE_URL).toString()
-                )
-            )
+            viewModel.addGroup(data)
         }
     }
 

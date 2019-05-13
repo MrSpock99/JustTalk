@@ -1,6 +1,7 @@
 package itis.ru.justtalk.ui.words.groups
 
 import android.arch.lifecycle.MutableLiveData
+import android.content.Intent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.WordsInteractor
 import itis.ru.justtalk.models.db.WordGroup
@@ -14,7 +15,11 @@ class GroupsViewModel @Inject constructor(
     val addGroupSuccessLiveData = MutableLiveData<Response<Boolean>>()
     val allGroupsLiveData = MutableLiveData<Response<List<WordGroup>>>()
 
-    fun addGroup(group: WordGroup) {
+    fun addGroup(data: Intent?) {
+        val group = WordGroup(
+            name = data?.getStringExtra(ARG_GROUP_NAME).toString(),
+            imageUrl = data?.getStringExtra(ARG_IMAGE_URL).toString()
+        )
         disposables.add(
             interactor.addGroup(group)
                 .observeOn(AndroidSchedulers.mainThread())
