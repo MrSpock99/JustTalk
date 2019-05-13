@@ -17,6 +17,14 @@
     <string name="nav_people_title">People</string>
     <string name="nav_profile_title">Profle</string>
     <string name="nav_words_title">Words</string>
+    <string name="all_word">Word</string>
+    <string name="all_translation">Translation</string>
+    <string name="switch_choose_image_text">Choose image automatically</string>
+    <string name="all_add">Add</string>
+    <string name="all_name">Name</string>
+    <string name="all_create">Create</string>
+    <string name="message_hint">Type a message</string>
+    <string name="btn_start_test_text">Start test</string>
     <string-array name="spinner_gender_entities">
         <item>Man</item>
         <item>Woman</item>

@@ -38,7 +38,7 @@
                     android:id="@+id/et_word"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name" />
+                    android:hint="@string/all_word" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -58,7 +58,7 @@
                     android:id="@+id/et_translation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Translation" />
+                    android:hint="@string/all_translation" />
             </android.support.design.widget.TextInputLayout>
 
             <ImageView
@@ -82,7 +82,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="Choose image automatically"
+                android:text="@string/switch_choose_image_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/til_translation" />
@@ -97,7 +97,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/button_rounded"
-        android:text="Add"
+        android:text="@string/all_add"
         android:textColor="@color/coloPrimaryText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

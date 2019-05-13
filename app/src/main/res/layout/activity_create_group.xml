@@ -37,7 +37,7 @@
                     android:id="@+id/et_group_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name" />
+                    android:hint="@string/all_name" />
             </android.support.design.widget.TextInputLayout>
 
             <ImageView
@@ -65,7 +65,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/button_rounded"
-        android:text="Create"
+        android:text="@string/all_create"
         android:textColor="@color/coloPrimaryText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
