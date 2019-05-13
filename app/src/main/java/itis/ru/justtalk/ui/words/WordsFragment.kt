@@ -18,6 +18,7 @@ import javax.inject.Inject
 const val REQ_CODE_CREATE_GROUP = 1001
 const val ARG_GROUP_NAME = "GROUP_NAME"
 const val ARG_IMAGE_URL = "IMAGE_URL"
+const val ARG_GROUP_ID = "GROUP_ID"
 
 class WordsFragment : BaseFragment() {
     @Inject
@@ -94,10 +95,9 @@ class WordsFragment : BaseFragment() {
         viewModel.allGroupsLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
                 val adapter = WordGroupAdapter { item ->
-                    /*val chatBundle = Bundle()
-                    chatBundle.putString(ARG_USER_UID, listOfContacts[pos].uid)
-                    chatBundle.putString(ARG_CHAT_ID, listOfToUserChats[pos])
-                    rootActivity.navigateTo(ChatWithUserFragment(), chatBundle)*/
+                    val bundle = Bundle()
+                    bundle.putLong(ARG_GROUP_ID, item.id)
+                    rootActivity.navigateTo(WordsDetailsFragment(),bundle)
                 }
                 adapter.submitList(response.data)
                 rv_word_groups.adapter = adapter

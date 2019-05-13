@@ -1,4 +1,6 @@
 package itis.ru.justtalk.ui.words
 
-class WordsDetailsViewModel {
+import itis.ru.justtalk.ui.base.BaseViewModel
+
+class WordsDetailsViewModel: BaseViewModel() {
 }
