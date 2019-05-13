@@ -1,4 +1,4 @@
-package itis.ru.justtalk.ui.words
+package itis.ru.justtalk.ui.words.groups
 
 import android.arch.lifecycle.MutableLiveData
 import android.content.Intent

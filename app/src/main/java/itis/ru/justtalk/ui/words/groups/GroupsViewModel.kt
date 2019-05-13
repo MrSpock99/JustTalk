@@ -1,4 +1,4 @@
-package itis.ru.justtalk.ui.words
+package itis.ru.justtalk.ui.words.groups
 
 import android.arch.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -8,7 +8,7 @@ import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.utils.Response
 import javax.inject.Inject
 
-class WordsViewModel @Inject constructor(
+class GroupsViewModel @Inject constructor(
     private val interactor: WordsInteractor
 ) : BaseViewModel() {
     val addGroupSuccessLiveData = MutableLiveData<Response<Boolean>>()

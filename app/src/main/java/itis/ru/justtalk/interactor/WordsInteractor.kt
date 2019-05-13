@@ -19,8 +19,15 @@ class WordsInteractor @Inject constructor(private val repository: WordsRepositor
             .subscribeOn(Schedulers.io())
     }
 
-    fun getGroups(): Single<List<WordGroup>>{
+    fun getGroups(): Single<List<WordGroup>> {
         return repository.getAllGroups()
             .subscribeOn(Schedulers.io())
+    }
+
+    fun getWordsInGroup(groupId: Long): Single<List<Word>> {
+        return repository.getGroupWords(groupId)
+            .map {
+                it.list
+            }
     }
 }

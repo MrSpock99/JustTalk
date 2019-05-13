@@ -1,4 +1,4 @@
-package itis.ru.justtalk.ui.words
+package itis.ru.justtalk.ui.words.groups
 
 import android.Manifest
 import android.app.Activity
@@ -21,7 +21,7 @@ import javax.inject.Inject
 const val GALLERY_REQUEST_CODE = 12
 const val READ_EXTERNAL_STORAGE_REQUEST_CODE = 15
 
-class ActivityCreateGroup : AppCompatActivity() {
+class CreateGroupActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: CreateGroupViewModel

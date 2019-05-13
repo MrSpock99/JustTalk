@@ -1,4 +1,4 @@
-package itis.ru.justtalk.ui.words
+package itis.ru.justtalk.ui.words.groups
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
@@ -11,8 +11,9 @@ import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.WordGroupAdapter
 import itis.ru.justtalk.models.db.WordGroup
 import itis.ru.justtalk.ui.base.BaseFragment
+import itis.ru.justtalk.ui.words.words.WordsFragment
 import itis.ru.justtalk.utils.ViewModelFactory
-import kotlinx.android.synthetic.main.fragment_words.*
+import kotlinx.android.synthetic.main.fragment_groups.*
 import javax.inject.Inject
 
 const val REQ_CODE_CREATE_GROUP = 1001
@@ -20,10 +21,10 @@ const val ARG_GROUP_NAME = "GROUP_NAME"
 const val ARG_IMAGE_URL = "IMAGE_URL"
 const val ARG_GROUP_ID = "GROUP_ID"
 
-class WordsFragment : BaseFragment() {
+class GroupsFragment : BaseFragment() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
-    private lateinit var viewModel: WordsViewModel
+    private lateinit var viewModel: GroupsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,7 @@ class WordsFragment : BaseFragment() {
         injectDependencies()
 
         viewModel =
-            ViewModelProviders.of(this, this.viewModeFactory).get(WordsViewModel::class.java)
+            ViewModelProviders.of(this, this.viewModeFactory).get(GroupsViewModel::class.java)
         observeAddGroupSuccessLiveData()
         observeGetAllGroupsLiveData()
     }
@@ -41,7 +42,7 @@ class WordsFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_words, container, false)
+        return inflater.inflate(R.layout.fragment_groups, container, false)
     }
 
     override fun onStart() {
@@ -58,7 +59,7 @@ class WordsFragment : BaseFragment() {
         when (item?.itemId) {
             R.id.menu_add -> {
                 startActivityForResult(
-                    Intent(rootActivity, ActivityCreateGroup::class.java),
+                    Intent(rootActivity, CreateGroupActivity::class.java),
                     REQ_CODE_CREATE_GROUP
                 )
                 return true
@@ -97,7 +98,7 @@ class WordsFragment : BaseFragment() {
                 val adapter = WordGroupAdapter { item ->
                     val bundle = Bundle()
                     bundle.putLong(ARG_GROUP_ID, item.id)
-                    rootActivity.navigateTo(WordsDetailsFragment(),bundle)
+                    rootActivity.navigateTo(WordsFragment(),bundle)
                 }
                 adapter.submitList(response.data)
                 rv_word_groups.adapter = adapter
@@ -108,6 +109,6 @@ class WordsFragment : BaseFragment() {
         })
 
     companion object {
-        fun newInstance() = WordsFragment()
+        fun newInstance() = GroupsFragment()
     }
 }

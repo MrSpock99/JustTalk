@@ -16,8 +16,8 @@ import itis.ru.justtalk.ui.messages.ContactsFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.ui.people.PeopleFragment
 import itis.ru.justtalk.ui.people.UserDetailsFragment
-import itis.ru.justtalk.ui.words.WordsDetailsFragment
-import itis.ru.justtalk.ui.words.WordsFragment
+import itis.ru.justtalk.ui.words.groups.GroupsFragment
+import itis.ru.justtalk.ui.words.words.WordsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                     navigateTo(ContactsFragment(), null)
                 }
                 R.id.nav_words -> {
-                    navigateTo(WordsFragment(), null)
+                    navigateTo(GroupsFragment(), null)
                 }
                 else -> {
                     return@OnNavigationItemSelectedListener false
@@ -126,16 +126,16 @@ class MainActivity : AppCompatActivity() {
                     UserDetailsFragment.newInstance(arguments)
                 )
             }
+            is GroupsFragment -> {
+                transaction.replace(
+                    R.id.main_container,
+                    GroupsFragment.newInstance()
+                )
+            }
             is WordsFragment -> {
                 transaction.replace(
                     R.id.main_container,
                     WordsFragment.newInstance()
-                )
-            }
-            is WordsDetailsFragment -> {
-                transaction.replace(
-                    R.id.main_container,
-                    WordsDetailsFragment.newInstance()
                 )
             }
         }

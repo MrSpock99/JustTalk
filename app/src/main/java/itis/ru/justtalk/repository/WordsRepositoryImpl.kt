@@ -5,11 +5,16 @@ import io.reactivex.Single
 import itis.ru.justtalk.db.WordGroupsDao
 import itis.ru.justtalk.models.db.Word
 import itis.ru.justtalk.models.db.WordGroup
+import itis.ru.justtalk.models.db.WordGroupWithWord
 import javax.inject.Inject
 
 class WordsRepositoryImpl @Inject constructor(private val dao: WordGroupsDao) : WordsRepository {
     override fun addWord(word: Word, wordGroup: WordGroup): Completable {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Completable.create { emitter ->
+            val wordGroupWithWord = WordGroupWithWord(wordGroup = wordGroup, list = listOf(word))
+            dao.insert(wordGroupWithWord)
+            emitter.onComplete()
+        }
     }
 
     override fun addGroup(group: WordGroup): Completable {
@@ -19,8 +24,8 @@ class WordsRepositoryImpl @Inject constructor(private val dao: WordGroupsDao) : 
         }
     }
 
-    override fun getGroupWords(group: WordGroup): Single<List<Word>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getGroupWords(groupId: Long): Single<WordGroupWithWord> {
+        return dao.getAllWordsInGroup(groupId)
     }
 
     override fun getAllWords(): Single<List<Word>> {

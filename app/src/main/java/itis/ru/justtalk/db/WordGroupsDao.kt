@@ -8,15 +8,23 @@ import itis.ru.justtalk.models.db.WordGroupWithWord
 
 @Dao
 interface WordGroupsDao {
-    @Transaction @Query("SELECT * FROM word_group")
+    @Transaction
+    @Query("SELECT * FROM word_group")
     fun getAllWordGroups(): Single<List<WordGroup>>
 
     @Transaction
-    fun insert(wordGroupWithWord: WordGroupWithWord){
-        insert(wordGroupWithWord.wordGroup)
-        wordGroupWithWord.list.forEach {
+    @Query("SELECT * from word_group WHERE id =:groupId")
+    fun getAllWordsInGroup(groupId: Long): Single<WordGroupWithWord>
+
+    @Transaction
+    fun insert(wordGroupWithWord: WordGroupWithWord) {
+        wordGroupWithWord.wordGroup?.let {
             insert(it)
+            wordGroupWithWord.list.forEach { word ->
+                insert(word)
+            }
         }
+
     }
 
     @Query("SELECT * FROM word_group WHERE id = :id")
