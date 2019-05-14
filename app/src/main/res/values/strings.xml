@@ -29,6 +29,8 @@
     <string name="swipe_in_msg">Remember</string>
     <string name="swipe_out_msg">Don\'t remember</string>
     <string name="test_res_string">%1$d/%2$d</string>
+    <string name="end_test_res_string">You remember %1$d of %2$d words</string>
+    <string name="test_is_passed">Test is passed</string>
     <string-array name="spinner_gender_entities">
         <item>Man</item>
         <item>Woman</item>

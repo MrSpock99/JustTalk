@@ -17,6 +17,7 @@ import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.ui.people.PeopleFragment
 import itis.ru.justtalk.ui.people.UserDetailsFragment
 import itis.ru.justtalk.ui.words.groups.GroupsFragment
+import itis.ru.justtalk.ui.words.test.EndTestFragment
 import itis.ru.justtalk.ui.words.test.TestFragment
 import itis.ru.justtalk.ui.words.words.WordsFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -143,6 +144,12 @@ class MainActivity : AppCompatActivity() {
                 transaction.replace(
                     R.id.main_container,
                     TestFragment.newInstance()
+                )
+            }
+            is EndTestFragment -> {
+                transaction.replace(
+                    R.id.main_container,
+                    EndTestFragment.newInstance(arguments)
                 )
             }
         }

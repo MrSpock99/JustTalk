@@ -19,6 +19,9 @@ import itis.ru.justtalk.utils.getDisplaySize
 import kotlinx.android.synthetic.main.fragment_test.*
 import javax.inject.Inject
 
+const val ARG_LIST_SIZE: String = "LIST_SIZE"
+const val ARG_CORRECT_COUNT: String = "CORRECT_COUNT"
+
 class TestFragment : BaseFragment() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
@@ -109,7 +112,10 @@ class TestFragment : BaseFragment() {
     private fun observeEndTestLiveData() =
         viewModel.endTestListLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
-                showSnackbar("END")
+                val bundle = Bundle()
+                bundle.putInt(ARG_LIST_SIZE, response.data.count)
+                bundle.putInt(ARG_CORRECT_COUNT, response.data.correctCount)
+                rootActivity.navigateTo(EndTestFragment(), bundle)
             }
         })
 
