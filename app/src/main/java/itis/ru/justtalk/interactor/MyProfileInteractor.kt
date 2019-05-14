@@ -4,7 +4,7 @@ import com.google.firebase.auth.FirebaseUser
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import itis.ru.justtalk.models.User
+import itis.ru.justtalk.models.user.User
 import itis.ru.justtalk.repository.UserRepository
 import javax.inject.Inject
 

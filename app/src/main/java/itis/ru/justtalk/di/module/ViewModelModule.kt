@@ -12,6 +12,12 @@ import itis.ru.justtalk.ui.messages.ContactsViewModel
 import itis.ru.justtalk.ui.myprofile.MyProfileViewModel
 import itis.ru.justtalk.ui.people.PeopleViewModel
 import itis.ru.justtalk.ui.people.UserDetailsViewModel
+import itis.ru.justtalk.ui.words.groups.CreateGroupViewModel
+import itis.ru.justtalk.ui.words.groups.GroupsViewModel
+import itis.ru.justtalk.ui.words.test.EndTestViewModel
+import itis.ru.justtalk.ui.words.test.TestViewModel
+import itis.ru.justtalk.ui.words.words.AddWordViewModel
+import itis.ru.justtalk.ui.words.words.WordsViewModel
 import kotlin.reflect.KClass
 
 @Module
@@ -51,6 +57,35 @@ abstract class ViewModelModule {
     @ViewModelKey(ContactsViewModel::class)
     abstract fun bindContactsViewModel(contactsViewModel: ContactsViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(GroupsViewModel::class)
+    abstract fun bindWordsViewModel(groupsViewModel: GroupsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CreateGroupViewModel::class)
+    abstract fun bindCreateGroupViewModel(createGroupViewModel: CreateGroupViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(WordsViewModel::class)
+    abstract fun bindWordsDetailsViewModel(wordsViewModel: WordsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AddWordViewModel::class)
+    abstract fun bindAddWordViewModel(addWordViewModel: AddWordViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TestViewModel::class)
+    abstract fun bindTestViewModel(testViewModel: TestViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(EndTestViewModel::class)
+    abstract fun bindEndTestViewModel(endTestViewModel: EndTestViewModel): ViewModel
 }
 
 @Target(

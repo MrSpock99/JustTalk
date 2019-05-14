@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import itis.ru.justtalk.R
-import itis.ru.justtalk.models.ChatUser
+import itis.ru.justtalk.models.user.ChatUser
 import kotlinx.android.synthetic.main.item_contact.view.*
 
 class ContactsAdapter(private val clickListener: (Int) -> Unit) :

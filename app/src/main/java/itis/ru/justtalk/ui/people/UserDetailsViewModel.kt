@@ -3,7 +3,7 @@ package itis.ru.justtalk.ui.people
 import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
 import itis.ru.justtalk.interactor.MyProfileInteractor
-import itis.ru.justtalk.models.User
+import itis.ru.justtalk.models.user.User
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.utils.Response

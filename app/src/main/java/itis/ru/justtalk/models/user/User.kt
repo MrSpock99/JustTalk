@@ -1,4 +1,4 @@
-package itis.ru.justtalk.models
+package itis.ru.justtalk.models.user
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -33,6 +33,7 @@ data class User(
             parcel.writeDouble(location.longitude)
         }
 
-        override fun create(parcel: Parcel): User = User(parcel)
+        override fun create(parcel: Parcel): User =
+            User(parcel)
     }
 }

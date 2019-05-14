@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.models.User
+import itis.ru.justtalk.models.user.User
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.utils.ViewModelFactory

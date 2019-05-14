@@ -5,9 +5,9 @@ import android.os.Bundle
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.ChatInteractor
 import itis.ru.justtalk.interactor.MyProfileInteractor
-import itis.ru.justtalk.models.ChatUser
 import itis.ru.justtalk.models.Message
-import itis.ru.justtalk.models.UidAndRecyclerOptions
+import itis.ru.justtalk.models.user.ChatUser
+import itis.ru.justtalk.models.utils.UidAndRecyclerOptions
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.ui.people.ARG_CHAT_ID
 import itis.ru.justtalk.ui.people.ARG_USER_UID
@@ -103,7 +103,12 @@ class ChatWithUserViewModel @Inject constructor(
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    getMessagesLiveData.value = Response.success(UidAndRecyclerOptions(myUid, it))
+                    getMessagesLiveData.value = Response.success(
+                        UidAndRecyclerOptions(
+                            myUid,
+                            it
+                        )
+                    )
                 }, { error ->
                     sendMessageSuccessLiveData.value = Response.error(error)
                     error.printStackTrace()

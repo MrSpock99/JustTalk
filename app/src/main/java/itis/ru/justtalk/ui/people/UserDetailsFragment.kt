@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.models.User
+import itis.ru.justtalk.models.user.User
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.utils.ViewModelFactory
 import itis.ru.justtalk.utils.getDistanceFromLocation
