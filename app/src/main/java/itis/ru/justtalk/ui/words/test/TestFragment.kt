@@ -12,7 +12,6 @@ import com.mindorks.placeholderview.SwipePlaceHolderView
 import com.mindorks.placeholderview.SwipeViewBuilder
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.adapters.TestAdapter
 import itis.ru.justtalk.models.TestCard
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.utils.ViewModelFactory
@@ -25,8 +24,6 @@ class TestFragment : BaseFragment() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: TestViewModel
-    private var cardAdapter: TestAdapter = TestAdapter()
-    private var viewPagerPosition: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +45,7 @@ class TestFragment : BaseFragment() {
         init()
         viewModel.startTest(arguments)
         observeWordListLiveData()
+        observeEndTestLiveData()
     }
 
     private fun injectDependencies() {
@@ -79,12 +77,19 @@ class TestFragment : BaseFragment() {
             if (response?.data != null) {
                 response.data.forEach {
                     swipeView.addView(view?.let { context ->
-                        TestCard(context, it, swipeView)
+                        TestCard(context, it, viewModel, swipeView)
                     })
                 }
             }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
+            }
+        })
+
+    private fun observeEndTestLiveData() =
+        viewModel.endTestListLiveData.observe(this, Observer {response ->
+            if (response?.data != null){
+                showSnackbar("END")
             }
         })
 

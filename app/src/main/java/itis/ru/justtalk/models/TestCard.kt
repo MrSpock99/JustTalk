@@ -10,11 +10,13 @@ import com.mindorks.placeholderview.annotations.View
 import com.mindorks.placeholderview.annotations.swipe.*
 import itis.ru.justtalk.R
 import itis.ru.justtalk.models.db.Word
+import itis.ru.justtalk.ui.words.test.TestViewModel
 
 @Layout(R.layout.item_test)
 class TestCard(
     private val context: android.view.View,
     private val word: Word,
+    private val viewModel: TestViewModel,
     private val swipeView: SwipePlaceHolderView
 ) {
 
@@ -38,7 +40,8 @@ class TestCard(
 
     @SwipeOut
     private fun onSwipedOut() {
-        swipeView.addView(this)
+        viewModel.wrong(word)
+        checkIfTestDone()
     }
 
     @SwipeCancelState
@@ -47,6 +50,8 @@ class TestCard(
 
     @SwipeIn
     private fun onSwipeIn() {
+        viewModel.correct(word)
+        checkIfTestDone()
     }
 
     @SwipeInState
@@ -55,5 +60,11 @@ class TestCard(
 
     @SwipeOutState
     private fun onSwipeOutState() {
+    }
+
+    private fun checkIfTestDone() {
+        if (swipeView.allResolvers.size == 1) {
+            viewModel.endTest()
+        }
     }
 }

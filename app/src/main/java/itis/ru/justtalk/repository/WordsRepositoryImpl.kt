@@ -9,6 +9,15 @@ import itis.ru.justtalk.models.db.WordGroupWithWord
 import javax.inject.Inject
 
 class WordsRepositoryImpl @Inject constructor(private val dao: WordGroupsDao) : WordsRepository {
+
+    override fun addWords(wordList: List<Word>, wordGroup: WordGroup): Completable {
+        return Completable.create { emitter ->
+            val wordGroupWithWord = WordGroupWithWord(wordGroup = wordGroup, list = wordList)
+            dao.insert(wordGroupWithWord)
+            emitter.onComplete()
+        }
+    }
+
     override fun addWord(word: Word, wordGroup: WordGroup): Completable {
         return Completable.create { emitter ->
             val wordGroupWithWord = WordGroupWithWord(wordGroup = wordGroup, list = listOf(word))
@@ -34,5 +43,16 @@ class WordsRepositoryImpl @Inject constructor(private val dao: WordGroupsDao) : 
 
     override fun getAllGroups(): Single<List<WordGroup>> {
         return dao.getAllWordGroups()
+    }
+
+    override fun geGroupById(groupId: Long): Single<WordGroup> {
+        return dao.getById(groupId)
+    }
+
+    override fun addWordsWithoutGroup(wordList: List<Word>): Completable {
+        return Completable.create { emitter ->
+            dao.insert(wordList)
+            emitter.onComplete()
+        }
     }
 }

@@ -26,6 +26,8 @@
     <string name="all_create">Create</string>
     <string name="message_hint">Type a message</string>
     <string name="btn_start_test_text">Start test</string>
+    <string name="swipe_in_msg">Remember</string>
+    <string name="swipe_out_msg">Don\'t remember</string>
     <string-array name="spinner_gender_entities">
         <item>Man</item>
         <item>Woman</item>

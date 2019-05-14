@@ -28,16 +28,19 @@ interface WordGroupsDao {
     }
 
     @Query("SELECT * FROM word_group WHERE id = :id")
-    fun getById(id: Int): Single<WordGroup>
+    fun getById(id: Long): Single<WordGroup>
 
     @Query("DELETE FROM word_group")
     fun nukeTable()
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(group: WordGroup)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(word: Word)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(wordList: List<Word>)
 
     @Update
     fun update(group: WordGroup)

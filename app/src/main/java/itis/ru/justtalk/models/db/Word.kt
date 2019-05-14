@@ -11,7 +11,7 @@ data class Word(
     val wordId: Long = 0,
     val word: String,
     val translation: String,
-    val progress: Int = 0,
+    var progress: Int = 0,
     @ColumnInfo(name = "image_url")
     val imageUrl: String,
     @ColumnInfo(name = "group_id")

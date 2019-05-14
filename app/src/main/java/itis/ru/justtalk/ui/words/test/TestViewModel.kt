@@ -3,6 +3,7 @@ package itis.ru.justtalk.ui.words.test
 import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import itis.ru.justtalk.interactor.WordsInteractor
 import itis.ru.justtalk.models.db.Word
 import itis.ru.justtalk.ui.base.BaseViewModel
@@ -12,7 +13,9 @@ import javax.inject.Inject
 
 class TestViewModel @Inject constructor(private val interactor: WordsInteractor) : BaseViewModel() {
     val wordListLiveData = MutableLiveData<Response<List<Word>>>()
-    private var wordList: List<Word> = emptyList()
+    val endTestListLiveData = MutableLiveData<Response<List<Word>>>()
+    private var wordList: MutableList<Word> = mutableListOf()
+    private var groupId: Long = -1
 
     fun startTest(bundle: Bundle?) {
         if (bundle == null) {
@@ -20,7 +23,7 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
                 interactor.getAllWords()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        wordList = it
+                        wordList = it.toMutableList()
                         wordListLiveData.value = Response.success(wordList)
                     }, { error ->
                         wordListLiveData.value = Response.error(error)
@@ -28,12 +31,12 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
                     })
             )
         } else {
-            val groupId = bundle[ARG_GROUP_ID] as Long
+            groupId = bundle[ARG_GROUP_ID] as Long
             disposables.add(
                 interactor.getWordsInGroup(groupId)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        wordList = it
+                        wordList = it.toMutableList()
                         wordListLiveData.value = Response.success(wordList)
                     }, { error ->
                         wordListLiveData.value = Response.error(error)
@@ -43,4 +46,52 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
         }
     }
 
+    fun wrong(word: Word) {
+        if (word.progress > 0) {
+            val index = wordList.indexOf(word)
+            word.progress--
+            wordList[index] = word
+        }
+    }
+
+    fun correct(word: Word) {
+        if (word.progress > 10) {
+            val index = wordList.indexOf(word)
+            word.progress++
+            wordList[index] = word
+        }
+    }
+
+    fun endTest() {
+        if (groupId != -1L) {
+            disposables.add(
+                interactor.getGroupById(groupId)
+                    .observeOn(Schedulers.io())
+                    .subscribe({
+                        interactor.addWords(wordList, it)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                endTestListLiveData.value = Response.success(wordList)
+                            }, { error ->
+                                endTestListLiveData.value = Response.error(error)
+                                error.printStackTrace()
+                            })
+                    }, { error ->
+                        endTestListLiveData.value = Response.error(error)
+                        error.printStackTrace()
+                    })
+            )
+        } else {
+            disposables.add(
+                interactor.addWordsWithourGroup(wordList)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        endTestListLiveData.value = Response.success(wordList)
+                    }, { error ->
+                        endTestListLiveData.value = Response.error(error)
+                        error.printStackTrace()
+                    })
+            )
+        }
+    }
 }

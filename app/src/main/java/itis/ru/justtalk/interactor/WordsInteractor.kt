@@ -14,6 +14,16 @@ class WordsInteractor @Inject constructor(private val repository: WordsRepositor
             .subscribeOn(Schedulers.io())
     }
 
+    fun addWords(wordList: List<Word>, wordGroup: WordGroup): Completable {
+        return repository.addWords(wordList, wordGroup)
+            .subscribeOn(Schedulers.io())
+    }
+
+    fun addWordsWithourGroup(wordList: List<Word>): Completable {
+        return repository.addWordsWithoutGroup(wordList)
+            .subscribeOn(Schedulers.io())
+    }
+
     fun addGroup(wordGroup: WordGroup): Completable {
         return repository.addGroup(wordGroup)
             .subscribeOn(Schedulers.io())
@@ -30,6 +40,11 @@ class WordsInteractor @Inject constructor(private val repository: WordsRepositor
             .map {
                 it.list
             }
+    }
+
+    fun getGroupById(groupId: Long): Single<WordGroup> {
+        return repository.geGroupById(groupId)
+            .subscribeOn(Schedulers.io())
     }
 
     fun getAllWords(): Single<List<Word>> {
