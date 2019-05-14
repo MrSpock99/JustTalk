@@ -24,6 +24,7 @@ class TestFragment : BaseFragment() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: TestViewModel
+    private var listSize = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,7 @@ class TestFragment : BaseFragment() {
         init()
         viewModel.startTest(arguments)
         observeWordListLiveData()
+        observeTestGoingOnLiveData()
         observeEndTestLiveData()
     }
 
@@ -80,15 +82,27 @@ class TestFragment : BaseFragment() {
                         TestCard(context, it, viewModel, swipeView)
                     })
                 }
+                listSize = response.data.size
+                tv_test_result.text = getString(R.string.test_res_string, 0, listSize)
+                progressBar.progress = 0
+                progressBar.max = response.data.size
             }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
             }
         })
 
+    private fun observeTestGoingOnLiveData() =
+        viewModel.testGoingOnLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
+                tv_test_result.text = getString(R.string.test_res_string, response.data, listSize)
+                progressBar.progress = response.data
+            }
+        })
+
     private fun observeEndTestLiveData() =
-        viewModel.endTestListLiveData.observe(this, Observer {response ->
-            if (response?.data != null){
+        viewModel.endTestListLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
                 showSnackbar("END")
             }
         })

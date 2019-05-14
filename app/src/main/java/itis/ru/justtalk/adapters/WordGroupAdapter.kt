@@ -17,13 +17,15 @@ class WordGroupAdapter(private val clickListener: (WordGroup) -> Unit) :
     ListAdapter<WordGroup, WordGroupAdapter.RvItemViewHolder>(DiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): RvItemViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return RvItemViewHolder(
+        val holder = RvItemViewHolder(
             inflater.inflate(
                 R.layout.item_words_group,
                 parent,
                 false
             )
         )
+        holder.itemView.pb_word_group.max = 10
+        return holder
     }
 
     override fun onBindViewHolder(holder: RvItemViewHolder, position: Int) {
@@ -34,6 +36,7 @@ class WordGroupAdapter(private val clickListener: (WordGroup) -> Unit) :
         fun bind(item: WordGroup, clickListener: (WordGroup) -> Unit) {
             itemView.tv_word_group_name.text = item.name
             itemView.tv_word_group_count.text = "0"
+            itemView.pb_word_group.progress = item.progress
 
             val transformation = RoundedCornersTransformation(20, 1)
 

@@ -14,8 +14,10 @@ import javax.inject.Inject
 class TestViewModel @Inject constructor(private val interactor: WordsInteractor) : BaseViewModel() {
     val wordListLiveData = MutableLiveData<Response<List<Word>>>()
     val endTestListLiveData = MutableLiveData<Response<List<Word>>>()
+    val testGoingOnLiveData = MutableLiveData<Response<Int>>()
     private var wordList: MutableList<Word> = mutableListOf()
     private var groupId: Long = -1
+    private var count = 0
 
     fun startTest(bundle: Bundle?) {
         if (bundle == null) {
@@ -51,18 +53,21 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
             val index = wordList.indexOf(word)
             word.progress--
             wordList[index] = word
+            testGoingOnLiveData.value = Response.success(++count)
         }
     }
 
     fun correct(word: Word) {
-        if (word.progress > 10) {
+        if (word.progress < 10) {
             val index = wordList.indexOf(word)
             word.progress++
             wordList[index] = word
+            testGoingOnLiveData.value = Response.success(++count)
         }
     }
 
     fun endTest() {
+        testGoingOnLiveData.value = Response.success(count++)
         if (groupId != -1L) {
             disposables.add(
                 interactor.getGroupById(groupId)
