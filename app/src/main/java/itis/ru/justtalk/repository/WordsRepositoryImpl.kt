@@ -29,7 +29,7 @@ class WordsRepositoryImpl @Inject constructor(private val dao: WordGroupsDao) : 
     }
 
     override fun getAllWords(): Single<List<Word>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return dao.getAllWords()
     }
 
     override fun getAllGroups(): Single<List<WordGroup>> {

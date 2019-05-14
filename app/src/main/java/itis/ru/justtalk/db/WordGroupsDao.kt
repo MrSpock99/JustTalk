@@ -44,4 +44,7 @@ interface WordGroupsDao {
 
     @Delete
     fun delete(group: WordGroup)
+
+    @Query("SELECT * FROM word")
+    fun getAllWords(): Single<List<Word>>
 }

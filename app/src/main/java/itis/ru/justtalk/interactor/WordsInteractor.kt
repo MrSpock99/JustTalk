@@ -31,4 +31,9 @@ class WordsInteractor @Inject constructor(private val repository: WordsRepositor
                 it.list
             }
     }
+
+    fun getAllWords(): Single<List<Word>> {
+        return repository.getAllWords()
+            .subscribeOn(Schedulers.io())
+    }
 }

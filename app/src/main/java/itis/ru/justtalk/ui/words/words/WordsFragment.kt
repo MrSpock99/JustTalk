@@ -13,6 +13,7 @@ import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.WordsAdapter
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.words.groups.ARG_GROUP_ID
+import itis.ru.justtalk.ui.words.groups.ARG_GROUP_NAME
 import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_words.*
 import javax.inject.Inject
@@ -57,7 +58,7 @@ class WordsFragment : BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQ_CODE_ADD_WORD) {
-            viewModel.addWord(arguments,data)
+            viewModel.addWord(arguments, data)
         }
     }
 
@@ -66,6 +67,9 @@ class WordsFragment : BaseFragment() {
     }
 
     private fun init() {
+        setToolbarAndBottomNavVisibility(View.VISIBLE, View.GONE)
+        setArrowToolbarVisibility(true)
+        setToolbarTitle(arguments?.get(ARG_GROUP_NAME) as String)
         fab_add_word.setOnClickListener {
             startActivityForResult(
                 Intent(rootActivity, AddWordActivity::class.java),

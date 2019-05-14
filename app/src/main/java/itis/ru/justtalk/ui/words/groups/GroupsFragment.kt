@@ -10,6 +10,7 @@ import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.WordGroupAdapter
 import itis.ru.justtalk.ui.base.BaseFragment
+import itis.ru.justtalk.ui.words.test.TestFragment
 import itis.ru.justtalk.ui.words.words.WordsFragment
 import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_groups.*
@@ -46,6 +47,7 @@ class GroupsFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
+        init()
         viewModel.getGroups()
     }
 
@@ -78,6 +80,15 @@ class GroupsFragment : BaseFragment() {
         (activity?.application as BaseApplication).appComponent.inject(this)
     }
 
+    private fun init() {
+        setToolbarAndBottomNavVisibility(View.VISIBLE, View.VISIBLE)
+        setArrowToolbarVisibility(false)
+        setToolbarTitle(getString(R.string.nav_words_title))
+        btn_start_test.setOnClickListener {
+            rootActivity.navigateTo(TestFragment(), null)
+        }
+    }
+
     private fun observeAddGroupSuccessLiveData() =
         viewModel.addGroupSuccessLiveData.observe(this, Observer { response ->
             if (response?.error != null) {
@@ -85,13 +96,13 @@ class GroupsFragment : BaseFragment() {
             }
         })
 
-
     private fun observeGetAllGroupsLiveData() =
         viewModel.allGroupsLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
                 val adapter = WordGroupAdapter { item ->
                     val bundle = Bundle()
                     bundle.putLong(ARG_GROUP_ID, item.id)
+                    bundle.putString(ARG_GROUP_NAME, item.name)
                     rootActivity.navigateTo(WordsFragment(), bundle)
                 }
                 adapter.submitList(response.data)
