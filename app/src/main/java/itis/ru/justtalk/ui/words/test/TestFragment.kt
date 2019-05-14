@@ -12,7 +12,6 @@ import com.mindorks.placeholderview.SwipePlaceHolderView
 import com.mindorks.placeholderview.SwipeViewBuilder
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.models.TestCard
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.utils.ViewModelFactory
 import itis.ru.justtalk.utils.dpToPx
@@ -61,7 +60,7 @@ class TestFragment : BaseFragment() {
         val bottomMargin = dpToPx(160)
         val windowSize = getDisplaySize(rootActivity.windowManager)
         swipeView.getBuilder<SwipePlaceHolderView, SwipeViewBuilder<SwipePlaceHolderView>>()
-            .setDisplayViewCount(3)
+            .setDisplayViewCount(1)
             .setSwipeDecor(
                 SwipeDecor()
                     .setViewWidth(windowSize.x)
@@ -72,15 +71,22 @@ class TestFragment : BaseFragment() {
                     .setSwipeInMsgLayoutId(R.layout.test_swipe_in_msg_view)
                     .setSwipeOutMsgLayoutId(R.layout.test_swipe_out_msg_view)
             )
+
+        btn_hint.setOnClickListener {
+            viewModel.getHint()
+        }
     }
 
     private fun observeWordListLiveData() =
         viewModel.wordListLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
                 response.data.forEach {
-                    swipeView.addView(view?.let { context ->
-                        TestCard(context, it, viewModel, swipeView)
-                    })
+                    view?.let { context ->
+                        val card = TestCard(context, it, viewModel, swipeView)
+                        swipeView.addView(card)
+                        viewModel.register(card)
+                    }
+
                 }
                 listSize = response.data.size
                 tv_test_result.text = getString(R.string.test_res_string, 0, listSize)

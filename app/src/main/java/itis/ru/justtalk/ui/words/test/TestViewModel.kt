@@ -11,13 +11,31 @@ import itis.ru.justtalk.ui.words.groups.ARG_GROUP_ID
 import itis.ru.justtalk.utils.Response
 import javax.inject.Inject
 
-class TestViewModel @Inject constructor(private val interactor: WordsInteractor) : BaseViewModel() {
+class TestViewModel @Inject constructor(private val interactor: WordsInteractor) : BaseViewModel(),
+    Subject {
     val wordListLiveData = MutableLiveData<Response<List<Word>>>()
     val endTestListLiveData = MutableLiveData<Response<List<Word>>>()
     val testGoingOnLiveData = MutableLiveData<Response<Int>>()
     private var wordList: MutableList<Word> = mutableListOf()
     private var groupId: Long = -1
     private var count = 0
+    private var observers: MutableList<Observer> = mutableListOf()
+
+    override fun register(observer: Observer) {
+        if (!observers.contains(observer)) {
+            observers.add(observer)
+        }
+    }
+
+    override fun unregister(observer: Observer) {
+        observers.remove(observer)
+    }
+
+    override fun notifyObserversHintClicked(clicked: Boolean) {
+        observers.forEach {
+            it.update(clicked)
+        }
+    }
 
     fun startTest(bundle: Bundle?) {
         if (bundle == null) {
@@ -98,5 +116,9 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
                     })
             )
         }
+    }
+
+    fun getHint() {
+        notifyObserversHintClicked(true)
     }
 }

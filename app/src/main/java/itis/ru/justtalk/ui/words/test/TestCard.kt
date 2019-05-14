@@ -1,4 +1,4 @@
-package itis.ru.justtalk.models
+package itis.ru.justtalk.ui.words.test
 
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,7 +10,6 @@ import com.mindorks.placeholderview.annotations.View
 import com.mindorks.placeholderview.annotations.swipe.*
 import itis.ru.justtalk.R
 import itis.ru.justtalk.models.db.Word
-import itis.ru.justtalk.ui.words.test.TestViewModel
 
 @Layout(R.layout.item_test)
 class TestCard(
@@ -18,7 +17,17 @@ class TestCard(
     private val word: Word,
     private val viewModel: TestViewModel,
     private val swipeView: SwipePlaceHolderView
-) {
+): Observer {
+
+    override fun update(hintClicked: Boolean) {
+        if (translationTv != null){
+            if (hintClicked){
+                translationTv?.visibility = android.view.View.VISIBLE
+            }else{
+                translationTv?.visibility = android.view.View.GONE
+            }
+        }
+    }
 
     @View(R.id.iv_word_image)
     private lateinit var wordImage: ImageView
@@ -27,7 +36,7 @@ class TestCard(
     private lateinit var wordTv: TextView
 
     @View(R.id.tv_translation)
-    private lateinit var translationTv: TextView
+    private var translationTv: TextView? = null
 
     @Resolve
     private fun onResolved() {
@@ -35,7 +44,7 @@ class TestCard(
             Glide.with(context).load(word.imageUrl).into(wordImage)
         }
         wordTv.text = word.word
-        translationTv.text = word.translation
+        translationTv?.text = word.translation
     }
 
     @SwipeOut
