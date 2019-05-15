@@ -63,11 +63,15 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 0) {
             if (getTopFragment() is EndTestFragment) {
-                supportFragmentManager.popBackStack()
                 navigateTo(GroupsFragment.toString(), null)
-            } else {
-                supportFragmentManager.popBackStack()
             }
+            supportFragmentManager.popBackStackImmediate()
+            getTopFragment()?.let {
+                supportFragmentManager.beginTransaction()
+                    .remove(it)
+                    .commit()
+            }
+            setBottomNavSelectedItem(getTopFragment())
         } else {
             super.onBackPressed()
         }
@@ -80,8 +84,24 @@ class MainActivity : AppCompatActivity() {
             top = fragmentList[i] as Fragment
             return top
         }
-
         return top
+    }
+
+    private fun setBottomNavSelectedItem(fragment: Fragment?) {
+        when (fragment) {
+            is MyProfileFragment -> {
+                bottom_navigation.selectedItemId = R.id.nav_profile
+            }
+            is PeopleFragment -> {
+                bottom_navigation.selectedItemId = R.id.nav_people
+            }
+            is ContactsFragment -> {
+                bottom_navigation.selectedItemId = R.id.nav_messages
+            }
+            is GroupsFragment -> {
+                bottom_navigation.selectedItemId = R.id.nav_words
+            }
+        }
     }
 
     private fun init() {
@@ -189,6 +209,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.isLoginedLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
                 if (response.data) {
+                    bottom_navigation.selectedItemId = R.id.nav_people
                     navigateTo(PeopleFragment.toString(), null)
                 } else {
                     navigateTo(LoginFragment.toString(), null)
