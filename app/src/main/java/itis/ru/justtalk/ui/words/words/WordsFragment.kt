@@ -30,6 +30,7 @@ class WordsFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
+        setHasOptionsMenu(true)
 
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(WordsViewModel::class.java)
