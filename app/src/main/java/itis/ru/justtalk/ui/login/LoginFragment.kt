@@ -50,28 +50,12 @@ class LoginFragment : BaseFragment() {
             ViewModelProviders.of(this, this.viewModeFactory).get(LoginViewModel::class.java)
         viewModel.loginState.observe(::getLifecycle, ::updateUI)
 
-        /* val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-             .requestIdToken(getString(R.string.google_api_token))
-             .requestEmail()
-             .build()*/
-
-        /* mGoogleApiClient = activity?.let {
-             GoogleApiClient.Builder(it)
-                 .enableAutoManage(it, viewModel)
-                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                 .build()
-         }*/
-
         view.btn_login.setOnClickListener {
             openGoogleActivity(mGoogleApiClient)
         }
     }
 
     private fun injectDependencies() {
-        /*val component = DaggerAppComponent.builder()
-            .appModule(AppModule())
-            .build()
-        component.inject(this)*/
         (activity?.application as BaseApplication).appComponent.inject(this)
 
     }

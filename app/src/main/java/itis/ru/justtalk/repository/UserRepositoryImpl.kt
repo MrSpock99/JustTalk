@@ -67,7 +67,6 @@ class UserRepositoryImpl @Inject constructor(
                 .set(userMap)
                 .addOnSuccessListener {
                     emitter.onComplete()
-                    //Log.d("MYLOG", it.toString())
                 }.addOnFailureListener {
                     emitter.onError(it)
                     Log.d("MYLOG", it.message)
@@ -82,7 +81,6 @@ class UserRepositoryImpl @Inject constructor(
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val result = task.result
-                        //val user = result?.toObject(RemoteUser::class.java)
                         emitter.onSuccess(
                             result?.toObject(RemoteUser::class.java) ?: RemoteUser(
                                 "",
@@ -142,9 +140,6 @@ class UserRepositoryImpl @Inject constructor(
         updateUserLocationInDb(userLocation)
         return Single.create { emitter ->
             db.collection(USERS)
-/*
-                .whereLessThanOrEqualTo("location", userLocation)
-*/
                 .limit(limit)
                 .get()
                 .addOnCompleteListener { task ->
@@ -167,5 +162,4 @@ class UserRepositoryImpl @Inject constructor(
             .document(firebaseAuth.currentUser?.email ?: "")
             .update(userMap)
     }
-
 }

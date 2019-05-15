@@ -90,7 +90,7 @@ class PeopleFragment : BaseFragment() {
         when (requestCode) {
             ACCESS_FINE_LOCATION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //viewModel.getUsersNearby()
+                    viewModel.getUsersNearby()
                 } else {
                     showSnackbar(getString(R.string.snackbar_permission_message))
                 }

@@ -49,12 +49,6 @@ class MyProfileFragment : BaseFragment() {
         observeProfileLiveData()
         observeShowLoadingLiveData()
 
-        btn_settings.setOnClickListener {
-            //rootActivity.navigateTo(SettingsFragment, null)
-        }
-        btn_add_photo.setOnClickListener {
-            //(activity as MainActivity).navigateTo(SettingsFragment())
-        }
         btn_edit.setOnClickListener {
             viewModel.editProfileClick()
         }
@@ -96,10 +90,6 @@ class MyProfileFragment : BaseFragment() {
     }
 
     private fun injectDependencies() {
-        /*val component = DaggerAppComponent.builder()
-            .appModule(AppModule())
-            .build()
-        component.inject(this)*/
         (activity?.application as BaseApplication).appComponent.inject(this)
     }
 

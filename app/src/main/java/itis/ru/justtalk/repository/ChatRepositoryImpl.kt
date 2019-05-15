@@ -132,13 +132,6 @@ class ChatRepositoryImpl @Inject constructor(
             val options =
                 FirestoreRecyclerOptions.Builder<Message>().setQuery(query, Message::class.java)
                     .build()
-            /*query.get().addOnCompleteListener {task ->
-                if (task.isSuccessful){
-                }else{
-                    emitter.onError(task.exception!!)
-                }
-
-            }*/
             query.addSnapshotListener { snp, e ->
                 if (e != null) {
                     emitter.onError(e)

@@ -72,10 +72,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun injectDependencies() {
-        /* val component = DaggerAppComponent.builder()
-             .appModule(AppModule())
-             .build()
-         component.inject(this)*/
         (application as BaseApplication).appComponent.inject(this)
     }
 
