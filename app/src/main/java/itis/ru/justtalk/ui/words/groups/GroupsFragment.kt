@@ -85,7 +85,7 @@ class GroupsFragment : BaseFragment() {
         setArrowToolbarVisibility(false)
         setToolbarTitle(getString(R.string.nav_words_title))
         btn_start_test.setOnClickListener {
-            rootActivity.navigateTo(TestFragment(), null)
+            rootActivity.navigateTo(TestFragment.toString(), null)
         }
     }
 
@@ -103,7 +103,7 @@ class GroupsFragment : BaseFragment() {
                     val bundle = Bundle()
                     bundle.putLong(ARG_GROUP_ID, item.id)
                     bundle.putString(ARG_GROUP_NAME, item.name)
-                    rootActivity.navigateTo(WordsFragment(), bundle)
+                    rootActivity.navigateTo(WordsFragment.toString(), bundle)
                 }
                 adapter.submitList(response.data)
                 rv_word_groups.adapter = adapter

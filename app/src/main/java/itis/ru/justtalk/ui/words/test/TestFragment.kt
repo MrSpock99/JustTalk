@@ -115,7 +115,7 @@ class TestFragment : BaseFragment() {
                 val bundle = Bundle()
                 bundle.putInt(ARG_LIST_SIZE, response.data.count)
                 bundle.putInt(ARG_CORRECT_COUNT, response.data.correctCount)
-                rootActivity.navigateTo(EndTestFragment(), bundle)
+                rootActivity.navigateTo(EndTestFragment.toString(), bundle)
             }
         })
 

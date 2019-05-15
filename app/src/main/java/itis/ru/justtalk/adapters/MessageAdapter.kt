@@ -13,12 +13,10 @@ import itis.ru.justtalk.models.Message
 import kotlinx.android.synthetic.main.fragment_chat_with_user.view.*
 
 
-
 class MessageAdapter internal constructor(
-    private  val uidFrom: String,
+    private val uidFrom: String,
     options: FirestoreRecyclerOptions<Message>
-) :
-    FirestoreRecyclerAdapter<Message, MessageAdapter.MessageViewHolder>(options) {
+) : FirestoreRecyclerAdapter<Message, MessageAdapter.MessageViewHolder>(options) {
     private var view: View? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
@@ -50,7 +48,7 @@ class MessageAdapter internal constructor(
     }
 
     override fun onDataChanged() {
-        if (view != null){
+        if (view != null) {
             view?.rv_messages?.layoutManager?.scrollToPosition(itemCount - 1)
         }
     }

@@ -13,7 +13,7 @@ import itis.ru.justtalk.models.user.RemoteUser
 import itis.ru.justtalk.models.user.User
 import javax.inject.Inject
 
-const val UID = "name"
+const val UID = "uid"
 const val USER_NAME = "name"
 const val USER_AGE = "age"
 const val USER_GENDER = "gender"
@@ -57,6 +57,7 @@ class UserRepositoryImpl @Inject constructor(
             userMap[USER_AVATAR_URL] = user.avatarUrl
             userMap[USER_GENDER] = user.gender
             userMap[USER_LOCATION] = user.location
+            userMap[CHATS] = emptyMap<String, Boolean>()
             userMap[USER_LEARNING_LANGUAGE] = user.learningLanguage
             userMap[USER_LEARNING_LANGUAGE_LEVEL] = user.learningLanguageLevel
             userMap[USER_SPEAKING_LANGUAGE] = user.speakingLanguage

@@ -198,6 +198,8 @@ class ChatRepositoryImpl @Inject constructor(
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         emitter.onSuccess(it.result?.documents?.get(0)?.data?.get(MESSAGE_TEXT).toString())
+                    } else {
+                        emitter.onError(it.exception ?: Exception("error getting last message"))
                     }
                 }
         }

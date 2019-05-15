@@ -76,7 +76,7 @@ class ContactsFragment : BaseFragment() {
                     val chatBundle = Bundle()
                     chatBundle.putString(ARG_USER_UID, listOfContacts[pos].uid)
                     chatBundle.putString(ARG_CHAT_ID, listOfToUserChats[pos])
-                    rootActivity.navigateTo(ChatWithUserFragment(), chatBundle)
+                    rootActivity.navigateTo(ChatWithUserFragment.toString(), chatBundle)
                 }
                 contactsAdapter.submitList(listOfContacts)
                 rv_contacts.adapter = contactsAdapter

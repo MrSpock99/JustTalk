@@ -90,7 +90,7 @@ class PeopleFragment : BaseFragment() {
         when (requestCode) {
             ACCESS_FINE_LOCATION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    viewModel.getUsersNearby()
+                    //viewModel.getUsersNearby()
                 } else {
                     showSnackbar(getString(R.string.snackbar_permission_message))
                 }
@@ -159,7 +159,7 @@ class PeopleFragment : BaseFragment() {
                 val chatBundle = Bundle()
                 chatBundle.putString(ARG_USER_UID, user.uid)
                 chatBundle.putString(ARG_CHAT_ID, NO_CHAT_ID)
-                rootActivity.navigateTo(ChatWithUserFragment(), chatBundle)
+                rootActivity.navigateTo(ChatWithUserFragment.toString(), chatBundle)
             }
         })
 
@@ -168,7 +168,7 @@ class PeopleFragment : BaseFragment() {
             event?.getContentIfNotHandled()?.let { user ->
                 val profileBundle = Bundle()
                 profileBundle.putParcelable(MyProfileFragment.ARG_USER, user)
-                rootActivity.navigateTo(UserDetailsFragment(), profileBundle)
+                rootActivity.navigateTo(UserDetailsFragment.toString(), profileBundle)
             }
         })
 

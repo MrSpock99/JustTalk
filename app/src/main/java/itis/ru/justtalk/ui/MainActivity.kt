@@ -2,7 +2,6 @@ package itis.ru.justtalk.ui
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
@@ -32,16 +31,16 @@ class MainActivity : AppCompatActivity() {
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_profile -> {
-                    navigateTo(MyProfileFragment(), null)
+                    navigateTo(MyProfileFragment.toString(), null)
                 }
                 R.id.nav_people -> {
-                    navigateTo(PeopleFragment(), null)
+                    navigateTo(PeopleFragment.toString(), null)
                 }
                 R.id.nav_messages -> {
-                    navigateTo(ContactsFragment(), null)
+                    navigateTo(ContactsFragment.toString(), null)
                 }
                 R.id.nav_words -> {
-                    navigateTo(GroupsFragment(), null)
+                    navigateTo(GroupsFragment.toString(), null)
                 }
                 else -> {
                     return@OnNavigationItemSelectedListener false
@@ -57,10 +56,10 @@ class MainActivity : AppCompatActivity() {
         bottom_navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         injectDependencies()
         if (isLoggedIn()) {
-            navigateTo(PeopleFragment(), null)
+            navigateTo(PeopleFragment.toString(), null)
             bottom_navigation.selectedItemId = R.id.nav_people
         } else {
-            navigateTo(LoginFragment(), null)
+            navigateTo(LoginFragment.toString(), null)
         }
     }
 
@@ -82,71 +81,71 @@ class MainActivity : AppCompatActivity() {
 
     private fun isLoggedIn(): Boolean = firebaseAuth.currentUser != null
 
-    fun navigateTo(fragment: Fragment, arguments: Bundle?) {
+    fun navigateTo(fragment: String, arguments: Bundle?) {
         val transaction =
             supportFragmentManager.beginTransaction()
         when (fragment) {
-            is LoginFragment -> {
+            LoginFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     LoginFragment.newInstance()
                 )
             }
-            is PeopleFragment -> {
+            PeopleFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     PeopleFragment.newInstance()
                 )
             }
-            is MyProfileFragment -> {
+            MyProfileFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     MyProfileFragment.newInstance()
                 )
             }
-            is EditProfileInfoFragment -> {
+            EditProfileInfoFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     EditProfileInfoFragment.newInstance(arguments)
                 )
             }
-            is ContactsFragment -> {
+            ContactsFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     ContactsFragment.newInstance()
                 )
             }
-            is ChatWithUserFragment -> {
+            ChatWithUserFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     ChatWithUserFragment.newInstance(arguments)
                 )
             }
-            is UserDetailsFragment -> {
+            UserDetailsFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     UserDetailsFragment.newInstance(arguments)
                 )
             }
-            is GroupsFragment -> {
+            GroupsFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     GroupsFragment.newInstance()
                 )
             }
-            is WordsFragment -> {
+            WordsFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     WordsFragment.newInstance(arguments)
                 )
             }
-            is TestFragment -> {
+            TestFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     TestFragment.newInstance()
                 )
             }
-            is EndTestFragment -> {
+            EndTestFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     EndTestFragment.newInstance(arguments)

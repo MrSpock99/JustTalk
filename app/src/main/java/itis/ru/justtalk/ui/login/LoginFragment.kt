@@ -87,7 +87,7 @@ class LoginFragment : BaseFragment() {
         rootActivity.showLoading(false)
         when (renderState) {
             LoginState.Success -> (activity as MainActivity).navigateTo(
-                EditProfileInfoFragment(),
+                EditProfileInfoFragment.toString(),
                 null
             )
             LoginState.Error -> view?.let {
