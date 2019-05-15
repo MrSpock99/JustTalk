@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
@@ -61,10 +62,26 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 0) {
-            supportFragmentManager.popBackStack()
+            if (getTopFragment() is EndTestFragment) {
+                supportFragmentManager.popBackStack()
+                navigateTo(GroupsFragment.toString(), null)
+            } else {
+                supportFragmentManager.popBackStack()
+            }
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun getTopFragment(): Fragment? {
+        val fragmentList = supportFragmentManager.fragments
+        var top: Fragment? = null
+        for (i in fragmentList.indices.reversed()) {
+            top = fragmentList[i] as Fragment
+            return top
+        }
+
+        return top
     }
 
     private fun init() {

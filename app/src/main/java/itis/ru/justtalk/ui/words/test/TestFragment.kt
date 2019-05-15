@@ -112,10 +112,12 @@ class TestFragment : BaseFragment() {
     private fun observeEndTestLiveData() =
         viewModel.endTestListLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
-                val bundle = Bundle()
-                bundle.putInt(ARG_LIST_SIZE, response.data.count)
-                bundle.putInt(ARG_CORRECT_COUNT, response.data.correctCount)
-                rootActivity.navigateTo(EndTestFragment.toString(), bundle)
+                response.data.getContentIfNotHandled()?.let {
+                    val bundle = Bundle()
+                    bundle.putInt(ARG_LIST_SIZE, it.count)
+                    bundle.putInt(ARG_CORRECT_COUNT, it.correctCount)
+                    rootActivity.navigateTo(EndTestFragment.toString(), bundle)
+                }
             }
         })
 
