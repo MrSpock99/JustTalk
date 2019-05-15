@@ -1,11 +1,12 @@
-package itis.ru.justtalk.ui
+package itis.ru.justtalk.ui.main
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
-import com.google.firebase.auth.FirebaseAuth
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
@@ -19,13 +20,15 @@ import itis.ru.justtalk.ui.words.groups.GroupsFragment
 import itis.ru.justtalk.ui.words.test.EndTestFragment
 import itis.ru.justtalk.ui.words.test.TestFragment
 import itis.ru.justtalk.ui.words.words.WordsFragment
+import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
     @Inject
-    lateinit var firebaseAuth: FirebaseAuth
+    lateinit var viewModeFactory: ViewModelFactory
+    private lateinit var viewModel: MainViewModel
 
     private val mOnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -52,15 +55,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
-        bottom_navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         injectDependencies()
-        if (isLoggedIn()) {
-            navigateTo(PeopleFragment.toString(), null)
-            bottom_navigation.selectedItemId = R.id.nav_people
-        } else {
-            navigateTo(LoginFragment.toString(), null)
-        }
+        init()
     }
 
     override fun onBackPressed() {
@@ -71,11 +67,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun init() {
+        setSupportActionBar(toolbar)
+        bottom_navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        viewModel = ViewModelProviders.of(this, this.viewModeFactory)
+            .get(MainViewModel::class.java)
+        viewModel.checkIsLogined()
+        observeIsLoginedLiveData()
+    }
+
     private fun injectDependencies() {
         (application as BaseApplication).appComponent.inject(this)
     }
-
-    private fun isLoggedIn(): Boolean = firebaseAuth.currentUser != null
 
     fun navigateTo(fragment: String, arguments: Bundle?) {
         val transaction =
@@ -164,4 +167,15 @@ class MainActivity : AppCompatActivity() {
             window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         }
     }
+
+    private fun observeIsLoginedLiveData() =
+        viewModel.isLoginedLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
+                if (response.data) {
+                    navigateTo(PeopleFragment.toString(), null)
+                } else {
+                    navigateTo(LoginFragment.toString(), null)
+                }
+            }
+        })
 }

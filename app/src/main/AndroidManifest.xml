@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.words.words.AddWordActivity"></activity>
         <activity android:name=".ui.words.groups.CreateGroupActivity" />
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

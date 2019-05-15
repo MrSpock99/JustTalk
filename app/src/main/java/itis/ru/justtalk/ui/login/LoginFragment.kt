@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
+import itis.ru.justtalk.ui.main.MainActivity
 import itis.ru.justtalk.utils.LoginState
 import itis.ru.justtalk.utils.ScreenState
 import itis.ru.justtalk.utils.ViewModelFactory
