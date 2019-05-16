@@ -78,6 +78,9 @@ class TestFragment : BaseFragment() {
         btn_hint.setOnClickListener {
             viewModel.getHint()
         }
+        btn_cancel_test.setOnClickListener {
+            rootActivity.onBackPressed()
+        }
     }
 
     private fun observeWordListLiveData() =
