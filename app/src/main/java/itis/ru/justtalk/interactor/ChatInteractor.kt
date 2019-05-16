@@ -14,10 +14,14 @@ class ChatInteractor @Inject constructor(private val chatRepository: ChatReposit
     fun getUser(uid: String): Single<ChatUser> {
         return chatRepository.getUser(uid)
             .subscribeOn(Schedulers.io())
+            .map {
+                ChatUser(it.uid, it.name, it.chats, it.avatarUrl, it.lastMessage)
+            }
     }
 
-    fun addToContacts(userFromUid: String, userTo: ChatUser): Completable {
-        return chatRepository.addToContacts(userFromUid, userTo)
+    fun addToContacts(userFrom: ChatUser, userTo: ChatUser, chatId: String): Single<String> {
+        return chatRepository.addToContacts(userFrom, userTo, chatId)
+            .subscribeOn(Schedulers.io())
     }
 
     fun sendMessage(
@@ -38,5 +42,8 @@ class ChatInteractor @Inject constructor(private val chatRepository: ChatReposit
     fun getContacts(userFromUid: String): Single<ContactsAndChats> {
         return chatRepository.getContacts(userFromUid)
             .subscribeOn(Schedulers.io())
+            .map {
+                ContactsAndChats(it.first, it.second)
+            }
     }
 }

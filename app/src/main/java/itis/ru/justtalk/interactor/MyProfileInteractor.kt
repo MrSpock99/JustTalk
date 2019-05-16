@@ -87,5 +87,6 @@ class MyProfileInteractor @Inject constructor(
 
     fun editUserInfo(user: User): Completable {
         return userRepository.addUserToDb(user)
+            .subscribeOn(Schedulers.io())
     }
 }

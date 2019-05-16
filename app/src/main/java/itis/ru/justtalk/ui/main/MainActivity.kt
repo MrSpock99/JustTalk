@@ -1,12 +1,13 @@
-package itis.ru.justtalk.ui
+package itis.ru.justtalk.ui.main
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
-import com.google.firebase.auth.FirebaseAuth
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
@@ -20,28 +21,29 @@ import itis.ru.justtalk.ui.words.groups.GroupsFragment
 import itis.ru.justtalk.ui.words.test.EndTestFragment
 import itis.ru.justtalk.ui.words.test.TestFragment
 import itis.ru.justtalk.ui.words.words.WordsFragment
+import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-
 class MainActivity : AppCompatActivity() {
     @Inject
-    lateinit var firebaseAuth: FirebaseAuth
+    lateinit var viewModeFactory: ViewModelFactory
+    private lateinit var viewModel: MainViewModel
 
     private val mOnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_profile -> {
-                    navigateTo(MyProfileFragment(), null)
+                    navigateTo(MyProfileFragment.toString(), null)
                 }
                 R.id.nav_people -> {
-                    navigateTo(PeopleFragment(), null)
+                    navigateTo(PeopleFragment.toString(), null)
                 }
                 R.id.nav_messages -> {
-                    navigateTo(ContactsFragment(), null)
+                    navigateTo(ContactsFragment.toString(), null)
                 }
                 R.id.nav_words -> {
-                    navigateTo(GroupsFragment(), null)
+                    navigateTo(GroupsFragment.toString(), null)
                 }
                 else -> {
                     return@OnNavigationItemSelectedListener false
@@ -53,100 +55,132 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
-        bottom_navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         injectDependencies()
-        if (isLoggedIn()) {
-            navigateTo(PeopleFragment(), null)
-            bottom_navigation.selectedItemId = R.id.nav_people
-        } else {
-            navigateTo(LoginFragment(), null)
-        }
+        init()
     }
 
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 0) {
+            if (getTopFragment() is EndTestFragment) {
+                navigateTo(GroupsFragment.toString(), null)
+            }
             supportFragmentManager.popBackStack()
+            getTopFragment()?.let {
+                supportFragmentManager.beginTransaction()
+                    .remove(it)
+                    .commitNow()
+            }
+            setBottomNavSelectedItem(getTopFragment())
         } else {
             super.onBackPressed()
         }
     }
 
+    private fun getTopFragment(): Fragment? {
+        val fragmentList = supportFragmentManager.fragments
+        var top: Fragment? = null
+        for (i in fragmentList.indices.reversed()) {
+            top = fragmentList[i] as Fragment
+            return top
+        }
+        return top
+    }
+
+    private fun setBottomNavSelectedItem(fragment: Fragment?) {
+        when (fragment) {
+            is MyProfileFragment -> {
+                bottom_navigation.selectedItemId = R.id.nav_profile
+            }
+            is PeopleFragment -> {
+                bottom_navigation.selectedItemId = R.id.nav_people
+            }
+            is ContactsFragment -> {
+                bottom_navigation.selectedItemId = R.id.nav_messages
+            }
+            is GroupsFragment -> {
+                bottom_navigation.selectedItemId = R.id.nav_words
+            }
+        }
+    }
+
+    private fun init() {
+        setSupportActionBar(toolbar)
+        bottom_navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        viewModel = ViewModelProviders.of(this, this.viewModeFactory)
+            .get(MainViewModel::class.java)
+        viewModel.checkIsLogined()
+        observeIsLoginedLiveData()
+    }
+
     private fun injectDependencies() {
-        /* val component = DaggerAppComponent.builder()
-             .appModule(AppModule())
-             .build()
-         component.inject(this)*/
         (application as BaseApplication).appComponent.inject(this)
     }
 
-    private fun isLoggedIn(): Boolean = firebaseAuth.currentUser != null
-
-    fun navigateTo(fragment: Fragment, arguments: Bundle?) {
+    fun navigateTo(fragment: String, arguments: Bundle?) {
         val transaction =
             supportFragmentManager.beginTransaction()
         when (fragment) {
-            is LoginFragment -> {
+            LoginFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     LoginFragment.newInstance()
                 )
             }
-            is PeopleFragment -> {
+            PeopleFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     PeopleFragment.newInstance()
                 )
             }
-            is MyProfileFragment -> {
+            MyProfileFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     MyProfileFragment.newInstance()
                 )
             }
-            is EditProfileInfoFragment -> {
+            EditProfileInfoFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     EditProfileInfoFragment.newInstance(arguments)
                 )
             }
-            is ContactsFragment -> {
+            ContactsFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     ContactsFragment.newInstance()
                 )
             }
-            is ChatWithUserFragment -> {
+            ChatWithUserFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     ChatWithUserFragment.newInstance(arguments)
                 )
             }
-            is UserDetailsFragment -> {
+            UserDetailsFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     UserDetailsFragment.newInstance(arguments)
                 )
             }
-            is GroupsFragment -> {
+            GroupsFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     GroupsFragment.newInstance()
                 )
             }
-            is WordsFragment -> {
+            WordsFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     WordsFragment.newInstance(arguments)
                 )
             }
-            is TestFragment -> {
+            TestFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     TestFragment.newInstance()
                 )
             }
-            is EndTestFragment -> {
+            EndTestFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
                     EndTestFragment.newInstance(arguments)
@@ -169,4 +203,24 @@ class MainActivity : AppCompatActivity() {
             window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         }
     }
+
+    fun showLoadingWithoutFreezing(show: Boolean) {
+        if (show) {
+            pb_main.visibility = View.VISIBLE
+        } else {
+            pb_main.visibility = View.GONE
+        }
+    }
+
+    private fun observeIsLoginedLiveData() =
+        viewModel.isLoginedLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
+                if (response.data) {
+                    bottom_navigation.selectedItemId = R.id.nav_people
+                    navigateTo(PeopleFragment.toString(), null)
+                } else {
+                    navigateTo(LoginFragment.toString(), null)
+                }
+            }
+        })
 }

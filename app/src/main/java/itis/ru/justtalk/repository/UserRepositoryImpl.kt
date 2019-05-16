@@ -13,7 +13,7 @@ import itis.ru.justtalk.models.user.RemoteUser
 import itis.ru.justtalk.models.user.User
 import javax.inject.Inject
 
-const val UID = "name"
+const val UID = "uid"
 const val USER_NAME = "name"
 const val USER_AGE = "age"
 const val USER_GENDER = "gender"
@@ -57,6 +57,7 @@ class UserRepositoryImpl @Inject constructor(
             userMap[USER_AVATAR_URL] = user.avatarUrl
             userMap[USER_GENDER] = user.gender
             userMap[USER_LOCATION] = user.location
+            userMap[CHATS] = emptyMap<String, Boolean>()
             userMap[USER_LEARNING_LANGUAGE] = user.learningLanguage
             userMap[USER_LEARNING_LANGUAGE_LEVEL] = user.learningLanguageLevel
             userMap[USER_SPEAKING_LANGUAGE] = user.speakingLanguage
@@ -66,7 +67,6 @@ class UserRepositoryImpl @Inject constructor(
                 .set(userMap)
                 .addOnSuccessListener {
                     emitter.onComplete()
-                    //Log.d("MYLOG", it.toString())
                 }.addOnFailureListener {
                     emitter.onError(it)
                     Log.d("MYLOG", it.message)
@@ -81,27 +81,16 @@ class UserRepositoryImpl @Inject constructor(
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val result = task.result
-                        //val user = result?.toObject(RemoteUser::class.java)
-                        emitter.onSuccess(
-                            result?.toObject(RemoteUser::class.java) ?: RemoteUser(
-                                "",
-                                "",
-                                0,
-                                "",
-                                "",
-                                ArrayList(),
-                                "",
-                                "",
-                                "",
-                                "",
-                                "",
-                                GeoPoint(0.0, 0.0),
-                                mutableMapOf()
+                        val user = result?.toObject(RemoteUser::class.java)
+                        if (user != null) {
+                            emitter.onSuccess(user)
+                        } else {
+                            emitter.onError(
+                                task.exception ?: Exception("error getting user from db")
                             )
-                        )
-                        Log.d("MYLOG", task.result?.data.toString())
+                        }
                     } else {
-                        emitter.onError(task.exception ?: Exception(""))
+                        emitter.onError(task.exception ?: Exception("error getting user from db"))
                     }
                 }
         }
@@ -141,9 +130,6 @@ class UserRepositoryImpl @Inject constructor(
         updateUserLocationInDb(userLocation)
         return Single.create { emitter ->
             db.collection(USERS)
-/*
-                .whereLessThanOrEqualTo("location", userLocation)
-*/
                 .limit(limit)
                 .get()
                 .addOnCompleteListener { task ->
@@ -166,5 +152,4 @@ class UserRepositoryImpl @Inject constructor(
             .document(firebaseAuth.currentUser?.email ?: "")
             .update(userMap)
     }
-
 }

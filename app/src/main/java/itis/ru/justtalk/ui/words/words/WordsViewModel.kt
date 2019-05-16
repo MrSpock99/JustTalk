@@ -6,7 +6,6 @@ import android.os.Bundle
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.WordsInteractor
 import itis.ru.justtalk.models.db.Word
-import itis.ru.justtalk.models.db.WordGroup
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.ui.words.groups.ARG_GROUP_ID
 import itis.ru.justtalk.ui.words.groups.ARG_IMAGE_URL
@@ -25,12 +24,19 @@ class WordsViewModel @Inject constructor(private val interactor: WordsInteractor
             translation = data?.getStringExtra(ARG_TRANSLATION).toString(),
             imageUrl = data?.getStringExtra(ARG_IMAGE_URL).toString()
         )
-        val wordGroup = WordGroup(id = arguments.get(ARG_GROUP_ID) as Long)
         disposables.add(
-            interactor.addWord(word, wordGroup)
+            interactor.getGroupById(arguments.get(ARG_GROUP_ID) as Long)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    addWordSuccessLiveData.value = Response.success(true)
+                .subscribe({ wordGroup ->
+                    interactor.addWord(word, wordGroup)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            getWords(wordGroup.id)
+                            addWordSuccessLiveData.value = Response.success(true)
+                        }, { error ->
+                            addWordSuccessLiveData.value = Response.error(error)
+                            error.printStackTrace()
+                        })
                 }, { error ->
                     addWordSuccessLiveData.value = Response.error(error)
                     error.printStackTrace()

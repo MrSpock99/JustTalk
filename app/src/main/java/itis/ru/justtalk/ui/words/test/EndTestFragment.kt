@@ -21,6 +21,9 @@ class EndTestFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
+        setArrowToolbarVisibility(false)
+        setToolbarAndBottomNavVisibility(View.VISIBLE, View.GONE)
+        setHasOptionsMenu(false)
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(EndTestViewModel::class.java)
     }

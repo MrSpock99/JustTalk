@@ -2,9 +2,9 @@ package itis.ru.justtalk.di.component
 
 import dagger.Component
 import itis.ru.justtalk.di.module.*
-import itis.ru.justtalk.ui.MainActivity
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.login.LoginFragment
+import itis.ru.justtalk.ui.main.MainActivity
 import itis.ru.justtalk.ui.messages.ChatWithUserFragment
 import itis.ru.justtalk.ui.messages.ContactsFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment

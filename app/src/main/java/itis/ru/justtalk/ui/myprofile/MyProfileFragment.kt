@@ -11,7 +11,6 @@ import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
-import itis.ru.justtalk.ui.settings.SettingsFragment
 import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_my_profile.*
 import javax.inject.Inject
@@ -50,12 +49,6 @@ class MyProfileFragment : BaseFragment() {
         observeProfileLiveData()
         observeShowLoadingLiveData()
 
-        btn_settings.setOnClickListener {
-            rootActivity.navigateTo(SettingsFragment(), null)
-        }
-        btn_add_photo.setOnClickListener {
-            //(activity as MainActivity).navigateTo(SettingsFragment())
-        }
         btn_edit.setOnClickListener {
             viewModel.editProfileClick()
         }
@@ -83,7 +76,7 @@ class MyProfileFragment : BaseFragment() {
             event?.getContentIfNotHandled()?.let { user ->
                 val profileBundle = Bundle()
                 profileBundle.putParcelable(ARG_USER, user)
-                rootActivity.navigateTo(EditProfileInfoFragment(), profileBundle)
+                rootActivity.navigateTo(EditProfileInfoFragment.toString(), profileBundle)
             }
         })
     }
@@ -97,10 +90,6 @@ class MyProfileFragment : BaseFragment() {
     }
 
     private fun injectDependencies() {
-        /*val component = DaggerAppComponent.builder()
-            .appModule(AppModule())
-            .build()
-        component.inject(this)*/
         (activity?.application as BaseApplication).appComponent.inject(this)
     }
 

@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.MenuItem
-import itis.ru.justtalk.ui.MainActivity
+import itis.ru.justtalk.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 

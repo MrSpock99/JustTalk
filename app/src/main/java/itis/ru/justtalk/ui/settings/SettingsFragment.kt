@@ -1,6 +1,6 @@
 package itis.ru.justtalk.ui.settings
 
-import android.support.v4.app.Fragment
+import itis.ru.justtalk.ui.base.BaseFragment
 
-class SettingsFragment : Fragment() {
+class SettingsFragment : BaseFragment() {
 }

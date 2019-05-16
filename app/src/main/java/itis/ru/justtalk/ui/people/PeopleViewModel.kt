@@ -3,6 +3,7 @@ package itis.ru.justtalk.ui.people
 import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.location.Location
+import android.util.Log
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.firebase.firestore.GeoPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,6 +28,7 @@ class PeopleViewModel @Inject constructor(
 
     @SuppressLint("MissingPermission")
     fun getUsersNearby() {
+        Log.d("VIEW_MODEL", "GET USERS NEARBY")
         locationProviderClient.lastLocation.addOnCompleteListener {
             if (it.result != null) {
                 val currentLocation = it.result as Location

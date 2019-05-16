@@ -6,10 +6,11 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import itis.ru.justtalk.models.Message
 import itis.ru.justtalk.models.user.ChatUser
-import itis.ru.justtalk.models.utils.ContactsAndChats
+import itis.ru.justtalk.models.user.RemoteChatUser
 import itis.ru.justtalk.ui.people.NO_CHAT_ID
 import javax.inject.Inject
 
@@ -26,31 +27,47 @@ class ChatRepositoryImpl @Inject constructor(
     private val db: FirebaseFirestore
 ) : ChatRepository {
 
-    override fun getUser(uid: String): Single<ChatUser> {
+    override fun getUser(uid: String): Single<RemoteChatUser> {
         return Single.create { emitter ->
             db.collection(USERS).document(uid).get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val user: ChatUser = task.result?.toObject(ChatUser::class.java) as ChatUser
-                        user.uid = uid
-                        emitter.onSuccess(user)
+                        val userRemote: RemoteChatUser =
+                            task.result?.toObject(RemoteChatUser::class.java) as RemoteChatUser
+                        userRemote.uid = uid
+                        emitter.onSuccess(userRemote)
                     } else {
-                        emitter.onError(task.exception ?: Exception("error getting ChatUser"))
+                        emitter.onError(task.exception ?: Exception("error getting RemoteChatUser"))
                     }
                 }
         }
     }
 
-    override fun addToContacts(userFromUid: String, userTo: ChatUser): Completable {
-        return Completable.create { emitter ->
+    override fun addToContacts(
+        userFrom: ChatUser,
+        userTo: ChatUser,
+        immutableChatId: String
+    ): Single<String> {
+        return Single.create { emitter ->
+            var chatId: String
+            if (immutableChatId == NO_CHAT_ID) {
+                chatId = db.collection(MESSAGES).document().id
+                for ((key, _) in userFrom.chats) {
+                    if (userTo.chats.contains(key)) {
+                        chatId = key
+                    }
+                }
+            } else {
+                chatId = immutableChatId
+            }
             db.collection(CONTACTS)
-                .document(userFromUid)
+                .document(userFrom.uid)
                 .collection(USER_CONTACTS)
                 .document(userTo.uid)
                 .set(userTo, SetOptions.merge())
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        emitter.onComplete()
+                        emitter.onSuccess(chatId)
                     } else {
                         emitter.onError(task.exception ?: Exception("error adding to contacts"))
                     }
@@ -125,55 +142,50 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMessages(chatId: String): Single<FirestoreRecyclerOptions<Message>> {
+    override fun getMessages(chatIdImmutable: String): Single<FirestoreRecyclerOptions<Message>> {
         return Single.create { emitter ->
+            var chatId = chatIdImmutable
+            if (chatIdImmutable == NO_CHAT_ID) {
+                chatId = db.collection(MESSAGES).document().id
+            }
             val query = db.collection(MESSAGES).document(chatId).collection(CHAT_MESSAGES)
                 .orderBy(SENT_AT, Query.Direction.ASCENDING)
             val options =
                 FirestoreRecyclerOptions.Builder<Message>().setQuery(query, Message::class.java)
                     .build()
-            /*query.get().addOnCompleteListener {task ->
-                if (task.isSuccessful){
-                }else{
-                    emitter.onError(task.exception!!)
-                }
-
-            }*/
             query.addSnapshotListener { snp, e ->
                 if (e != null) {
                     emitter.onError(e)
                 } else {
                     emitter.onSuccess(options)
                 }
-
             }
         }
     }
 
-    override fun getContacts(userFromUid: String): Single<ContactsAndChats> {
+    override fun getContacts(userFromUid: String): Single<Pair<MutableList<RemoteChatUser>, MutableList<String>>> {
         return Single.create { emitter ->
             db.collection(CHATS).document(userFromUid).collection(USER_CHATS)
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val contactsList = mutableListOf<ChatUser>()
+                        val contactsList = mutableListOf<RemoteChatUser>()
                         val chatList = mutableListOf<String>()
+
+                        if (task.result?.size() == 0) {
+                            emitter.onSuccess(Pair(contactsList, chatList))
+                        }
 
                         task.result?.forEach { it ->
                             getLastMessageInChat(it.id)
                                 .subscribeOn(Schedulers.io())
-                                .observeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe({ message ->
-                                    val user = it.toObject(ChatUser::class.java)
+                                    val user = it.toObject(RemoteChatUser::class.java)
                                     user.lastMessage = message
                                     contactsList.add(user)
                                     chatList.add(it.id)
                                     if (contactsList.size == task.result?.size()) {
-                                        emitter.onSuccess(
-                                            ContactsAndChats(
-                                                contactsList,
-                                                chatList
-                                            )
-                                        )
+                                        emitter.onSuccess(Pair(contactsList, chatList))
                                     }
                                 }, { error ->
                                     emitter.onError(
@@ -198,6 +210,8 @@ class ChatRepositoryImpl @Inject constructor(
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         emitter.onSuccess(it.result?.documents?.get(0)?.data?.get(MESSAGE_TEXT).toString())
+                    } else {
+                        emitter.onError(it.exception ?: Exception("error getting last message"))
                     }
                 }
         }

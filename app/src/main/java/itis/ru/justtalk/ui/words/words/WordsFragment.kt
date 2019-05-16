@@ -30,6 +30,7 @@ class WordsFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
+        setHasOptionsMenu(true)
 
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(WordsViewModel::class.java)
@@ -88,11 +89,7 @@ class WordsFragment : BaseFragment() {
     private fun observeAllWordsLiveData() =
         viewModel.allWordsLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
-                val adapter = WordsAdapter { item ->
-                    /*val bundle = Bundle()
-                    bundle.putLong(ARG_GROUP_ID, item.id)
-                    rootActivity.navigateTo(WordsFragment(), bundle)*/
-                }
+                val adapter = WordsAdapter { item -> }
                 adapter.submitList(response.data)
                 rv_words.adapter = adapter
             }

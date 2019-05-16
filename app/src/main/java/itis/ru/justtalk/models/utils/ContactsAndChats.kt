@@ -1,5 +1,8 @@
 package itis.ru.justtalk.models.utils
 
-import itis.ru.justtalk.models.user.ChatUser
+import itis.ru.justtalk.models.user.RemoteChatUser
 
-data class ContactsAndChats(val contactsList: List<ChatUser>, val chatsList: List<String>)
+data class ContactsAndChats(
+    val contactsList: MutableList<RemoteChatUser>,
+    val chatsList: List<String>
+)

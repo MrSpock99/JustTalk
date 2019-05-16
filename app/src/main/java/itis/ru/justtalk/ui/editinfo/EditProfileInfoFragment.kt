@@ -114,7 +114,7 @@ class EditProfileInfoFragment : BaseFragment() {
         viewModel.editProfileSuccessLiveData.observe(this, Observer {
             it?.let { success ->
                 if (success) {
-                    rootActivity.navigateTo(MyProfileFragment(), null)
+                    rootActivity.navigateTo(MyProfileFragment.toString(), null)
                 } else {
                     showSnackbar(getString(R.string.snackbar_error_message))
                 }

@@ -159,7 +159,7 @@ class PeopleFragment : BaseFragment() {
                 val chatBundle = Bundle()
                 chatBundle.putString(ARG_USER_UID, user.uid)
                 chatBundle.putString(ARG_CHAT_ID, NO_CHAT_ID)
-                rootActivity.navigateTo(ChatWithUserFragment(), chatBundle)
+                rootActivity.navigateTo(ChatWithUserFragment.toString(), chatBundle)
             }
         })
 
@@ -168,7 +168,7 @@ class PeopleFragment : BaseFragment() {
             event?.getContentIfNotHandled()?.let { user ->
                 val profileBundle = Bundle()
                 profileBundle.putParcelable(MyProfileFragment.ARG_USER, user)
-                rootActivity.navigateTo(UserDetailsFragment(), profileBundle)
+                rootActivity.navigateTo(UserDetailsFragment.toString(), profileBundle)
             }
         })
 

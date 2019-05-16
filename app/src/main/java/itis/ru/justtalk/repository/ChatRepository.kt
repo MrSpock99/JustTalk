@@ -5,12 +5,16 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import itis.ru.justtalk.models.Message
 import itis.ru.justtalk.models.user.ChatUser
-import itis.ru.justtalk.models.utils.ContactsAndChats
+import itis.ru.justtalk.models.user.RemoteChatUser
 
 interface ChatRepository {
-    fun getUser(uid: String): Single<ChatUser>
+    fun getUser(uid: String): Single<RemoteChatUser>
 
-    fun addToContacts(userFromUid: String, userTo: ChatUser): Completable
+    fun addToContacts(
+        userFromUid: ChatUser,
+        userTo: ChatUser,
+        immutableChatId: String
+    ): Single<String>
 
     fun sendMessage(
         userFrom: ChatUser,
@@ -19,7 +23,7 @@ interface ChatRepository {
         message: Message
     ): Completable
 
-    fun getMessages(chatId: String): Single<FirestoreRecyclerOptions<Message>>
+    fun getMessages(chatIdImmutable: String): Single<FirestoreRecyclerOptions<Message>>
 
-    fun getContacts(userFromUid: String): Single<ContactsAndChats>
+    fun getContacts(userFromUid: String): Single<Pair<MutableList<RemoteChatUser>, MutableList<String>>>
 }

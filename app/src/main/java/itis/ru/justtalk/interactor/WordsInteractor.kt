@@ -8,7 +8,10 @@ import itis.ru.justtalk.models.db.WordGroup
 import itis.ru.justtalk.repository.WordsRepository
 import javax.inject.Inject
 
-class WordsInteractor @Inject constructor(private val repository: WordsRepository) {
+class WordsInteractor @Inject constructor(
+    private val repository: WordsRepository
+) {
+
     fun addWord(word: Word, wordGroup: WordGroup): Completable {
         return repository.addWord(word, wordGroup)
             .subscribeOn(Schedulers.io())

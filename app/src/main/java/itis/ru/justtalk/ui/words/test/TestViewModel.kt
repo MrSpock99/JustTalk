@@ -9,13 +9,14 @@ import itis.ru.justtalk.models.db.Word
 import itis.ru.justtalk.models.utils.EndTestModel
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.ui.words.groups.ARG_GROUP_ID
+import itis.ru.justtalk.utils.ClickEvent
 import itis.ru.justtalk.utils.Response
 import javax.inject.Inject
 
 class TestViewModel @Inject constructor(private val interactor: WordsInteractor) : BaseViewModel(),
     Subject {
     val wordListLiveData = MutableLiveData<Response<List<Word>>>()
-    val endTestListLiveData = MutableLiveData<Response<EndTestModel>>()
+    val endTestListLiveData = MutableLiveData<Response<ClickEvent<EndTestModel>>>()
     val testGoingOnLiveData = MutableLiveData<Response<Int>>()
     private var wordList: MutableList<Word> = mutableListOf()
     private var groupId: Long = -1
@@ -73,8 +74,8 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
             val index = wordList.indexOf(word)
             word.progress--
             wordList[index] = word
-            testGoingOnLiveData.value = Response.success(++count)
         }
+        testGoingOnLiveData.value = Response.success(++count)
     }
 
     fun correct(word: Word) {
@@ -82,8 +83,8 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
             val index = wordList.indexOf(word)
             word.progress++
             wordList[index] = word
-            testGoingOnLiveData.value = Response.success(++count)
         }
+        testGoingOnLiveData.value = Response.success(++count)
         correctCount++
     }
 
@@ -98,7 +99,8 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({
                                 val endTestModel = EndTestModel(wordList.size, correctCount)
-                                endTestListLiveData.value = Response.success(endTestModel)
+                                endTestListLiveData.value =
+                                    Response.success(ClickEvent(endTestModel))
                             }, { error ->
                                 endTestListLiveData.value = Response.error(error)
                                 error.printStackTrace()
@@ -114,7 +116,7 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         val endTestModel = EndTestModel(wordList.size, correctCount)
-                        endTestListLiveData.value = Response.success(endTestModel)
+                        endTestListLiveData.value = Response.success(ClickEvent(endTestModel))
                     }, { error ->
                         endTestListLiveData.value = Response.error(error)
                         error.printStackTrace()

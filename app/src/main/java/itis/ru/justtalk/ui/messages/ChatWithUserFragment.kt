@@ -107,7 +107,7 @@ class ChatWithUserFragment : BaseFragment() {
 
     private fun observeShowLoadingLiveData() =
         viewModel.showLoadingLiveData.observe(this, Observer {
-            it?.let { it1 -> rootActivity.showLoading(it1) }
+            it?.let { it1 -> rootActivity.showLoadingWithoutFreezing(it1) }
         })
 
     companion object {
