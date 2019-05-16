@@ -19,8 +19,8 @@ class ChatInteractor @Inject constructor(private val chatRepository: ChatReposit
             }
     }
 
-    fun addToContacts(userFromUid: String, userTo: ChatUser): Completable {
-        return chatRepository.addToContacts(userFromUid, userTo)
+    fun addToContacts(userFrom: ChatUser, userTo: ChatUser, chatId: String): Single<String> {
+        return chatRepository.addToContacts(userFrom, userTo, chatId)
     }
 
     fun sendMessage(

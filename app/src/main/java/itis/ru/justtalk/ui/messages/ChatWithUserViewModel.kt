@@ -11,6 +11,7 @@ import itis.ru.justtalk.models.utils.UidAndRecyclerOptions
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.ui.people.ARG_CHAT_ID
 import itis.ru.justtalk.ui.people.ARG_USER_UID
+import itis.ru.justtalk.ui.people.NO_CHAT_ID
 import itis.ru.justtalk.utils.Response
 import javax.inject.Inject
 
@@ -26,8 +27,11 @@ class ChatWithUserViewModel @Inject constructor(
     private lateinit var userTo: ChatUser
     private lateinit var myUid: String
     private lateinit var chatId: String
+    private var arguments: Bundle? = null
 
-    fun startChat(arguments: Bundle?) {
+    fun startChat(args: Bundle?) {
+        arguments = args
+        chatId = arguments?.getString(ARG_CHAT_ID).toString()
         val userToUid = arguments?.getString(ARG_USER_UID).toString()
         showLoadingLiveData.value = true
         disposables.add(
@@ -36,27 +40,36 @@ class ChatWithUserViewModel @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ myUid ->
                     this.myUid = myUid
-                    getMessages(arguments)
-                    chatInteractor
-                        .getUser(userToUid)
+                    chatInteractor.getUser(myUid)
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ chatUser ->
-                            userTo = chatUser
-                            chatInteractor.addToContacts(myUid, chatUser)
-                                .doFinally {
-                                    showLoadingLiveData.value = false
-                                }
+                        .subscribe({ me ->
+                            chatInteractor
+                                .getUser(userToUid)
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe({
-                                    startChatSuccessLiveData.value = Response.success(userTo.name)
+                                .subscribe({ chatUser ->
+                                    userTo = chatUser
+                                    chatInteractor.addToContacts(me, chatUser, NO_CHAT_ID)
+                                        .doFinally {
+                                            showLoadingLiveData.value = false
+                                        }
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe({
+                                            chatId = it
+                                            getMessages(it)
+                                            startChatSuccessLiveData.value =
+                                                Response.success(userTo.name)
+                                        }, { error ->
+                                            startChatSuccessLiveData.value = Response.error(error)
+                                            error.printStackTrace()
+                                        })
                                 }, { error ->
                                     startChatSuccessLiveData.value = Response.error(error)
                                     error.printStackTrace()
                                 })
-                        }, { error ->
-                            startChatSuccessLiveData.value = Response.error(error)
-                            error.printStackTrace()
+                        }, {
+
                         })
+
                 }, { error ->
                     startChatSuccessLiveData.value = Response.error(error)
                     error.printStackTrace()
@@ -75,11 +88,11 @@ class ChatWithUserViewModel @Inject constructor(
                         userTo,
                         chatId,
                         Message(textMessage, userFrom.uid)
-
                     ).doFinally {
                         showLoadingLiveData.value = false
                     }.observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
+                            getMessages(chatId)
                             sendMessageSuccessLiveData.value = Response.success(true)
                         }, { error ->
                             sendMessageSuccessLiveData.value = Response.error(error)
@@ -93,9 +106,8 @@ class ChatWithUserViewModel @Inject constructor(
         )
     }
 
-    private fun getMessages(arguments: Bundle?) {
+    private fun getMessages(chatId: String) {
         showLoadingLiveData.value = true
-        chatId = arguments?.getString(ARG_CHAT_ID).toString()
         disposables.add(
             chatInteractor.getMessages(chatId)
                 .doFinally {

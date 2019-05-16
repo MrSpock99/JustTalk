@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.card_view_tinder_like.view.*
 class CardPagerAdapter: PagerAdapter() {
     val data: MutableList<User> = ArrayList()
     private lateinit var clickListener: (User) -> Unit
-    private lateinit var myLocation: GeoPoint
+    private var myLocation: GeoPoint? = null
     private var baseElevation: Float = 0.0f
 
     fun setOnClickListener(clickListener: (User) -> Unit) {
@@ -68,7 +68,7 @@ class CardPagerAdapter: PagerAdapter() {
         val ivAvatar = view.iv_user_avatar
 
         tvName.text = user.name
-        tvDistance.text = getDistanceFromLocation(user.location, myLocation)
+        tvDistance.text = myLocation?.let { getDistanceFromLocation(user.location, it) }
 
         val transformation = RoundedCornersTransformation(20, 1)
 

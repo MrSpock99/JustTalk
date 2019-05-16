@@ -10,7 +10,11 @@ import itis.ru.justtalk.models.user.RemoteChatUser
 interface ChatRepository {
     fun getUser(uid: String): Single<RemoteChatUser>
 
-    fun addToContacts(userFromUid: String, userTo: ChatUser): Completable
+    fun addToContacts(
+        userFromUid: ChatUser,
+        userTo: ChatUser,
+        immutableChatId: String
+    ): Single<String>
 
     fun sendMessage(
         userFrom: ChatUser,

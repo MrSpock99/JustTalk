@@ -42,16 +42,31 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun addToContacts(userFromUid: String, userTo: ChatUser): Completable {
-        return Completable.create { emitter ->
+    override fun addToContacts(
+        userFrom: ChatUser,
+        userTo: ChatUser,
+        immutableChatId: String
+    ): Single<String> {
+        return Single.create { emitter ->
+            var chatId: String
+            if (immutableChatId == NO_CHAT_ID) {
+                chatId = db.collection(MESSAGES).document().id
+                for ((key, _) in userFrom.chats) {
+                    if (userTo.chats.contains(key)) {
+                        chatId = key
+                    }
+                }
+            } else {
+                chatId = immutableChatId
+            }
             db.collection(CONTACTS)
-                .document(userFromUid)
+                .document(userFrom.uid)
                 .collection(USER_CONTACTS)
                 .document(userTo.uid)
                 .set(userTo, SetOptions.merge())
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        emitter.onComplete()
+                        emitter.onSuccess(chatId)
                     } else {
                         emitter.onError(task.exception ?: Exception("error adding to contacts"))
                     }
@@ -126,8 +141,12 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMessages(chatId: String): Single<FirestoreRecyclerOptions<Message>> {
+    override fun getMessages(chatIdImmutable: String): Single<FirestoreRecyclerOptions<Message>> {
         return Single.create { emitter ->
+            var chatId = chatIdImmutable
+            if (chatIdImmutable == NO_CHAT_ID) {
+                chatId = db.collection(MESSAGES).document().id
+            }
             val query = db.collection(MESSAGES).document(chatId).collection(CHAT_MESSAGES)
                 .orderBy(SENT_AT, Query.Direction.ASCENDING)
             val options =
@@ -139,7 +158,6 @@ class ChatRepositoryImpl @Inject constructor(
                 } else {
                     emitter.onSuccess(options)
                 }
-
             }
         }
     }
