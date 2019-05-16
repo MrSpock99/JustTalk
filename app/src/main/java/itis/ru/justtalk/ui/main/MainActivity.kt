@@ -64,11 +64,11 @@ class MainActivity : AppCompatActivity() {
             if (getTopFragment() is EndTestFragment) {
                 navigateTo(GroupsFragment.toString(), null)
             }
-            supportFragmentManager.popBackStackImmediate()
+            supportFragmentManager.popBackStack()
             getTopFragment()?.let {
                 supportFragmentManager.beginTransaction()
                     .remove(it)
-                    .commit()
+                    .commitNow()
             }
             setBottomNavSelectedItem(getTopFragment())
         } else {
