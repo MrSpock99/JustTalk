@@ -170,6 +170,10 @@ class ChatRepositoryImpl @Inject constructor(
                         val contactsList = mutableListOf<RemoteChatUser>()
                         val chatList = mutableListOf<String>()
 
+                        if (task.result?.size() == 0) {
+                            emitter.onSuccess(Pair(contactsList, chatList))
+                        }
+
                         task.result?.forEach { it ->
                             getLastMessageInChat(it.id)
                                 .subscribeOn(Schedulers.io())

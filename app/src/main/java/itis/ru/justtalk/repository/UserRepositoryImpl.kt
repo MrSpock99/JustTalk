@@ -81,26 +81,16 @@ class UserRepositoryImpl @Inject constructor(
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val result = task.result
-                        emitter.onSuccess(
-                            result?.toObject(RemoteUser::class.java) ?: RemoteUser(
-                                "",
-                                "",
-                                0,
-                                "",
-                                "",
-                                ArrayList(),
-                                "",
-                                "",
-                                "",
-                                "",
-                                "",
-                                GeoPoint(0.0, 0.0),
-                                mutableMapOf()
+                        val user = result?.toObject(RemoteUser::class.java)
+                        if (user != null) {
+                            emitter.onSuccess(user)
+                        } else {
+                            emitter.onError(
+                                task.exception ?: Exception("error getting user from db")
                             )
-                        )
-                        Log.d("MYLOG", task.result?.data.toString())
+                        }
                     } else {
-                        emitter.onError(task.exception ?: Exception(""))
+                        emitter.onError(task.exception ?: Exception("error getting user from db"))
                     }
                 }
         }

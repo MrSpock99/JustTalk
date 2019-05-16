@@ -11,7 +11,7 @@ import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
-import itis.ru.justtalk.ui.main.MainActivity
+import itis.ru.justtalk.ui.people.PeopleFragment
 import itis.ru.justtalk.utils.LoginState
 import itis.ru.justtalk.utils.ScreenState
 import itis.ru.justtalk.utils.ViewModelFactory
@@ -70,7 +70,11 @@ class LoginFragment : BaseFragment() {
     private fun processLoginState(renderState: LoginState) {
         rootActivity.showLoading(false)
         when (renderState) {
-            LoginState.Success -> (activity as MainActivity).navigateTo(
+            LoginState.SuccessLogin -> rootActivity.navigateTo(
+                PeopleFragment.toString(),
+                null
+            )
+            LoginState.SuccessRegister -> rootActivity.navigateTo(
                 EditProfileInfoFragment.toString(),
                 null
             )

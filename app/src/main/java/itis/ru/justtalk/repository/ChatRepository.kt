@@ -23,7 +23,7 @@ interface ChatRepository {
         message: Message
     ): Completable
 
-    fun getMessages(chatId: String): Single<FirestoreRecyclerOptions<Message>>
+    fun getMessages(chatIdImmutable: String): Single<FirestoreRecyclerOptions<Message>>
 
     fun getContacts(userFromUid: String): Single<Pair<MutableList<RemoteChatUser>, MutableList<String>>>
 }

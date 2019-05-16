@@ -21,6 +21,7 @@ class ChatInteractor @Inject constructor(private val chatRepository: ChatReposit
 
     fun addToContacts(userFrom: ChatUser, userTo: ChatUser, chatId: String): Single<String> {
         return chatRepository.addToContacts(userFrom, userTo, chatId)
+            .subscribeOn(Schedulers.io())
     }
 
     fun sendMessage(
