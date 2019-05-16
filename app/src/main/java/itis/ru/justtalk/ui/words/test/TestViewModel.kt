@@ -74,8 +74,8 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
             val index = wordList.indexOf(word)
             word.progress--
             wordList[index] = word
-            testGoingOnLiveData.value = Response.success(++count)
         }
+        testGoingOnLiveData.value = Response.success(++count)
     }
 
     fun correct(word: Word) {
@@ -83,8 +83,8 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
             val index = wordList.indexOf(word)
             word.progress++
             wordList[index] = word
-            testGoingOnLiveData.value = Response.success(++count)
         }
+        testGoingOnLiveData.value = Response.success(++count)
         correctCount++
     }
 
