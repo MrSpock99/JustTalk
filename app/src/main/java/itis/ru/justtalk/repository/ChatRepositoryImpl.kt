@@ -6,6 +6,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import itis.ru.justtalk.models.Message
 import itis.ru.justtalk.models.user.ChatUser
@@ -177,7 +178,7 @@ class ChatRepositoryImpl @Inject constructor(
                         task.result?.forEach { it ->
                             getLastMessageInChat(it.id)
                                 .subscribeOn(Schedulers.io())
-                                .observeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe({ message ->
                                     val user = it.toObject(RemoteChatUser::class.java)
                                     user.lastMessage = message
