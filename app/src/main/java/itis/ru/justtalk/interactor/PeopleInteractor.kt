@@ -23,7 +23,9 @@ class PeopleInteractor @Inject constructor(
             .map {
                 val list = mutableListOf<RemoteUser>()
                 it.forEach { user ->
-                    if (myChats.keys.intersect(user.chats.keys).isEmpty()) {
+                    if (myChats.keys.intersect(user.chats.keys).isEmpty()
+                        && !user.chats.keys.isEmpty()
+                    ) {
                         list.add(user)
                     }
                 }
