@@ -85,7 +85,8 @@
                 android:id="@+id/et_age"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/et_age_hint" />
+                android:hint="@string/et_age_hint"
+                android:inputType="number" />
         </android.support.design.widget.TextInputLayout>
 
         <include

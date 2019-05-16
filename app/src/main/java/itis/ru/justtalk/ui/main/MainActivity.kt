@@ -204,6 +204,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun showLoadingWithoutFreezing(show: Boolean) {
+        if (show) {
+            pb_main.visibility = View.VISIBLE
+        } else {
+            pb_main.visibility = View.GONE
+        }
+    }
+
     private fun observeIsLoginedLiveData() =
         viewModel.isLoginedLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
