@@ -43,6 +43,5 @@ class GroupsViewModel @Inject constructor(
                     error.printStackTrace()
                 })
         )
-
     }
 }

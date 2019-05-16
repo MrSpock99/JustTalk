@@ -14,6 +14,9 @@ class ChatInteractor @Inject constructor(private val chatRepository: ChatReposit
     fun getUser(uid: String): Single<ChatUser> {
         return chatRepository.getUser(uid)
             .subscribeOn(Schedulers.io())
+            .map {
+                ChatUser(it.uid, it.name, it.chats, it.avatarUrl, it.lastMessage)
+            }
     }
 
     fun addToContacts(userFromUid: String, userTo: ChatUser): Completable {
@@ -38,5 +41,8 @@ class ChatInteractor @Inject constructor(private val chatRepository: ChatReposit
     fun getContacts(userFromUid: String): Single<ContactsAndChats> {
         return chatRepository.getContacts(userFromUid)
             .subscribeOn(Schedulers.io())
+            .map {
+                ContactsAndChats(it.first, it.second)
+            }
     }
 }

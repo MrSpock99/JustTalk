@@ -9,7 +9,7 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import itis.ru.justtalk.models.Message
 import itis.ru.justtalk.models.user.ChatUser
-import itis.ru.justtalk.models.utils.ContactsAndChats
+import itis.ru.justtalk.models.user.RemoteChatUser
 import itis.ru.justtalk.ui.people.NO_CHAT_ID
 import javax.inject.Inject
 
@@ -26,16 +26,17 @@ class ChatRepositoryImpl @Inject constructor(
     private val db: FirebaseFirestore
 ) : ChatRepository {
 
-    override fun getUser(uid: String): Single<ChatUser> {
+    override fun getUser(uid: String): Single<RemoteChatUser> {
         return Single.create { emitter ->
             db.collection(USERS).document(uid).get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val user: ChatUser = task.result?.toObject(ChatUser::class.java) as ChatUser
-                        user.uid = uid
-                        emitter.onSuccess(user)
+                        val userRemote: RemoteChatUser =
+                            task.result?.toObject(RemoteChatUser::class.java) as RemoteChatUser
+                        userRemote.uid = uid
+                        emitter.onSuccess(userRemote)
                     } else {
-                        emitter.onError(task.exception ?: Exception("error getting ChatUser"))
+                        emitter.onError(task.exception ?: Exception("error getting RemoteChatUser"))
                     }
                 }
         }
@@ -143,12 +144,12 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getContacts(userFromUid: String): Single<ContactsAndChats> {
+    override fun getContacts(userFromUid: String): Single<Pair<MutableList<RemoteChatUser>, MutableList<String>>> {
         return Single.create { emitter ->
             db.collection(CHATS).document(userFromUid).collection(USER_CHATS)
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val contactsList = mutableListOf<ChatUser>()
+                        val contactsList = mutableListOf<RemoteChatUser>()
                         val chatList = mutableListOf<String>()
 
                         task.result?.forEach { it ->
@@ -156,17 +157,12 @@ class ChatRepositoryImpl @Inject constructor(
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(Schedulers.io())
                                 .subscribe({ message ->
-                                    val user = it.toObject(ChatUser::class.java)
+                                    val user = it.toObject(RemoteChatUser::class.java)
                                     user.lastMessage = message
                                     contactsList.add(user)
                                     chatList.add(it.id)
                                     if (contactsList.size == task.result?.size()) {
-                                        emitter.onSuccess(
-                                            ContactsAndChats(
-                                                contactsList,
-                                                chatList
-                                            )
-                                        )
+                                        emitter.onSuccess(Pair(contactsList, chatList))
                                     }
                                 }, { error ->
                                     emitter.onError(

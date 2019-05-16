@@ -8,11 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import itis.ru.justtalk.R
-import itis.ru.justtalk.models.user.ChatUser
+import itis.ru.justtalk.models.user.RemoteChatUser
 import kotlinx.android.synthetic.main.item_contact.view.*
 
 class ContactsAdapter(private val clickListener: (Int) -> Unit) :
-    ListAdapter<ChatUser, ContactsAdapter.RvItemViewHolder>(DiffCallback()) {
+    ListAdapter<RemoteChatUser, ContactsAdapter.RvItemViewHolder>(DiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): RvItemViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return RvItemViewHolder(inflater.inflate(R.layout.item_contact, parent, false))
@@ -23,7 +23,7 @@ class ContactsAdapter(private val clickListener: (Int) -> Unit) :
     }
 
     class RvItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: ChatUser, clickListener: (Int) -> Unit) {
+        fun bind(item: RemoteChatUser, clickListener: (Int) -> Unit) {
             itemView.tv_user_name.text = item.name
             itemView.tv_last_message.text = item.lastMessage
             Glide.with(itemView)
@@ -36,12 +36,12 @@ class ContactsAdapter(private val clickListener: (Int) -> Unit) :
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<ChatUser>() {
-        override fun areItemsTheSame(oldItem: ChatUser, newItem: ChatUser): Boolean {
+    class DiffCallback : DiffUtil.ItemCallback<RemoteChatUser>() {
+        override fun areItemsTheSame(oldItem: RemoteChatUser, newItem: RemoteChatUser): Boolean {
             return oldItem.lastMessage == newItem.lastMessage
         }
 
-        override fun areContentsTheSame(oldItem: ChatUser, newItem: ChatUser): Boolean {
+        override fun areContentsTheSame(oldItem: RemoteChatUser, newItem: RemoteChatUser): Boolean {
             return oldItem == newItem
         }
     }

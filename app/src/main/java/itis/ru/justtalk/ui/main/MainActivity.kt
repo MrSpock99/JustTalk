@@ -25,7 +25,6 @@ import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
