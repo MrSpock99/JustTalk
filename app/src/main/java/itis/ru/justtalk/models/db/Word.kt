@@ -13,7 +13,7 @@ data class Word(
     val translation: String,
     var progress: Int = 0,
     @ColumnInfo(name = "image_url")
-    val imageUrl: String,
+    var imageUrl: String,
     @ColumnInfo(name = "group_id")
     val groupId: Long = 0
 )
