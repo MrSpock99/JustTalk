@@ -2,25 +2,25 @@ package itis.ru.justtalk.db
 
 import android.arch.persistence.room.*
 import io.reactivex.Single
+import itis.ru.justtalk.models.db.Group
+import itis.ru.justtalk.models.db.GroupWithWord
 import itis.ru.justtalk.models.db.Word
-import itis.ru.justtalk.models.db.WordGroup
-import itis.ru.justtalk.models.db.WordGroupWithWord
 
 @Dao
 interface WordGroupsDao {
     @Transaction
     @Query("SELECT * FROM word_group")
-    fun getAllWordGroups(): Single<List<WordGroup>>
+    fun getAllWordGroups(): Single<List<Group>>
 
     @Transaction
     @Query("SELECT * from word_group WHERE id =:groupId")
-    fun getAllWordsInGroup(groupId: Long): Single<WordGroupWithWord>
+    fun getAllWordsInGroup(groupId: Long): Single<GroupWithWord>
 
     @Transaction
-    fun insert(wordGroupWithWord: WordGroupWithWord) {
-        wordGroupWithWord.wordGroup?.let {
+    fun insert(groupWithWord: GroupWithWord) {
+        groupWithWord.group?.let {
             insert(it)
-            wordGroupWithWord.list.forEach { word ->
+            groupWithWord.list.forEach { word ->
                 insert(word)
             }
         }
@@ -28,13 +28,13 @@ interface WordGroupsDao {
     }
 
     @Query("SELECT * FROM word_group WHERE id = :id")
-    fun getById(id: Long): Single<WordGroup>
+    fun getById(id: Long): Single<Group>
 
     @Query("DELETE FROM word_group")
     fun nukeTable()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(group: WordGroup)
+    fun insert(group: Group)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(word: Word)
@@ -43,10 +43,13 @@ interface WordGroupsDao {
     fun insert(wordList: List<Word>)
 
     @Update
-    fun update(group: WordGroup)
+    fun update(group: Group)
 
     @Delete
-    fun delete(group: WordGroup)
+    fun deleteGroup(group: Group)
+
+    @Delete
+    fun deleteWord(word: Word)
 
     @Query("SELECT * FROM word")
     fun getAllWords(): Single<List<Word>>

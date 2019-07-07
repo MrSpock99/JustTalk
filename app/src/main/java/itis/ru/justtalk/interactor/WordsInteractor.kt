@@ -3,8 +3,8 @@ package itis.ru.justtalk.interactor
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import itis.ru.justtalk.models.db.Group
 import itis.ru.justtalk.models.db.Word
-import itis.ru.justtalk.models.db.WordGroup
 import itis.ru.justtalk.repository.WordsRepository
 import javax.inject.Inject
 
@@ -12,13 +12,13 @@ class WordsInteractor @Inject constructor(
     private val repository: WordsRepository
 ) {
 
-    fun addWord(word: Word, wordGroup: WordGroup): Completable {
-        return repository.addWord(word, wordGroup)
+    fun addWord(word: Word, group: Group): Completable {
+        return repository.addWord(word, group)
             .subscribeOn(Schedulers.io())
     }
 
-    fun addWords(wordList: List<Word>, wordGroup: WordGroup): Completable {
-        return repository.addWords(wordList, wordGroup)
+    fun addWords(wordList: List<Word>, group: Group): Completable {
+        return repository.addWords(wordList, group)
             .subscribeOn(Schedulers.io())
     }
 
@@ -27,12 +27,17 @@ class WordsInteractor @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-    fun addGroup(wordGroup: WordGroup): Completable {
-        return repository.addGroup(wordGroup)
+    fun addGroup(group: Group): Completable {
+        return repository.addGroup(group)
             .subscribeOn(Schedulers.io())
     }
 
-    fun getGroups(): Single<List<WordGroup>> {
+    fun deleteGroup(group: Group): Completable {
+        return repository.deleteGroup(group)
+            .subscribeOn(Schedulers.io())
+    }
+
+    fun getGroups(): Single<List<Group>> {
         return repository.getAllGroups()
             .subscribeOn(Schedulers.io())
     }
@@ -45,7 +50,7 @@ class WordsInteractor @Inject constructor(
             }
     }
 
-    fun getGroupById(groupId: Long): Single<WordGroup> {
+    fun getGroupById(groupId: Long): Single<Group> {
         return repository.geGroupById(groupId)
             .subscribeOn(Schedulers.io())
     }

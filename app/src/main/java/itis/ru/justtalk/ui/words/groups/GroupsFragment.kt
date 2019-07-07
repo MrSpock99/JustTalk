@@ -6,9 +6,11 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.PopupMenu
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.WordGroupAdapter
+import itis.ru.justtalk.models.db.Group
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.words.test.TestFragment
 import itis.ru.justtalk.ui.words.words.WordsFragment
@@ -90,7 +92,7 @@ class GroupsFragment : BaseFragment() {
     }
 
     private fun observeAddGroupSuccessLiveData() =
-        viewModel.addGroupSuccessLiveData.observe(this, Observer { response ->
+        viewModel.groupOperationsLiveData.observe(this, Observer { response ->
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
             }
@@ -99,12 +101,14 @@ class GroupsFragment : BaseFragment() {
     private fun observeGetAllGroupsLiveData() =
         viewModel.allGroupsLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
-                val adapter = WordGroupAdapter { item ->
+                val adapter = WordGroupAdapter(clickListener = { item ->
                     val bundle = Bundle()
                     bundle.putLong(ARG_GROUP_ID, item.id)
                     bundle.putString(ARG_GROUP_NAME, item.name)
                     rootActivity.navigateTo(WordsFragment.toString(), bundle)
-                }
+                }, longClickListener = { position, item ->
+                    showPopup(position, item)
+                })
                 adapter.submitList(response.data)
                 rv_word_groups.adapter = adapter
             }
@@ -112,6 +116,21 @@ class GroupsFragment : BaseFragment() {
                 showSnackbar(getString(R.string.snackbar_error_message))
             }
         })
+
+    private fun showPopup(position: Int, group: Group) {
+        val popup = PopupMenu(context, rv_word_groups.getChildAt(position), Gravity.END)
+        popup.inflate(R.menu.popup_group)
+
+        popup.setOnMenuItemClickListener { item: MenuItem? ->
+            when (item!!.itemId) {
+                R.id.popup_delete -> {
+                    viewModel.deleteGroup(group)
+                }
+            }
+            true
+        }
+        popup.show()
+    }
 
     companion object {
         fun newInstance() = GroupsFragment()
