@@ -24,7 +24,6 @@ interface WordGroupsDao {
                 insert(word)
             }
         }
-
     }
 
     @Query("SELECT * FROM word_group WHERE id = :id")
@@ -44,6 +43,16 @@ interface WordGroupsDao {
 
     @Update
     fun update(group: Group)
+
+    //@Query("DELETE FROM word word_group USING word, word_group WHERE word.group_id = :groupId AND word_group.id = :groupId")
+    //@Query("DELETE FROM word WHERE word.group_id = :groupId; DELETE FROM word WHERE word.group_id = :groupId")
+    @Transaction
+    fun deleteGroup(group: GroupWithWord) {
+        group.list.forEach { word ->
+            deleteWord(word)
+        }
+        group.group?.let { deleteGroup(it) }
+    }
 
     @Delete
     fun deleteGroup(group: Group)

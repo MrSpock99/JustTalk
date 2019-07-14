@@ -78,7 +78,7 @@ class WordsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun deleteGroup(group: Group): Completable {
+    override fun deleteGroup(group: GroupWithWord): Completable {
         return Completable.create { emitter ->
             dao.deleteGroup(group)
             emitter.onComplete()

@@ -47,14 +47,18 @@ class GroupsViewModel @Inject constructor(
 
     fun deleteGroup(group: Group) {
         disposables.add(
-            interactor.deleteGroup(group)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    groupOperationsLiveData.value = Response.success(true)
-                }, { error ->
-                    groupOperationsLiveData.value = Response.error(error)
-                    error.printStackTrace()
-                })
+            interactor.getGroupWithWords(group.id)
+                .map {
+                    interactor.deleteGroup(it)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            groupOperationsLiveData.value = Response.success(true)
+                        }, { error ->
+                            groupOperationsLiveData.value = Response.error(error)
+                            error.printStackTrace()
+                        })
+                    it
+                }.subscribe()
         )
     }
 }

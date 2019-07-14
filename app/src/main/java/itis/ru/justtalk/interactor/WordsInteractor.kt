@@ -4,6 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import itis.ru.justtalk.models.db.Group
+import itis.ru.justtalk.models.db.GroupWithWord
 import itis.ru.justtalk.models.db.Word
 import itis.ru.justtalk.repository.WordsRepository
 import javax.inject.Inject
@@ -32,7 +33,7 @@ class WordsInteractor @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-    fun deleteGroup(group: Group): Completable {
+    fun deleteGroup(group: GroupWithWord): Completable {
         return repository.deleteGroup(group)
             .subscribeOn(Schedulers.io())
     }
@@ -57,6 +58,11 @@ class WordsInteractor @Inject constructor(
 
     fun getAllWords(): Single<List<Word>> {
         return repository.getAllWords()
+            .subscribeOn(Schedulers.io())
+    }
+
+    fun getGroupWithWords(groupId: Long): Single<GroupWithWord> {
+        return repository.getGroupWords(groupId)
             .subscribeOn(Schedulers.io())
     }
 }
