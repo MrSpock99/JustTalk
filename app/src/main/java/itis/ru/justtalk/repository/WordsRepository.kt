@@ -12,7 +12,7 @@ interface WordsRepository {
     fun addWordsWithoutGroup(wordList: List<Word>): Completable
     fun addGroup(group: Group): Completable
     fun deleteGroup(group: GroupWithWord): Completable
-    fun deleteWord(word: Word, group: Group): Completable
+    fun deleteWord(word: Word): Completable
     fun getGroupWords(groupId: Long): Single<GroupWithWord>
     fun getAllWords(): Single<List<Word>>
     fun getAllGroups(): Single<List<Group>>

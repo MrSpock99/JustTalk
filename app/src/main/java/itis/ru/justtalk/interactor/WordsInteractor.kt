@@ -65,4 +65,9 @@ class WordsInteractor @Inject constructor(
         return repository.getGroupWords(groupId)
             .subscribeOn(Schedulers.io())
     }
+
+    fun deleteWord(word: Word): Completable {
+        return repository.deleteWord(word)
+            .subscribeOn(Schedulers.io())
+    }
 }

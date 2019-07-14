@@ -5,12 +5,12 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.PopupMenu
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.WordsAdapter
+import itis.ru.justtalk.models.db.Word
 import itis.ru.justtalk.ui.base.BaseFragment
 import itis.ru.justtalk.ui.words.groups.ARG_GROUP_ID
 import itis.ru.justtalk.ui.words.groups.ARG_GROUP_NAME
@@ -80,7 +80,7 @@ class WordsFragment : BaseFragment() {
     }
 
     private fun observeAddWordLiveData() =
-        viewModel.addWordSuccessLiveData.observe(this, Observer { response ->
+        viewModel.wordOperationsLiveData.observe(this, Observer { response ->
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
             }
@@ -89,7 +89,9 @@ class WordsFragment : BaseFragment() {
     private fun observeAllWordsLiveData() =
         viewModel.allWordsLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
-                val adapter = WordsAdapter { item -> }
+                val adapter = WordsAdapter({ item -> }, { position, item ->
+                    showPopup(position, item)
+                })
                 adapter.submitList(response.data)
                 rv_words.adapter = adapter
             }
@@ -97,6 +99,21 @@ class WordsFragment : BaseFragment() {
                 showSnackbar(getString(R.string.snackbar_error_message))
             }
         })
+
+    private fun showPopup(position: Int, word: Word) {
+        val popup = PopupMenu(context, rv_words.getChildAt(position), Gravity.END)
+        popup.inflate(R.menu.popup_group)
+
+        popup.setOnMenuItemClickListener { item: MenuItem? ->
+            when (item!!.itemId) {
+                R.id.popup_delete -> {
+                    viewModel.deleteWord(word)
+                }
+            }
+            true
+        }
+        popup.show()
+    }
 
     companion object {
         fun newInstance(bundle: Bundle?): WordsFragment {

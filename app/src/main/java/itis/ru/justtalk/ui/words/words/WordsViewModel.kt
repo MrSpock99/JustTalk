@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 class WordsViewModel @Inject constructor(private val interactor: WordsInteractor) :
     BaseViewModel() {
-    val addWordSuccessLiveData = MutableLiveData<Response<Boolean>>()
+    val wordOperationsLiveData = MutableLiveData<Response<Boolean>>()
     val allWordsLiveData = MutableLiveData<Response<List<Word>>>()
 
     fun addWord(arguments: Bundle?, data: Intent?) {
@@ -32,13 +32,13 @@ class WordsViewModel @Inject constructor(private val interactor: WordsInteractor
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             getWords(wordGroup.id)
-                            addWordSuccessLiveData.value = Response.success(true)
+                            wordOperationsLiveData.value = Response.success(true)
                         }, { error ->
-                            addWordSuccessLiveData.value = Response.error(error)
+                            wordOperationsLiveData.value = Response.error(error)
                             error.printStackTrace()
                         })
                 }, { error ->
-                    addWordSuccessLiveData.value = Response.error(error)
+                    wordOperationsLiveData.value = Response.error(error)
                     error.printStackTrace()
                 })
         )
@@ -52,6 +52,19 @@ class WordsViewModel @Inject constructor(private val interactor: WordsInteractor
                     allWordsLiveData.value = Response.success(it)
                 }, { error ->
                     allWordsLiveData.value = Response.error(error)
+                    error.printStackTrace()
+                })
+        )
+    }
+
+    fun deleteWord(word: Word) {
+        disposables.add(
+            interactor.deleteWord(word)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    wordOperationsLiveData.value = Response.success(true)
+                }, { error ->
+                    wordOperationsLiveData.value = Response.error(error)
                     error.printStackTrace()
                 })
         )
