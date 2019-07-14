@@ -26,11 +26,13 @@ class WordsFragment : BaseFragment() {
     @Inject
     lateinit var viewModeFactory: ViewModelFactory
     private lateinit var viewModel: WordsViewModel
+    private var groupId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
         setHasOptionsMenu(true)
+        groupId = arguments?.get(ARG_GROUP_ID) as Long
 
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(WordsViewModel::class.java)
@@ -53,7 +55,7 @@ class WordsFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.getWords(arguments?.get(ARG_GROUP_ID) as Long)
+        viewModel.getWords(groupId)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -81,6 +83,9 @@ class WordsFragment : BaseFragment() {
 
     private fun observeAddWordLiveData() =
         viewModel.wordOperationsLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
+                viewModel.getWords(groupId)
+            }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
             }

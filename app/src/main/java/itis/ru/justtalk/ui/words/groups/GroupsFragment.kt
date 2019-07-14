@@ -93,6 +93,9 @@ class GroupsFragment : BaseFragment() {
 
     private fun observeAddGroupSuccessLiveData() =
         viewModel.groupOperationsLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
+                viewModel.getGroups()
+            }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
             }
