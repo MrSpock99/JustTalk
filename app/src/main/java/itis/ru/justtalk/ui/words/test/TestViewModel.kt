@@ -2,8 +2,8 @@ package itis.ru.justtalk.ui.words.test
 
 import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import itis.ru.justtalk.interactor.WordsInteractor
 import itis.ru.justtalk.models.db.Word
 import itis.ru.justtalk.models.utils.EndTestModel
@@ -93,34 +93,72 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
         if (groupId != -1L) {
             disposables.add(
                 interactor.getGroupById(groupId)
-                    .observeOn(Schedulers.io())
+                    .map { group ->
+                        var groupProgress = 0
+                        wordList.forEach { word ->
+                            groupProgress += word.progress
+                        }
+                        group.progress = groupProgress / wordList.size
+                        interactor.addWords(wordList, group).subscribe()
+                    }
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        interactor.addWords(wordList, it)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                val endTestModel = EndTestModel(wordList.size, correctCount)
-                                endTestListLiveData.value =
-                                    Response.success(ClickEvent(endTestModel))
-                            }, { error ->
-                                endTestListLiveData.value = Response.error(error)
-                                error.printStackTrace()
-                            })
+                        val endTestModel = EndTestModel(wordList.size, correctCount)
+                        endTestListLiveData.value =
+                            Response.success(ClickEvent(endTestModel))
                     }, { error ->
                         endTestListLiveData.value = Response.error(error)
                         error.printStackTrace()
                     })
             )
+
         } else {
-            disposables.add(
-                interactor.addWordsWithourGroup(wordList)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        val endTestModel = EndTestModel(wordList.size, correctCount)
-                        endTestListLiveData.value = Response.success(ClickEvent(endTestModel))
-                    }, { error ->
-                        endTestListLiveData.value = Response.error(error)
-                        error.printStackTrace()
-                    })
+            val wordsByGroupList = mutableListOf<List<Word>>()
+
+            wordList.sortBy { word -> word.groupId }
+            var words = mutableListOf<Word>()
+            var i = 0
+            while (i < wordList.size) {
+                for (k in i until wordList.size) {
+                    if (wordList[i].groupId == wordList[k].groupId) {
+                        words.add(wordList[k])
+                    } else {
+                        wordsByGroupList.add(words)
+                        words = mutableListOf()
+                        i = k
+                        break
+                    }
+                    if (k == wordList.size - 1) {
+                        wordsByGroupList.add(words)
+                        words = mutableListOf()
+                        i = k + 1
+                    }
+                }
+            }
+
+            disposables.add(Observable.fromIterable(wordsByGroupList)
+                .concatMapSingle { words ->
+                    interactor.getGroupById(words[0].groupId)
+                        .map { group ->
+                            var groupProgress = 0
+                            words.forEach { word ->
+                                groupProgress += word.progress
+                            }
+                            group.progress = groupProgress / words.size
+                            interactor.addWords(words, group).subscribe()
+                            group
+                        }
+                }
+                .toList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    val endTestModel = EndTestModel(wordList.size, correctCount)
+                    endTestListLiveData.value =
+                        Response.success(ClickEvent(endTestModel))
+                }, { error ->
+                    endTestListLiveData.value = Response.error(error)
+                    error.printStackTrace()
+                })
             )
         }
     }
