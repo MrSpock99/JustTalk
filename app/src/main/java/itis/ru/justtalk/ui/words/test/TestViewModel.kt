@@ -47,6 +47,7 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         wordList = it.toMutableList()
+                        wordList.shuffle()
                         wordListLiveData.value = Response.success(wordList)
                     }, { error ->
                         wordListLiveData.value = Response.error(error)
@@ -60,6 +61,7 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         wordList = it.toMutableList()
+                        wordList.shuffle()
                         wordListLiveData.value = Response.success(wordList)
                     }, { error ->
                         wordListLiveData.value = Response.error(error)

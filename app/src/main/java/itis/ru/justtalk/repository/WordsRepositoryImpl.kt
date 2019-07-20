@@ -29,7 +29,9 @@ class WordsRepositoryImpl @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe({
-                    word.imageUrl = it.results?.get(0)?.urls?.small.toString()
+                    if (it.results!!.isNotEmpty()) {
+                        word.imageUrl = it.results?.get(0)?.urls?.small.toString()
+                    }
                     val wordGroupWithWord =
                         GroupWithWord(group = group, list = listOf(word))
                     dao.insert(wordGroupWithWord)
