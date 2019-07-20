@@ -1,12 +1,12 @@
 package itis.ru.justtalk.ui.words.groups
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.PopupMenu
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.WordGroupAdapter
@@ -110,7 +110,7 @@ class GroupsFragment : BaseFragment() {
                     bundle.putString(ARG_GROUP_NAME, item.name)
                     rootActivity.navigateTo(WordsFragment.toString(), bundle)
                 }, longClickListener = { position, item ->
-                    showPopup(position, item)
+                    showPopup(item)
                 })
                 adapter.submitList(response.data)
                 rv_word_groups.adapter = adapter
@@ -120,19 +120,15 @@ class GroupsFragment : BaseFragment() {
             }
         })
 
-    private fun showPopup(position: Int, group: Group) {
-        val popup = PopupMenu(context, rv_word_groups.getChildAt(position), Gravity.END)
-        popup.inflate(R.menu.popup_group)
-
-        popup.setOnMenuItemClickListener { item: MenuItem? ->
-            when (item!!.itemId) {
-                R.id.popup_delete -> {
-                    viewModel.deleteGroup(group)
-                }
+    private fun showPopup(group: Group) {
+        val entities = resources.getStringArray(R.array.group_popup_entities)
+        val builder = AlertDialog.Builder(context)
+        builder.setItems(entities) { _, which ->
+            when (which) {
+                0 -> viewModel.deleteGroup(group)
             }
-            true
         }
-        popup.show()
+        builder.show()
     }
 
     companion object {

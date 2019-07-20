@@ -93,4 +93,11 @@ class WordsRepositoryImpl @Inject constructor(
             emitter.onComplete()
         }
     }
+
+    override fun editWord(word: Word): Completable {
+        return Completable.create { emitter ->
+            dao.updateWord(word.wordId, word.word, word.translation)
+            emitter.onComplete()
+        }
+    }
 }

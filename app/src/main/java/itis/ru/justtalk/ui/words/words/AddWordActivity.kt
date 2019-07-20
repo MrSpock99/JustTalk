@@ -6,18 +6,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
+import itis.ru.justtalk.ui.base.BaseActivity
 import itis.ru.justtalk.ui.words.groups.GALLERY_REQUEST_CODE
-import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_add_word.*
-import javax.inject.Inject
 
-class AddWordActivity : AppCompatActivity() {
-    @Inject
-    lateinit var viewModeFactory: ViewModelFactory
+class AddWordActivity : BaseActivity() {
     private lateinit var viewModel: AddWordViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +34,10 @@ class AddWordActivity : AppCompatActivity() {
 
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(AddWordViewModel::class.java)
+        viewModel.getArguments(intent)
         observePhotoChoose()
         observeAddWordLiveData()
+        observeEditWordLiveData()
 
         btn_add_word.setOnClickListener {
             viewModel.addWordFinish(et_word.text.toString(), et_translation.text.toString())
@@ -79,6 +77,15 @@ class AddWordActivity : AppCompatActivity() {
             }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
+            }
+        })
+
+    private fun observeEditWordLiveData() =
+        viewModel.editWordLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
+                et_word.setText(response.data.word)
+                et_translation.setText(response.data.translation)
+                btn_add_word.text = getString(R.string.all_edit)
             }
         })
 

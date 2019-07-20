@@ -1,26 +1,32 @@
 package itis.ru.justtalk.ui.words.words
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
-import android.widget.PopupMenu
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.WordsAdapter
 import itis.ru.justtalk.models.db.Word
 import itis.ru.justtalk.ui.base.BaseFragment
+import itis.ru.justtalk.ui.base.REQUEST_CODE
 import itis.ru.justtalk.ui.words.groups.ARG_GROUP_ID
 import itis.ru.justtalk.ui.words.groups.ARG_GROUP_NAME
+import itis.ru.justtalk.ui.words.groups.ARG_IMAGE_URL
 import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_words.*
 import javax.inject.Inject
 
 const val REQ_CODE_ADD_WORD = 1002
+const val REQ_CODE_EDIT_WORD = 1003
 const val ARG_WORD = "WORD"
 const val ARG_TRANSLATION = "TRANSLATION"
+const val ARG_WORD_ID = "WORD_ID"
 
 class WordsFragment : BaseFragment() {
     @Inject
@@ -60,8 +66,11 @@ class WordsFragment : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQ_CODE_ADD_WORD) {
-            viewModel.addWord(arguments, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQ_CODE_ADD_WORD -> viewModel.addWord(arguments, data)
+                REQ_CODE_EDIT_WORD -> viewModel.editWord(arguments, data)
+            }
         }
     }
 
@@ -95,7 +104,7 @@ class WordsFragment : BaseFragment() {
         viewModel.allWordsLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
                 val adapter = WordsAdapter({ item -> }, { position, item ->
-                    showPopup(position, item)
+                    showPopup(item)
                 })
                 adapter.submitList(response.data)
                 rv_words.adapter = adapter
@@ -105,19 +114,28 @@ class WordsFragment : BaseFragment() {
             }
         })
 
-    private fun showPopup(position: Int, word: Word) {
-        val popup = PopupMenu(context, rv_words.getChildAt(position), Gravity.END)
-        popup.inflate(R.menu.popup_group)
-
-        popup.setOnMenuItemClickListener { item: MenuItem? ->
-            when (item!!.itemId) {
-                R.id.popup_delete -> {
-                    viewModel.deleteWord(word)
+    private fun showPopup(word: Word) {
+        val entities = resources.getStringArray(R.array.word_popup_entities)
+        val builder = AlertDialog.Builder(context)
+        builder.setItems(entities) { _, which ->
+            when (which) {
+                0 -> {
+                    val intent = Intent(rootActivity, AddWordActivity::class.java)
+                    intent.putExtra(ARG_WORD, word.word)
+                    intent.putExtra(ARG_TRANSLATION, word.translation)
+                    intent.putExtra(ARG_GROUP_ID, word.groupId)
+                    intent.putExtra(ARG_WORD_ID, word.wordId)
+                    intent.putExtra(ARG_IMAGE_URL, word.imageUrl)
+                    intent.putExtra(REQUEST_CODE, REQ_CODE_EDIT_WORD)
+                    startActivityForResult(
+                        intent,
+                        REQ_CODE_EDIT_WORD
+                    )
                 }
+                1 -> viewModel.deleteWord(word)
             }
-            true
         }
-        popup.show()
+        builder.show()
     }
 
     companion object {

@@ -32,6 +32,7 @@
     <string name="end_test_res_string">You remember %1$d of %2$d words</string>
     <string name="test_is_passed">Test is passed</string>
     <string name="all_delete">Delete</string>
+    <string name="all_edit">Edit</string>
     <string-array name="spinner_gender_entities">
         <item>Man</item>
         <item>Woman</item>
@@ -47,5 +48,13 @@
     <string-array name="et_language_entities">
         <item>English</item>
         <item>Russian</item>
+    </string-array>
+    <string-array name="group_popup_entities">
+        <item>Edit</item>
+        <item>Delete</item>
+    </string-array>
+    <string-array name="word_popup_entities">
+        <item>Edit</item>
+        <item>Delete</item>
     </string-array>
 </resources>

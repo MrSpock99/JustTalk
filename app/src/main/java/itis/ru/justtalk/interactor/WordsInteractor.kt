@@ -70,4 +70,9 @@ class WordsInteractor @Inject constructor(
         return repository.deleteWord(word)
             .subscribeOn(Schedulers.io())
     }
+
+    fun editWord(word: Word): Completable {
+        return repository.editWord(word)
+            .subscribeOn(Schedulers.io())
+    }
 }

@@ -44,8 +44,6 @@ interface WordGroupsDao {
     @Update
     fun update(group: Group)
 
-    //@Query("DELETE FROM word word_group USING word, word_group WHERE word.group_id = :groupId AND word_group.id = :groupId")
-    //@Query("DELETE FROM word WHERE word.group_id = :groupId; DELETE FROM word WHERE word.group_id = :groupId")
     @Transaction
     fun deleteGroup(group: GroupWithWord) {
         group.list.forEach { word ->
@@ -62,4 +60,7 @@ interface WordGroupsDao {
 
     @Query("SELECT * FROM word")
     fun getAllWords(): Single<List<Word>>
+
+    @Query("UPDATE word SET word = :word, translation = :translation WHERE word_id = :wordId")
+    fun updateWord(wordId: Long?, word: String, translation: String)
 }

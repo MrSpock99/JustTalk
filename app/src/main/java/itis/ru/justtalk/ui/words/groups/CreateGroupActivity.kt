@@ -10,20 +10,16 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.utils.ViewModelFactory
+import itis.ru.justtalk.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_create_group.*
-import javax.inject.Inject
 
 const val GALLERY_REQUEST_CODE = 12
 const val READ_EXTERNAL_STORAGE_REQUEST_CODE = 15
 
-class CreateGroupActivity : AppCompatActivity() {
-    @Inject
-    lateinit var viewModeFactory: ViewModelFactory
+class CreateGroupActivity : BaseActivity() {
     private lateinit var viewModel: CreateGroupViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

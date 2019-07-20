@@ -69,4 +69,37 @@ class WordsViewModel @Inject constructor(private val interactor: WordsInteractor
                 })
         )
     }
+
+    fun editWord(arguments: Bundle?, data: Intent?) {
+        data?.extras?.let {
+            val word = Word(
+                groupId = arguments?.get(ARG_GROUP_ID) as Long,
+                wordId = it.getLong(ARG_WORD_ID),
+                word = it.getString(ARG_WORD),
+                translation = it.getString(ARG_TRANSLATION),
+                imageUrl = it.getString(ARG_IMAGE_URL)
+            )
+
+            disposables.add(
+                interactor.getGroupById(arguments.get(ARG_GROUP_ID) as Long)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map { group ->
+                        interactor.editWord(word)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                getWords(group.id)
+                                wordOperationsLiveData.value = Response.success(true)
+                            }, { error ->
+                                wordOperationsLiveData.value = Response.error(error)
+                                error.printStackTrace()
+                            })
+                    }
+                    .subscribe({}, { error ->
+                        wordOperationsLiveData.value = Response.error(error)
+                        error.printStackTrace()
+                    })
+            )
+        }
+
+    }
 }

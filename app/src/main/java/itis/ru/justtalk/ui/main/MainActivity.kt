@@ -5,11 +5,11 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
+import itis.ru.justtalk.ui.base.BaseActivity
 import itis.ru.justtalk.ui.editinfo.EditProfileInfoFragment
 import itis.ru.justtalk.ui.login.LoginFragment
 import itis.ru.justtalk.ui.messages.ChatWithUserFragment
@@ -21,13 +21,9 @@ import itis.ru.justtalk.ui.words.groups.GroupsFragment
 import itis.ru.justtalk.ui.words.test.EndTestFragment
 import itis.ru.justtalk.ui.words.test.TestFragment
 import itis.ru.justtalk.ui.words.words.WordsFragment
-import itis.ru.justtalk.utils.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var viewModeFactory: ViewModelFactory
+class MainActivity : BaseActivity() {
     private lateinit var viewModel: MainViewModel
 
     private val mOnNavigationItemSelectedListener =
