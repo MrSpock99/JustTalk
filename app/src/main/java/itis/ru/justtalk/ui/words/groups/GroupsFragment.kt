@@ -12,6 +12,7 @@ import itis.ru.justtalk.R
 import itis.ru.justtalk.adapters.WordGroupAdapter
 import itis.ru.justtalk.models.db.Group
 import itis.ru.justtalk.ui.base.BaseFragment
+import itis.ru.justtalk.ui.base.REQUEST_CODE
 import itis.ru.justtalk.ui.words.test.TestFragment
 import itis.ru.justtalk.ui.words.words.WordsFragment
 import itis.ru.justtalk.utils.ViewModelFactory
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_groups.*
 import javax.inject.Inject
 
 const val REQ_CODE_CREATE_GROUP = 1001
+const val REQ_CODE_EDIT_GROUP = 1002
 const val ARG_GROUP_NAME = "GROUP_NAME"
 const val ARG_IMAGE_URL = "IMAGE_URL"
 const val ARG_GROUP_ID = "GROUP_ID"
@@ -73,8 +75,11 @@ class GroupsFragment : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQ_CODE_CREATE_GROUP) {
-            viewModel.addGroup(data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQ_CODE_CREATE_GROUP -> viewModel.addGroup(data)
+                REQ_CODE_EDIT_GROUP -> viewModel.editGroup(data)
+            }
         }
     }
 
@@ -125,7 +130,18 @@ class GroupsFragment : BaseFragment() {
         val builder = AlertDialog.Builder(context)
         builder.setItems(entities) { _, which ->
             when (which) {
-                0 -> viewModel.deleteGroup(group)
+                0 -> {
+                    val intent = Intent(rootActivity, CreateGroupActivity::class.java)
+                    intent.putExtra(ARG_GROUP_ID, group.id)
+                    intent.putExtra(ARG_GROUP_NAME, group.name)
+                    intent.putExtra(ARG_IMAGE_URL, group.imageUrl)
+                    intent.putExtra(REQUEST_CODE, REQ_CODE_EDIT_GROUP)
+                    startActivityForResult(
+                        intent,
+                        REQ_CODE_EDIT_GROUP
+                    )
+                }
+                1 -> viewModel.deleteGroup(group)
             }
         }
         builder.show()

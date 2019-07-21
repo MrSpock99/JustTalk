@@ -75,4 +75,9 @@ class WordsInteractor @Inject constructor(
         return repository.editWord(word)
             .subscribeOn(Schedulers.io())
     }
+
+    fun editGroup(group: Group): Completable {
+        return repository.editGroup(group)
+            .subscribeOn(Schedulers.io())
+    }
 }

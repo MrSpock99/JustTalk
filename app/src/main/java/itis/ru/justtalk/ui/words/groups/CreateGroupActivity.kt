@@ -54,8 +54,10 @@ class CreateGroupActivity : BaseActivity() {
 
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(CreateGroupViewModel::class.java)
+        viewModel.getArguments(intent)
         observePhotoChoose()
         observeCreateGroupLiveData()
+        observeEditGroupLiveData()
 
         btn_create_group.setOnClickListener {
             viewModel.createGroupFinish(et_group_name.text.toString())
@@ -108,6 +110,17 @@ class CreateGroupActivity : BaseActivity() {
             }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
+            }
+        })
+
+    private fun observeEditGroupLiveData() =
+        viewModel.editGroupLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
+                et_group_name.setText(response.data.name)
+                Glide.with(this)
+                    .load(response.data.imageUrl)
+                    .into(iv_group_image)
+                btn_create_group.text = getString(R.string.all_edit)
             }
         })
 

@@ -100,4 +100,11 @@ class WordsRepositoryImpl @Inject constructor(
             emitter.onComplete()
         }
     }
+
+    override fun editGroup(group: Group): Completable {
+        return Completable.create { emitter ->
+            dao.updateGroup(group.id, group.name, group.imageUrl)
+            emitter.onComplete()
+        }
+    }
 }

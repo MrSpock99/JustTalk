@@ -63,4 +63,7 @@ interface WordGroupsDao {
 
     @Query("UPDATE word SET word = :word, translation = :translation WHERE word_id = :wordId")
     fun updateWord(wordId: Long?, word: String, translation: String)
+
+    @Query("UPDATE word_group SET name = :name, image_url = :imageUrl where id = :id")
+    fun updateGroup(id: Long, name: String, imageUrl: String)
 }

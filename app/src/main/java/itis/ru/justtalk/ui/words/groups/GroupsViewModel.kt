@@ -61,4 +61,25 @@ class GroupsViewModel @Inject constructor(
                 }.subscribe()
         )
     }
+
+    fun editGroup(data: Intent?) {
+        data?.extras?.let {
+            val group = Group(
+                id = it.getLong(ARG_GROUP_ID),
+                name = it.getString(ARG_GROUP_NAME),
+                imageUrl = it.getString(ARG_IMAGE_URL)
+            )
+
+            disposables.add(
+                interactor.editGroup(group)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        groupOperationsLiveData.value = Response.success(true)
+                    }, { error ->
+                        error.printStackTrace()
+                        groupOperationsLiveData.value = Response.error(error)
+                    })
+            )
+        }
+    }
 }

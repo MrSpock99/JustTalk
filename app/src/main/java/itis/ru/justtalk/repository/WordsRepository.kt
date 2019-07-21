@@ -18,4 +18,5 @@ interface WordsRepository {
     fun getAllGroups(): Single<List<Group>>
     fun geGroupById(groupId: Long): Single<Group>
     fun editWord(word: Word): Completable
+    fun editGroup(group: Group): Completable
 }
