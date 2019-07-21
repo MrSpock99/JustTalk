@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.WordsInteractor
 import itis.ru.justtalk.models.db.Group
 import itis.ru.justtalk.ui.base.BaseViewModel
+import itis.ru.justtalk.ui.words.words.ARG_AUTO_PHOTO
 import itis.ru.justtalk.utils.Response
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ class GroupsViewModel @Inject constructor(
             imageUrl = data?.getStringExtra(ARG_IMAGE_URL).toString()
         )
         disposables.add(
-            interactor.addGroup(group)
+            interactor.addGroup(group, data?.getBooleanExtra(ARG_AUTO_PHOTO, false))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     groupOperationsLiveData.value = Response.success(true)

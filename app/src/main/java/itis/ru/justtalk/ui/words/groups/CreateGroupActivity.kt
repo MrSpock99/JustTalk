@@ -60,7 +60,10 @@ class CreateGroupActivity : BaseActivity() {
         observeEditGroupLiveData()
 
         btn_create_group.setOnClickListener {
-            viewModel.createGroupFinish(et_group_name.text.toString())
+            viewModel.createGroupFinish(
+                et_group_name.text.toString(),
+                switch_choose_photo_mode.isSelected
+            )
         }
         iv_group_image.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)

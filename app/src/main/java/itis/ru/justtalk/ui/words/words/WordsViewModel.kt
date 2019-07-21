@@ -28,7 +28,11 @@ class WordsViewModel @Inject constructor(private val interactor: WordsInteractor
             interactor.getGroupById(arguments.get(ARG_GROUP_ID) as Long)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ wordGroup ->
-                    interactor.addWord(word, wordGroup)
+                    interactor.addWord(
+                        word,
+                        wordGroup,
+                        data?.getBooleanExtra(ARG_AUTO_PHOTO, false)
+                    )
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             getWords(wordGroup.id)

@@ -5,6 +5,7 @@ import android.content.Intent
 import itis.ru.justtalk.models.db.Group
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.ui.base.REQUEST_CODE
+import itis.ru.justtalk.ui.words.words.ARG_AUTO_PHOTO
 import itis.ru.justtalk.utils.Response
 import javax.inject.Inject
 
@@ -24,8 +25,9 @@ class CreateGroupViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
-    fun createGroupFinish(groupName: String) {
+    fun createGroupFinish(groupName: String, autoPhoto: Boolean) {
         resultIntent.putExtra(ARG_GROUP_NAME, groupName)
+        resultIntent.putExtra(ARG_AUTO_PHOTO, autoPhoto)
         createGroupFinishLiveData.value = Response.success(resultIntent)
     }
 

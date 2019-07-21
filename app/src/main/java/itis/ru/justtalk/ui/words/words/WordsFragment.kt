@@ -26,6 +26,7 @@ const val REQ_CODE_EDIT_WORD = 1003
 const val ARG_WORD = "WORD"
 const val ARG_TRANSLATION = "TRANSLATION"
 const val ARG_WORD_ID = "WORD_ID"
+const val ARG_AUTO_PHOTO = "AUTO_PHOTO"
 
 class WordsFragment : BaseFragment() {
     @Inject

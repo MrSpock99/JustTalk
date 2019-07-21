@@ -40,7 +40,10 @@ class AddWordActivity : BaseActivity() {
         observeEditWordLiveData()
 
         btn_add_word.setOnClickListener {
-            viewModel.addWordFinish(et_word.text.toString(), et_translation.text.toString())
+            viewModel.addWordFinish(
+                et_word.text.toString(), et_translation.text.toString(),
+                switch_choose_photo_mode.isChecked
+            )
         }
 
         iv_word_image.setOnClickListener {
@@ -85,6 +88,8 @@ class AddWordActivity : BaseActivity() {
             if (response?.data != null) {
                 et_word.setText(response.data.word)
                 et_translation.setText(response.data.translation)
+                et_word.setSelection(response.data.word.length)
+                et_translation.setSelection(response.data.translation.length)
                 btn_add_word.text = getString(R.string.all_edit)
                 Glide.with(this)
                     .load(response.data.imageUrl)

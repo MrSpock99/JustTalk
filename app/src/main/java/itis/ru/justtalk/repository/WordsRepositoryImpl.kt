@@ -23,37 +23,52 @@ class WordsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun addWord(word: Word, group: Group): Completable {
+    override fun addWord(word: Word, group: Group, autoPhoto: Boolean?): Completable {
         return Completable.create { emitter ->
-            unsplashImageApi.getPhotoByKeyword(keyword = word.word)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe({
-                    if (it.results!!.isNotEmpty()) {
-                        word.imageUrl = it.results?.get(0)?.urls?.small.toString()
-                    }
-                    val wordGroupWithWord =
-                        GroupWithWord(group = group, list = listOf(word))
-                    dao.insert(wordGroupWithWord)
-                    emitter.onComplete()
-                }, {
-                    emitter.onError(it)
-                })
+            if (autoPhoto != null && autoPhoto) {
+                unsplashImageApi.getPhotoByKeyword(keyword = word.word)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe({
+                        if (it.results!!.isNotEmpty()) {
+                            word.imageUrl = it.results?.get(0)?.urls?.small.toString()
+                        }
+                        val wordGroupWithWord =
+                            GroupWithWord(group = group, list = listOf(word))
+                        dao.insert(wordGroupWithWord)
+                        emitter.onComplete()
+                    }, {
+                        emitter.onError(it)
+                    })
+            } else {
+                val wordGroupWithWord =
+                    GroupWithWord(group = group, list = listOf(word))
+                dao.insert(wordGroupWithWord)
+                emitter.onComplete()
+            }
+
         }
     }
 
-    override fun addGroup(group: Group): Completable {
+    override fun addGroup(group: Group, autoPhoto: Boolean?): Completable {
         return Completable.create { emitter ->
-            unsplashImageApi.getPhotoByKeyword(keyword = group.name)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe({
-                    group.imageUrl = it.results?.get(0)?.urls?.small.toString()
-                    dao.insert(group)
-                    emitter.onComplete()
-                }, {
-                    emitter.onError(it)
-                })
+            if (autoPhoto != null && autoPhoto) {
+                unsplashImageApi.getPhotoByKeyword(keyword = group.name)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe({
+                        if (it.results!!.isNotEmpty()) {
+                            group.imageUrl = it.results?.get(0)?.urls?.small.toString()
+                        }
+                        dao.insert(group)
+                        emitter.onComplete()
+                    }, {
+                        emitter.onError(it)
+                    })
+            } else {
+                dao.insert(group)
+                emitter.onComplete()
+            }
         }
     }
 

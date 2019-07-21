@@ -13,8 +13,8 @@ class WordsInteractor @Inject constructor(
     private val repository: WordsRepository
 ) {
 
-    fun addWord(word: Word, group: Group): Completable {
-        return repository.addWord(word, group)
+    fun addWord(word: Word, group: Group, autoPhoto: Boolean?): Completable {
+        return repository.addWord(word, group, autoPhoto)
             .subscribeOn(Schedulers.io())
     }
 
@@ -28,8 +28,8 @@ class WordsInteractor @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-    fun addGroup(group: Group): Completable {
-        return repository.addGroup(group)
+    fun addGroup(group: Group, autoPhoto: Boolean?): Completable {
+        return repository.addGroup(group, autoPhoto)
             .subscribeOn(Schedulers.io())
     }
 

@@ -17,9 +17,10 @@ class AddWordViewModel @Inject constructor() : BaseViewModel() {
     val editWordLiveData = MutableLiveData<Response<Word>>()
     private val resultIntent: Intent = Intent()
 
-    fun addWordFinish(word: String, translation: String) {
+    fun addWordFinish(word: String, translation: String, autoPhoto: Boolean) {
         resultIntent.putExtra(ARG_WORD, word)
         resultIntent.putExtra(ARG_TRANSLATION, translation)
+        resultIntent.putExtra(ARG_AUTO_PHOTO, autoPhoto)
         addWordFinishLiveData.value = Response.success(resultIntent)
     }
 
@@ -45,9 +46,7 @@ class AddWordViewModel @Inject constructor() : BaseViewModel() {
                         Word(
                             word = extras.getString(ARG_WORD, ""),
                             translation = extras.getString(ARG_TRANSLATION, ""),
-                            groupId = extras.getLong(
-                                ARG_GROUP_ID
-                            ),
+                            groupId = extras.getLong(ARG_GROUP_ID),
                             wordId = extras.getLong(ARG_WORD_ID),
                             imageUrl = extras.getString(ARG_IMAGE_URL, "")
                         )
