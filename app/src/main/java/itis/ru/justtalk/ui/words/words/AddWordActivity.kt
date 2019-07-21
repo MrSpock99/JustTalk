@@ -86,6 +86,9 @@ class AddWordActivity : BaseActivity() {
                 et_word.setText(response.data.word)
                 et_translation.setText(response.data.translation)
                 btn_add_word.text = getString(R.string.all_edit)
+                Glide.with(this)
+                    .load(response.data.imageUrl)
+                    .into(iv_word_image)
             }
         })
 

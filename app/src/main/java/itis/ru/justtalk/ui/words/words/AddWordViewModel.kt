@@ -15,12 +15,9 @@ class AddWordViewModel @Inject constructor() : BaseViewModel() {
     val addWordFinishLiveData = MutableLiveData<Response<Intent>>()
     val photoChooseSuccessLiveData = MutableLiveData<Response<String>>()
     val editWordLiveData = MutableLiveData<Response<Word>>()
-    private lateinit var resultIntent: Intent
+    private val resultIntent: Intent = Intent()
 
     fun addWordFinish(word: String, translation: String) {
-        if (!::resultIntent.isInitialized) {
-            resultIntent = Intent()
-        }
         resultIntent.putExtra(ARG_WORD, word)
         resultIntent.putExtra(ARG_TRANSLATION, translation)
         addWordFinishLiveData.value = Response.success(resultIntent)
@@ -40,8 +37,10 @@ class AddWordViewModel @Inject constructor() : BaseViewModel() {
         val requestCode = intent?.extras?.getInt(REQUEST_CODE, 0)
         when (requestCode) {
             REQ_CODE_EDIT_WORD -> {
-                resultIntent = intent
                 intent.extras?.let { extras ->
+                    resultIntent.putExtra(ARG_WORD_ID, extras.getLong(ARG_WORD_ID))
+                    resultIntent.putExtra(ARG_GROUP_ID, extras.getLong(ARG_GROUP_ID))
+                    resultIntent.putExtra(ARG_IMAGE_URL, extras.getLong(ARG_IMAGE_URL))
                     editWordLiveData.value = Response.success(
                         Word(
                             word = extras.getString(ARG_WORD, ""),
