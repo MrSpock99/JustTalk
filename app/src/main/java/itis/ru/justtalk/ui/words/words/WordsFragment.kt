@@ -118,7 +118,9 @@ class WordsFragment : BaseFragment() {
     private fun observeAllWordsLiveData() =
         viewModel.allWordsLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
-                val adapter = WordsAdapter({ item -> }, { position, item ->
+                val adapter = WordsAdapter({ item ->
+                    fillForEditing(item)
+                }, { _, item ->
                     showPopup(item)
                 })
                 adapter.submitList(response.data)
@@ -134,23 +136,25 @@ class WordsFragment : BaseFragment() {
         val builder = AlertDialog.Builder(context)
         builder.setItems(entities) { _, which ->
             when (which) {
-                0 -> {
-                    val intent = Intent(rootActivity, AddWordActivity::class.java)
-                    intent.putExtra(ARG_WORD, word.word)
-                    intent.putExtra(ARG_TRANSLATION, word.translation)
-                    intent.putExtra(ARG_GROUP_ID, word.groupId)
-                    intent.putExtra(ARG_WORD_ID, word.wordId)
-                    intent.putExtra(ARG_IMAGE_URL, word.imageUrl)
-                    intent.putExtra(REQUEST_CODE, REQ_CODE_EDIT_WORD)
-                    startActivityForResult(
-                        intent,
-                        REQ_CODE_EDIT_WORD
-                    )
-                }
+                0 -> fillForEditing(word)
                 1 -> viewModel.deleteWord(word)
             }
         }
         builder.show()
+    }
+
+    private fun fillForEditing(word: Word) {
+        val intent = Intent(rootActivity, AddWordActivity::class.java)
+        intent.putExtra(ARG_WORD, word.word)
+        intent.putExtra(ARG_TRANSLATION, word.translation)
+        intent.putExtra(ARG_GROUP_ID, word.groupId)
+        intent.putExtra(ARG_WORD_ID, word.wordId)
+        intent.putExtra(ARG_IMAGE_URL, word.imageUrl)
+        intent.putExtra(REQUEST_CODE, REQ_CODE_EDIT_WORD)
+        startActivityForResult(
+            intent,
+            REQ_CODE_EDIT_WORD
+        )
     }
 
     companion object {
