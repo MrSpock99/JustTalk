@@ -81,7 +81,7 @@ class WordsViewModel @Inject constructor(private val interactor: WordsInteractor
                 wordId = it.getLong(ARG_WORD_ID),
                 word = it.getString(ARG_WORD),
                 translation = it.getString(ARG_TRANSLATION),
-                imageUrl = it.getString(ARG_IMAGE_URL)
+                imageUrl = it.getString(ARG_IMAGE_URL) ?: ""
             )
 
             disposables.add(

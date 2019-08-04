@@ -46,13 +46,13 @@ class GroupsFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel.getGroups()
         return inflater.inflate(R.layout.fragment_groups, container, false)
     }
 
     override fun onStart() {
         super.onStart()
         init()
-        viewModel.getGroups()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

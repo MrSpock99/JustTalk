@@ -47,7 +47,7 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         wordList = it.toMutableList()
-                        wordList.shuffle()
+                        prepareList()
                         wordListLiveData.value = Response.success(wordList)
                     }, { error ->
                         wordListLiveData.value = Response.error(error)
@@ -61,7 +61,7 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         wordList = it.toMutableList()
-                        wordList.shuffle()
+                        prepareList()
                         wordListLiveData.value = Response.success(wordList)
                     }, { error ->
                         wordListLiveData.value = Response.error(error)
@@ -167,5 +167,11 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
 
     fun getHint() {
         notifyObserversHintClicked(true)
+    }
+
+    private fun prepareList() {
+        wordList.sortBy { it.progress }
+        wordList = wordList.subList(0, 15)
+        wordList.shuffle()
     }
 }

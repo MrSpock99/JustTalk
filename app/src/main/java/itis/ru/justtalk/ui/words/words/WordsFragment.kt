@@ -57,10 +57,6 @@ class WordsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
-    }
-
-    override fun onStart() {
-        super.onStart()
         viewModel.getWords(groupId)
     }
 

@@ -173,7 +173,7 @@ class MainActivity : BaseActivity() {
             TestFragment.toString() -> {
                 transaction.replace(
                     R.id.main_container,
-                    TestFragment.newInstance()
+                    TestFragment.newInstance(arguments)
                 )
             }
             EndTestFragment.toString() -> {
