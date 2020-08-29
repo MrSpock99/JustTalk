@@ -13,6 +13,7 @@ import itis.ru.justtalk.ui.messages.ContactsViewModel
 import itis.ru.justtalk.ui.myprofile.MyProfileViewModel
 import itis.ru.justtalk.ui.people.PeopleViewModel
 import itis.ru.justtalk.ui.people.UserDetailsViewModel
+import itis.ru.justtalk.ui.words.PhotoChooseViewModel
 import itis.ru.justtalk.ui.words.groups.CreateGroupViewModel
 import itis.ru.justtalk.ui.words.groups.GroupsViewModel
 import itis.ru.justtalk.ui.words.test.EndTestViewModel
@@ -92,6 +93,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     abstract fun bindMainViewModel(mainViewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PhotoChooseViewModel::class)
+    abstract fun bindPhotoChooseViewModel(photoChooseViewModel: PhotoChooseViewModel): ViewModel
 }
 
 @Target(

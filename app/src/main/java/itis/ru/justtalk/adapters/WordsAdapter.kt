@@ -13,7 +13,10 @@ import itis.ru.justtalk.models.db.Word
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.item_words_group.view.*
 
-class WordsAdapter(private val clickListener: (Word) -> Unit) :
+class WordsAdapter(
+    private val clickListener: (Word) -> Unit,
+    private val longClickListener: (Int, Word) -> Unit
+) :
     ListAdapter<Word, WordsAdapter.RvItemViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): RvItemViewHolder {
@@ -30,11 +33,16 @@ class WordsAdapter(private val clickListener: (Word) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: RvItemViewHolder, position: Int) {
-        holder.bind(getItem(position), clickListener)
+        holder.bind(position, getItem(position), clickListener, longClickListener)
     }
 
     class RvItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: Word, clickListener: (Word) -> Unit) {
+        fun bind(
+            position: Int,
+            item: Word,
+            clickListener: (Word) -> Unit,
+            longClickListener: (Int, Word) -> Unit
+        ) {
             itemView.tv_word_group_name.text = item.word
             itemView.tv_word_group_count.text = item.translation
             itemView.pb_word_group.progress = item.progress
@@ -57,6 +65,11 @@ class WordsAdapter(private val clickListener: (Word) -> Unit) :
 
             itemView.setOnClickListener {
                 clickListener(item)
+            }
+
+            itemView.setOnLongClickListener {
+                longClickListener(position, item)
+                return@setOnLongClickListener true
             }
         }
     }

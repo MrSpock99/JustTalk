@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 class WordsViewModel @Inject constructor(private val interactor: WordsInteractor) :
     BaseViewModel() {
-    val addWordSuccessLiveData = MutableLiveData<Response<Boolean>>()
+    val wordOperationsLiveData = MutableLiveData<Response<Boolean>>()
     val allWordsLiveData = MutableLiveData<Response<List<Word>>>()
 
     fun addWord(arguments: Bundle?, data: Intent?) {
@@ -28,17 +28,21 @@ class WordsViewModel @Inject constructor(private val interactor: WordsInteractor
             interactor.getGroupById(arguments.get(ARG_GROUP_ID) as Long)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ wordGroup ->
-                    interactor.addWord(word, wordGroup)
+                    interactor.addWord(
+                        word,
+                        wordGroup,
+                        data?.getBooleanExtra(ARG_AUTO_PHOTO, false)
+                    )
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             getWords(wordGroup.id)
-                            addWordSuccessLiveData.value = Response.success(true)
+                            wordOperationsLiveData.value = Response.success(true)
                         }, { error ->
-                            addWordSuccessLiveData.value = Response.error(error)
+                            wordOperationsLiveData.value = Response.error(error)
                             error.printStackTrace()
                         })
                 }, { error ->
-                    addWordSuccessLiveData.value = Response.error(error)
+                    wordOperationsLiveData.value = Response.error(error)
                     error.printStackTrace()
                 })
         )
@@ -55,5 +59,51 @@ class WordsViewModel @Inject constructor(private val interactor: WordsInteractor
                     error.printStackTrace()
                 })
         )
+    }
+
+    fun deleteWord(word: Word) {
+        disposables.add(
+            interactor.deleteWord(word)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    wordOperationsLiveData.value = Response.success(true)
+                }, { error ->
+                    wordOperationsLiveData.value = Response.error(error)
+                    error.printStackTrace()
+                })
+        )
+    }
+
+    fun editWord(arguments: Bundle?, data: Intent?) {
+        data?.extras?.let {
+            val word = Word(
+                groupId = arguments?.get(ARG_GROUP_ID) as Long,
+                wordId = it.getLong(ARG_WORD_ID),
+                word = it.getString(ARG_WORD),
+                translation = it.getString(ARG_TRANSLATION),
+                imageUrl = it.getString(ARG_IMAGE_URL) ?: ""
+            )
+
+            disposables.add(
+                interactor.getGroupById(arguments.get(ARG_GROUP_ID) as Long)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map { group ->
+                        interactor.editWord(word)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                getWords(group.id)
+                                wordOperationsLiveData.value = Response.success(true)
+                            }, { error ->
+                                wordOperationsLiveData.value = Response.error(error)
+                                error.printStackTrace()
+                            })
+                    }
+                    .subscribe({}, { error ->
+                        wordOperationsLiveData.value = Response.error(error)
+                        error.printStackTrace()
+                    })
+            )
+        }
+
     }
 }

@@ -57,7 +57,6 @@ class LoginFragment : BaseFragment() {
 
     private fun injectDependencies() {
         (activity?.application as BaseApplication).appComponent.inject(this)
-
     }
 
     private fun updateUI(screenState: ScreenState<LoginState>?) {

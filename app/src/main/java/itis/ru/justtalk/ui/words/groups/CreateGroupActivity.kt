@@ -10,20 +10,16 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
-import itis.ru.justtalk.utils.ViewModelFactory
+import itis.ru.justtalk.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_create_group.*
-import javax.inject.Inject
 
 const val GALLERY_REQUEST_CODE = 12
 const val READ_EXTERNAL_STORAGE_REQUEST_CODE = 15
 
-class CreateGroupActivity : AppCompatActivity() {
-    @Inject
-    lateinit var viewModeFactory: ViewModelFactory
+class CreateGroupActivity : BaseActivity() {
     private lateinit var viewModel: CreateGroupViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,11 +54,16 @@ class CreateGroupActivity : AppCompatActivity() {
 
         viewModel =
             ViewModelProviders.of(this, this.viewModeFactory).get(CreateGroupViewModel::class.java)
+        viewModel.getArguments(intent)
         observePhotoChoose()
         observeCreateGroupLiveData()
+        observeEditGroupLiveData()
 
         btn_create_group.setOnClickListener {
-            viewModel.createGroupFinish(et_group_name.text.toString())
+            viewModel.createGroupFinish(
+                et_group_name.text.toString(),
+                switch_choose_photo_mode.isSelected
+            )
         }
         iv_group_image.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
@@ -112,6 +113,17 @@ class CreateGroupActivity : AppCompatActivity() {
             }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
+            }
+        })
+
+    private fun observeEditGroupLiveData() =
+        viewModel.editGroupLiveData.observe(this, Observer { response ->
+            if (response?.data != null) {
+                et_group_name.setText(response.data.name)
+                Glide.with(this)
+                    .load(response.data.imageUrl)
+                    .into(iv_group_image)
+                btn_create_group.text = getString(R.string.all_edit)
             }
         })
 

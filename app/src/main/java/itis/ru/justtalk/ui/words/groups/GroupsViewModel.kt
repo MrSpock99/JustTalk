@@ -4,29 +4,30 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.Intent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.WordsInteractor
-import itis.ru.justtalk.models.db.WordGroup
+import itis.ru.justtalk.models.db.Group
 import itis.ru.justtalk.ui.base.BaseViewModel
+import itis.ru.justtalk.ui.words.words.ARG_AUTO_PHOTO
 import itis.ru.justtalk.utils.Response
 import javax.inject.Inject
 
 class GroupsViewModel @Inject constructor(
     private val interactor: WordsInteractor
 ) : BaseViewModel() {
-    val addGroupSuccessLiveData = MutableLiveData<Response<Boolean>>()
-    val allGroupsLiveData = MutableLiveData<Response<List<WordGroup>>>()
+    val groupOperationsLiveData = MutableLiveData<Response<Boolean>>()
+    val allGroupsLiveData = MutableLiveData<Response<List<Group>>>()
 
     fun addGroup(data: Intent?) {
-        val group = WordGroup(
+        val group = Group(
             name = data?.getStringExtra(ARG_GROUP_NAME).toString(),
             imageUrl = data?.getStringExtra(ARG_IMAGE_URL).toString()
         )
         disposables.add(
-            interactor.addGroup(group)
+            interactor.addGroup(group, data?.getBooleanExtra(ARG_AUTO_PHOTO, false))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    addGroupSuccessLiveData.value = Response.success(true)
+                    groupOperationsLiveData.value = Response.success(true)
                 }, { error ->
-                    addGroupSuccessLiveData.value = Response.error(error)
+                    groupOperationsLiveData.value = Response.error(error)
                     error.printStackTrace()
                 })
         )
@@ -43,5 +44,43 @@ class GroupsViewModel @Inject constructor(
                     error.printStackTrace()
                 })
         )
+    }
+
+    fun deleteGroup(group: Group) {
+        disposables.add(
+            interactor.getGroupWithWords(group.id)
+                .map {
+                    interactor.deleteGroup(it)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            groupOperationsLiveData.value = Response.success(true)
+                        }, { error ->
+                            groupOperationsLiveData.value = Response.error(error)
+                            error.printStackTrace()
+                        })
+                    it
+                }.subscribe()
+        )
+    }
+
+    fun editGroup(data: Intent?) {
+        data?.extras?.let {
+            val group = Group(
+                id = it.getLong(ARG_GROUP_ID),
+                name = it.getString(ARG_GROUP_NAME),
+                imageUrl = it.getString(ARG_IMAGE_URL)
+            )
+
+            disposables.add(
+                interactor.editGroup(group)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        groupOperationsLiveData.value = Response.success(true)
+                    }, { error ->
+                        error.printStackTrace()
+                        groupOperationsLiveData.value = Response.error(error)
+                    })
+            )
+        }
     }
 }

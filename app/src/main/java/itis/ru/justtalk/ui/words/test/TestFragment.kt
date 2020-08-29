@@ -13,6 +13,7 @@ import com.mindorks.placeholderview.SwipeViewBuilder
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.ui.base.BaseFragment
+import itis.ru.justtalk.ui.words.groups.GroupsFragment
 import itis.ru.justtalk.utils.ViewModelFactory
 import itis.ru.justtalk.utils.dpToPx
 import itis.ru.justtalk.utils.getDisplaySize
@@ -79,7 +80,8 @@ class TestFragment : BaseFragment() {
             viewModel.getHint()
         }
         btn_cancel_test.setOnClickListener {
-            rootActivity.onBackPressed()
+            //rootActivity.onBackPressed()
+            rootActivity.navigateTo(GroupsFragment.toString(), null)
         }
     }
 
@@ -125,6 +127,10 @@ class TestFragment : BaseFragment() {
         })
 
     companion object {
-        fun newInstance() = TestFragment()
+        fun newInstance(args: Bundle?): TestFragment {
+            val fragment = TestFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

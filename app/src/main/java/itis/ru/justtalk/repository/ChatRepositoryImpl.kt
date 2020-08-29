@@ -209,7 +209,11 @@ class ChatRepositoryImpl @Inject constructor(
             query.get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        emitter.onSuccess(it.result?.documents?.get(0)?.data?.get(MESSAGE_TEXT).toString())
+                        if (it.result?.documents?.size == 0) {
+                            emitter.onSuccess("")
+                        } else {
+                            emitter.onSuccess(it.result?.documents?.get(0)?.data?.get(MESSAGE_TEXT).toString())
+                        }
                     } else {
                         emitter.onError(it.exception ?: Exception("error getting last message"))
                     }

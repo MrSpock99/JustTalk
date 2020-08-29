@@ -22,7 +22,7 @@ data class RemoteUser(
     @set:PropertyName("about_me")
     var aboutMe: String,
 
-    @get:PropertyName("learning_language")
+    @get:PropertyName("learning_la nguage")
     @set:PropertyName("learning_language")
     var learningLanguage: String,
 
