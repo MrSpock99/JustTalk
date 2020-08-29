@@ -171,7 +171,8 @@ class TestViewModel @Inject constructor(private val interactor: WordsInteractor)
 
     private fun prepareList() {
         wordList.sortBy { it.progress }
-        wordList = wordList.subList(0, 15)
+        if (wordList.size > 14)
+            wordList = wordList.subList(0, 15)
         wordList.shuffle()
     }
 }

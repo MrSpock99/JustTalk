@@ -25,28 +25,10 @@ class WordsRepositoryImpl @Inject constructor(
 
     override fun addWord(word: Word, group: Group, autoPhoto: Boolean?): Completable {
         return Completable.create { emitter ->
-            if (autoPhoto != null && autoPhoto) {
-                unsplashImageApi.getPhotoByKeyword(keyword = word.word)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe({
-                        if (it.results!!.isNotEmpty()) {
-                            word.imageUrl = it.results?.get(0)?.urls?.small.toString()
-                        }
-                        val wordGroupWithWord =
-                            GroupWithWord(group = group, list = listOf(word))
-                        dao.insert(wordGroupWithWord)
-                        emitter.onComplete()
-                    }, {
-                        emitter.onError(it)
-                    })
-            } else {
-                val wordGroupWithWord =
-                    GroupWithWord(group = group, list = listOf(word))
-                dao.insert(wordGroupWithWord)
-                emitter.onComplete()
-            }
-
+            val wordGroupWithWord =
+                GroupWithWord(group = group, list = listOf(word))
+            dao.insert(wordGroupWithWord)
+            emitter.onComplete()
         }
     }
 

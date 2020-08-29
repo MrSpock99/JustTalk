@@ -1,16 +1,20 @@
 package itis.ru.justtalk.interactor
 
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import itis.ru.justtalk.api.UnsplashImageApi
 import itis.ru.justtalk.models.db.Group
 import itis.ru.justtalk.models.db.GroupWithWord
 import itis.ru.justtalk.models.db.Word
+import itis.ru.justtalk.models.unsplash.Result
 import itis.ru.justtalk.repository.WordsRepository
 import javax.inject.Inject
 
 class WordsInteractor @Inject constructor(
-    private val repository: WordsRepository
+    private val repository: WordsRepository,
+    private val unsplashImageApi: UnsplashImageApi
 ) {
 
     fun addWord(word: Word, group: Group, autoPhoto: Boolean?): Completable {
@@ -79,5 +83,12 @@ class WordsInteractor @Inject constructor(
     fun editGroup(group: Group): Completable {
         return repository.editGroup(group)
             .subscribeOn(Schedulers.io())
+    }
+
+    fun getPhotosByKeyword(keyword: String): Observable<List<String?>> {
+        return unsplashImageApi.getPhotoByKeyword(keyword = keyword)
+            .subscribeOn(Schedulers.io())
+            .map { it.results }
+            .map { it.map { it.urls?.small } }
     }
 }

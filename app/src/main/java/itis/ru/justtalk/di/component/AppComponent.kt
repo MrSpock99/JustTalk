@@ -10,6 +10,7 @@ import itis.ru.justtalk.ui.messages.ContactsFragment
 import itis.ru.justtalk.ui.myprofile.MyProfileFragment
 import itis.ru.justtalk.ui.people.PeopleFragment
 import itis.ru.justtalk.ui.people.UserDetailsFragment
+import itis.ru.justtalk.ui.words.PhotoChooseDialogFragment
 import itis.ru.justtalk.ui.words.groups.CreateGroupActivity
 import itis.ru.justtalk.ui.words.groups.GroupsFragment
 import itis.ru.justtalk.ui.words.test.EndTestFragment
@@ -38,4 +39,5 @@ interface AppComponent {
     fun inject(activity: MainActivity)
     fun inject(activity: CreateGroupActivity)
     fun inject(activity: AddWordActivity)
+    fun inject(dialog: PhotoChooseDialogFragment)
 }

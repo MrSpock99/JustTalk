@@ -10,11 +10,15 @@ import com.bumptech.glide.Glide
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R
 import itis.ru.justtalk.ui.base.BaseActivity
+import itis.ru.justtalk.ui.words.PhotoChooseDialogFragment
+import itis.ru.justtalk.ui.words.groups.ARG_IMAGE_URL
 import itis.ru.justtalk.ui.words.groups.GALLERY_REQUEST_CODE
+import itis.ru.justtalk.utils.PhotoChooseDialogCallback
 import kotlinx.android.synthetic.main.activity_add_word.*
 
-class AddWordActivity : BaseActivity() {
+class AddWordActivity : BaseActivity(), PhotoChooseDialogCallback {
     private lateinit var viewModel: AddWordViewModel
+    private var resultIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +31,12 @@ class AddWordActivity : BaseActivity() {
             viewModel.onPhotoChooseResult(requestCode, data)
         else
             showSnackbar(getString(R.string.snackbar_error_message))
+    }
+
+    override fun onPhotoSelected(url: String) {
+        resultIntent?.putExtra(ARG_IMAGE_URL, url)
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
     }
 
     private fun init() {
@@ -75,8 +85,21 @@ class AddWordActivity : BaseActivity() {
     private fun observeAddWordLiveData() =
         viewModel.addWordFinishLiveData.observe(this, Observer { response ->
             if (response?.data != null) {
-                setResult(Activity.RESULT_OK, response.data)
-                finish()
+                if (resultIntent == null){
+                    resultIntent = response.data
+                    setResult(Activity.RESULT_OK, resultIntent)
+                }
+                if (response.data.getBooleanExtra(ARG_AUTO_PHOTO, false)) {
+                    val dialog = PhotoChooseDialogFragment.newInstance(
+                        response.data.getStringExtra(
+                            ARG_WORD
+                        )
+                    )
+                    dialog.show(supportFragmentManager, null)
+                } else {
+                    finish()
+                }
+
             }
             if (response?.error != null) {
                 showSnackbar(getString(R.string.snackbar_error_message))
