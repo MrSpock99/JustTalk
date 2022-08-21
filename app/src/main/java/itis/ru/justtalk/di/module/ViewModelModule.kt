@@ -1,6 +1,6 @@
 package itis.ru.justtalk.di.module
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module

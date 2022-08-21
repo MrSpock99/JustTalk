@@ -1,6 +1,6 @@
 package itis.ru.justtalk.ui.messages
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.ChatInteractor
 import itis.ru.justtalk.interactor.MyProfileInteractor

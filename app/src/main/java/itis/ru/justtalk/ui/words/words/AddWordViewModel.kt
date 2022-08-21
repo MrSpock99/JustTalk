@@ -1,6 +1,6 @@
 package itis.ru.justtalk.ui.words.words
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.content.Intent
 import itis.ru.justtalk.models.db.Word
 import itis.ru.justtalk.ui.base.BaseViewModel

@@ -1,7 +1,7 @@
 package itis.ru.justtalk.ui.words.test
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater

@@ -1,8 +1,8 @@
 package itis.ru.justtalk.ui.base
 
 import android.content.Context
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
 import android.view.MenuItem
 import itis.ru.justtalk.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*

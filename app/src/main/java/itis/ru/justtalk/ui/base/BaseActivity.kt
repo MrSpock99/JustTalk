@@ -1,6 +1,6 @@
 package itis.ru.justtalk.ui.base
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import itis.ru.justtalk.utils.ViewModelFactory
 import javax.inject.Inject
 

@@ -22,10 +22,12 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [AppModule::class, ViewModelFactoryModule::class, ViewModelModule::class,
-        RepoModule::class, AuthModule::class, DatabaseModule::class, NetModule::class]
+        RepoModule::class, DatabaseModule::class, NetModule::class]
 )
 interface AppComponent {
-    fun inject(fragment: LoginFragment)
+
+    fun authComponent(authModule: AuthModule): AuthComponent
+
     fun inject(fragment: MyProfileFragment)
     fun inject(fragment: EditProfileInfoFragment)
     fun inject(fragment: PeopleFragment)

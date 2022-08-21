@@ -1,11 +1,11 @@
 package itis.ru.justtalk.ui.words.words
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import com.google.android.material.snackbar.Snackbar
 import com.bumptech.glide.Glide
 import itis.ru.justtalk.BaseApplication
 import itis.ru.justtalk.R

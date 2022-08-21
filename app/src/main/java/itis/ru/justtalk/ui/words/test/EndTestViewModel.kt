@@ -1,6 +1,6 @@
 package itis.ru.justtalk.ui.words.test
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.os.Bundle
 import itis.ru.justtalk.models.utils.EndTestModel
 import itis.ru.justtalk.ui.base.BaseViewModel

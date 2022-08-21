@@ -1,12 +1,12 @@
 package itis.ru.justtalk.ui.words
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +59,8 @@ class PhotoChooseDialogFragment : DialogFragment() {
                 callback?.onPhotoSelected(url)
             }
             adapter.submitList(response.data)
-            rv_photos.layoutManager = GridLayoutManager(context,2)
+            rv_photos.layoutManager =
+                GridLayoutManager(context, 2)
             rv_photos.adapter = adapter
         }
     })

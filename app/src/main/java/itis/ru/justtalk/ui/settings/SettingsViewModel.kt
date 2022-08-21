@@ -1,6 +1,6 @@
 package itis.ru.justtalk.ui.settings
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 
 class SettingsViewModel : ViewModel() {
 }

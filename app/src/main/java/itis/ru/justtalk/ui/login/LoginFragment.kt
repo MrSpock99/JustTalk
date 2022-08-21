@@ -1,6 +1,6 @@
 package itis.ru.justtalk.ui.login
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -40,6 +40,11 @@ class LoginFragment : BaseFragment() {
         viewModel.onGoogleIntentResult(requestCode, data)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity?.application as BaseApplication).clearAuthComponent()
+    }
+
     private fun init(view: View) {
         setToolbarAndBottomNavVisibility(
             toolbarVisibility = View.GONE,
@@ -56,7 +61,8 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun injectDependencies() {
-        (activity?.application as BaseApplication).appComponent.inject(this)
+        (activity?.application as BaseApplication).initAuthComponent(this)
+        (activity?.application as BaseApplication).authComponent!!.inject(this)
     }
 
     private fun updateUI(screenState: ScreenState<LoginState>?) {

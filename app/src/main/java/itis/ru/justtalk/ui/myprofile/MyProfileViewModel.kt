@@ -1,6 +1,6 @@
 package itis.ru.justtalk.ui.myprofile
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.MyProfileInteractor
 import itis.ru.justtalk.models.user.User

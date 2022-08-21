@@ -1,6 +1,6 @@
 package itis.ru.justtalk.ui.words.groups
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.content.Intent
 import itis.ru.justtalk.models.db.Group
 import itis.ru.justtalk.ui.base.BaseViewModel

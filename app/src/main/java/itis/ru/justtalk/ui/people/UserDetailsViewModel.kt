@@ -1,6 +1,6 @@
 package itis.ru.justtalk.ui.people
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.os.Bundle
 import itis.ru.justtalk.interactor.MyProfileInteractor
 import itis.ru.justtalk.models.user.User

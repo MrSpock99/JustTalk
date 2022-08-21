@@ -1,7 +1,7 @@
 package itis.ru.justtalk.ui.people
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.location.Location
 import android.util.Log
 import com.google.android.gms.location.FusedLocationProviderClient

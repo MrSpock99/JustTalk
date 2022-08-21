@@ -1,6 +1,6 @@
 package itis.ru.justtalk.ui.main
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import itis.ru.justtalk.ui.base.BaseViewModel
 import itis.ru.justtalk.utils.Response

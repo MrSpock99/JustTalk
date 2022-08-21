@@ -1,6 +1,6 @@
 package itis.ru.justtalk.db
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import io.reactivex.Single
 import itis.ru.justtalk.models.db.Group
 import itis.ru.justtalk.models.db.GroupWithWord

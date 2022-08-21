@@ -1,6 +1,6 @@
 package itis.ru.justtalk.ui.words.groups
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.content.Intent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.justtalk.interactor.WordsInteractor

@@ -1,7 +1,7 @@
 package itis.ru.justtalk.db
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
 import itis.ru.justtalk.models.db.Group
 import itis.ru.justtalk.models.db.Word
 

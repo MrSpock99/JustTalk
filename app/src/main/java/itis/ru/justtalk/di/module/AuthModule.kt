@@ -1,16 +1,19 @@
 package itis.ru.justtalk.di.module
 
 import android.content.Context
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import dagger.Module
 import dagger.Provides
 import itis.ru.justtalk.R
+import itis.ru.justtalk.di.scope.AuthScope
 
 @Module
 class AuthModule {
+
+    @AuthScope
     @Provides
     fun provideSignInOptions(context: Context): GoogleSignInOptions {
         return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -19,6 +22,7 @@ class AuthModule {
             .build()
     }
 
+    @AuthScope
     @Provides
     fun provideGoogleSignInClient(
         context: Context,
